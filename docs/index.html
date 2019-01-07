@@ -1,0 +1,359 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MyA Documentation</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/mya.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> 
+
+    <!-- Add custom CSS here -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="row">
+    <!-- uncomment code for absolute positioning tweek see top comment in css -->
+    <!-- <div class="absolute-wrapper"> </div> -->
+    <!-- Menu -->
+    <div class="side-menu">
+    
+    <nav class="navbar navbar-default" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <div class="brand-wrapper">
+            
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+          
+           <!-- <div class="brand-name-wrapper">
+                <a class="navbar-brand" href="#">
+                    Brand
+                </a>
+            </div>
+
+          
+            <a data-toggle="collapse" href="#search" class="btn btn-default" id="search-trigger">
+                <span class="glyphicon glyphicon-search"></span>
+            </a>
+
+           
+            <div id="search" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <form class="navbar-form" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default "><span class="glyphicon glyphicon-ok"></span></button>
+                    </form>
+                </div>
+            </div>-->
+        </div>
+
+    </div>
+
+    <!-- Main Menu -->
+    <div class="side-menu-container">
+        <ul class="nav navbar-nav">
+
+            <li style="font-size: 0.929em"><a href="#">OVERVIEW</a></li>
+            <li class="active" style="font-size: 0.929em"><a href="#">BACKEND ARCHITECTURE</a></li>
+            <li><a href="#"style="font-size: 0.929em"> HIPPA</a></li>
+            <li><a href="#"style="font-size: 0.929em"> FLOWCHART</a></li>
+           
+
+            <!-- Dropdown-->
+            <li class="panel panel-default" id="dropdown" style="font-size: 0.929em">
+                <a data-toggle="collapse" href="#dropdown-lvl1">
+                   TABLES <span class="caret"></span>
+                </a>
+
+                <!-- Dropdown level 1 -->
+                <div id="dropdown-lvl1" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul class="nav navbar-nav">
+                           
+                           <li class="panel panel-default" id="dropdown">
+                                <a data-toggle="collapse" href="#dropdown-lvl2">
+                                    Loader Tables <span class="caret"></span>
+                                </a>
+                                <div id="dropdown-lvl2" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul class="nav navbar-nav">
+                                            <li><a href="#">person_dim</a></li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            <li class="panel panel-default" id="dropdown">
+                                <a data-toggle="collapse" href="#dropdown-lvl3">
+                                    API Tables <span class="caret"></span>
+                                </a>
+                                <div id="dropdown-lvl3" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul class="nav navbar-nav">
+                                            <li><a href="#">charges_main</a></li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            
+                        </ul>
+                    </div>
+                </div>
+            </li>
+           <li><a href="http://mya-docs-api.s3-website-us-east-1.amazonaws.com" style="font-size: 0.929em"> API ENDPOINTS</a></li>
+            
+
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>
+    
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="side-body">
+           <h1> Overview</h1>
+           
+           <p>MyaHealth app is a personalized financial advisor for your healthcare needs.With the help of this app,users can keep track of their charges and their related charges.Mya Health personalized algorithm helps the users to understand the benefits of any additional plans that his/her employer made available.The users also can filter the health care providers based on t he procedure availability,least cost etc.</p>
+		   <p>MyaHealth app is powered by analyzing a lot of data informations like claims data,eligibility data,consumer data, electronic health care records etc from various sources.The backend of mya health uses big data analytics engine that uses Amazon Redshift with a set of predicitve machine learning algorithms to predict the future healthcare cost and robust optimization algorithms.</p>
+           <h1> Backend Architecture </h1>
+		 <img src="backend-architecture.jpg">
+		 
+		 <h1> HIPAA </h1>
+		 <p>HIPAA (Health Insurance Portability and Accountability Act of 1996) is United States legislation that provides data privacy and security provisions for safeguarding medical information.
+		The law has emerged into greater prominence in recent years with the proliferation of health data breaches caused by cyberattacks and ransomware attacks on health insurers and providers.
+		The act, which was signed into law by President Bill Clinton on Aug. 21, 1996, contains five sections, or titles</p>
+		 <h1 style="margin-top:33px"> Tables </h1>
+		 
+          <div class="row">
+            <div class="col-lg-12" style="padding:0px;">
+           
+           <h2>Charges Main</h2>
+           
+           <h3 style="padding-top: 31px">schema</h3>
+           
+           <div class="table-responsive"> 
+
+        <table class="table">
+
+           
+
+            <tbody>
+
+                <tr class="tbl-head">
+
+                <td>person_uuid</td>
+
+                <td>
+                <div class="str">integer</div>
+                <div class="fed"> person id for the user</div></td>
+
+                </tr>
+                
+                <tr class="tbl-head">
+
+                <td>employee_uuid</td>
+
+                <td>
+                <div class="str">integer</div>
+                <div class="fed"> employee id for the user</div></td>
+
+                </tr>
+                
+                <tr class="tbl-head">
+
+                <td>view_id</td>
+
+                <td>
+                <div class="str">string</div>
+                <div class="fed"> view_id </div></td>
+
+                </tr>
+				
+				<tr class="tbl-head">
+
+                <td>provider</td>
+
+                <td>
+                <div class="str">string</div>
+                <div class="fed"> provider name </div></td>
+
+                </tr>
+				
+					<tr class="tbl-head">
+
+                <td>record_dos_start</td>
+
+                <td>
+                <div class="str">date</div>
+                <div class="fed"> record start date </div></td>
+
+                </tr>
+				
+				
+				<tr class="tbl-head">
+
+                <td>record_dos_end</td>
+
+                <td>
+                <div class="str">date</div>
+                <div class="fed"> record end date </div></td>
+
+                </tr>
+				
+				<tr class="tbl-head">
+
+                <td>charges_category</td>
+
+                <td>
+                <div class="str">string</div>
+                <div class="fed"> charges category </div></td>
+
+                </tr>
+				
+				<tr class="tbl-head">
+
+                <td>episode_condition_detail</td>
+
+                <td>
+                <div class="str">string</div>
+                <div class="fed"> episode condition detail</div></td>
+
+                </tr>
+				
+				<tr class="tbl-head">
+
+                <td>employee_paid</td>
+
+                <td>
+                <div class="str">numeric</div>
+                <div class="fed"> amount paid by employee</div></td>
+
+                </tr>
+				
+				<tr class="tbl-head">
+
+                <td>person_first_name</td>
+
+                <td>
+                <div class="str">string</div>
+                <div class="fed"> person name</div></td>
+
+                </tr>
+				
+				
+				<tr class="tbl-head">
+
+                <td>family_order</td>
+
+                <td>
+                <div class="str">integer</div>
+                <div class="fed"> family order of the person based on date of birth</div></td>
+
+                </tr>
+				
+				<tr class="tbl-head">
+
+                <td>total_employee_paid</td>
+
+                <td>
+                <div class="str">numeric</div>
+                <div class="fed"> total amount paid by the employee</div></td>
+
+                </tr>
+				
+				<tr class="tbl-head">
+
+                <td>search_tags</td>
+
+                <td>
+                <div class="str">string</div>
+                <div class="fed"> list of search tags</div></td>
+
+                </tr>
+				
+
+            </tbody>
+
+        </table>
+
+    </div>
+           
+           
+           </div>
+           </div> 
+         
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+ <script src="js/jquery-1.10.2.js"></script>
+<script src="js/bootstrap.js"></script>
+
+    <script>
+    
+    $(function () {
+    $('.navbar-toggle').click(function () {
+        $('.navbar-nav').toggleClass('slide-in');
+        $('.side-body').toggleClass('body-slide-in');
+        $('#search').removeClass('in').addClass('collapse').slideUp(200);
+
+        /// uncomment code for absolute positioning tweek see top comment in css
+        //$('.absolute-wrapper').toggleClass('slide-in');
+        
+    });
+   
+   // Remove menu for searching
+   $('#search-trigger').click(function () {
+        $('.navbar-nav').removeClass('slide-in');
+        $('.side-body').removeClass('body-slide-in');
+
+        /// uncomment code for absolute positioning tweek see top comment in css
+        //$('.absolute-wrapper').removeClass('slide-in');
+
+    });
+});
+    
+    
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
