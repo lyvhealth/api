@@ -337,21 +337,6 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/EligibilityUploadDetailOutput"
-  /groups/[group_id]:
-    get:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Group Summary"
-      description: "This endpoint checks the ingestion status of the eligibility data within the Reclaim system."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/EligibilityUploadDetailOutput"   
   /groups/[group_id]/benefits:
     post:
       tags:
