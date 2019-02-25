@@ -1,0 +1,514 @@
+#Cost Prediction + Supplemental + Wellness
+#POST with subscriber / group? Offline / Online?
+{
+    "group": "acme",
+    "subscriber": 511750,
+    "members": [
+        {
+            "id": 511750,
+            "past_cost":{
+                "member_paid": 4000,
+                "plan_paid": 7500,
+                "services":[
+                    "pharmacy": 1000,
+                    "primary_care": 500,
+                    "specialty_care": 750
+                ],
+                "major_events":[
+                    {  
+                         "service":"Maternity Care",
+                         "episode":"Labor and Childbirth",
+                         "start_date":"2018-03-28",
+                         "end_date":"2018-04-01",
+                         "charge":{  
+                            "member_paid":6173.64,
+                            "plan_paid":15619.84
+                         },
+                         "in_network":true,
+                         "providers":[  
+                            "Plantation General Hospital",
+                            "Sheridan Healthcorp",
+                            "IRL Pathology Services"
+                         ]
+                      }
+                ],
+                "plan_performance":{
+                    "plan": "hdhp_base_plus",
+                    "plan_name": "HDHP Choice Base Plus",
+                    "recommended": true,
+                    "savings": 500
+                }
+            },
+            "future_cost": {
+                "median": 3500,
+                "percentile_75": 5000,
+                "percentile_95": 7500,
+                "services":[
+                    "pharmacy": 1000,
+                    "primary_care": 500,
+                    "specialty_care": 750
+                ],
+                "episodes":[
+                    {
+                        "label": "diabetes",
+                        "cost": {
+                            "median": 2500,
+                            "percentile_75": 3000,
+                            "percentile_95": 4500,
+                            "services":[
+                                "pharmacy": 1000,
+                                "specialty_care": 750,
+                                "lab and pathology": 1500
+                            ]
+                        }
+                    }
+                ]
+            },
+            "supplemental":[
+                {
+                    "type": "hospital",
+                    "eligible": true,
+                    "predictions":{
+                        "years_horizon": 3,
+                        "probability": 0.25,
+                        "reimbursement":[
+                            {
+                                "plan": "silver",
+                                "expected": 1500,
+                                "breakdown": [
+                                    {
+                                        "label": "Anesthesia",
+                                        "value": 500
+                                    },
+                                    {
+                                        "label": "Hospital Stay",
+                                        "value": 1000
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "accident",
+                    "eligible": true,
+                    "predictions":{
+                        "years_horizon": 3,
+                        "probability": 0.05,
+                        "reimbursement":[
+                            {
+                                "plan": "silver",
+                                "expected": 500
+                            }
+                        ]
+                    }
+                },
+            ],
+            "wellness":[
+                {
+                    "name": "Virgin Pulse",
+                    "recommended": true
+                }
+            ]
+        }
+    ]   
+}
+
+
+
+
+# Digital Claims
+# POST subscriber id
+
+{  
+   "subscriber_id": 511750,
+   "page_index":0,
+   "total_pages":3,
+   "is_next":true,
+   "events":[  
+      {  
+         "person_name":"Cora",
+         "member_id": 511751, 
+         "view_id":"ab50566e-3d90-11e8-875a-cbd36c8c84f7",
+         "type":"medical",
+         "service":"Doctor Visit",
+         "label":"Rash",
+         "date":"2017-12-26",
+         "potential_savings":{  
+            "total":0.0,
+            "hsa":0.0,
+            "reimbursement":0.0,
+            "appeal":0.0
+         },
+         "in_network":true,
+         "charge":150,
+         "highlight":false
+      },
+      {  
+         "person_name":"Susan",
+         "view_id":"1d7edf85-3d95-11e8-a32c-fffc9eb27b83",
+         "type":"medical",
+         "category":"Maternity Care",
+         "title":"Labor And Childbirth",
+         "date":"2017-03-28",
+         "potential_savings":{  
+            "total":1643.8912,
+            "hsa":493.8912,
+            "reimbursement":1150.0,
+            "appeal":0.0
+         },
+         "in_network":true,
+         "charge":6173.639999999999,
+         "highlight":true
+      },
+      {  
+         "person_name":"Susan",
+         "view_id":"5235315815",
+         "type":"hsa",
+         "service":"Employee Contribution",
+         "label":"Health Savings",
+         "date":"2017-11-30",
+         "credit":450,
+         "highlight":false
+      },
+      {  
+         "person_name":"Lilla",
+         "view_id":"2017-11-01",
+         "type":"premium",
+         "service":"Insurance Premium",
+         "label":"Medical & Pharmacy",
+         "date":"2017-11-01",
+         "is_linked_to_upload":false,
+         "in_network":true,
+         "charge":565.45,
+         "highlight":false
+      }
+   ]
+}
+
+
+
+{  
+   "view_id": " ", // this is the record_id  
+   "person_name":"Susan", 
+   "type":"medical", //"pharmacy" otherwise
+   "service":"Maternity Care", // This should be the 
+   "label":"Labor And Childbirth",
+   "start_date":"2017-03-28",
+   "end_date":"2017-04-01",
+   "in_network":true,
+   "cost": {
+      "deductible":1926.4,
+      "copay": 0,
+      "coinsurance": 4247.3,
+      "total": 6173.7
+   },
+   "bills":[
+       {
+           "billing_provider": "Plantation General Hospital",
+           "billing_address": " ",
+           "billing_phone": " ",
+           "cost": 4392.3,
+           "breakdown": [
+               {
+                   "rendering_provider": " ",
+                   "rendering_address": " ",
+                   "rendering_phone": " ",
+                   "service": "Obsterical Care",
+                   "code": "112",
+                   "cost": 3080.3
+               },
+               {
+                   "rendering_provider": " ",
+                   "rendering_address": " ",
+                   "rendering_phone": " ",
+                   "service": "Emergency Room",
+                   "code": "450",
+                   "cost": 1312.0
+               },
+               {
+                   "rendering_provider": " ",
+                   "rendering_address": " ",
+                   "rendering_phone": " ",
+                   "service": "Pharmacy",
+                   "code": "250",
+                   "cost": 0
+               }  
+           ]
+       },
+       {
+           "billing_provider": "Sheridan Healthcorp",
+           "billing_address": " ",
+           "billing_phone": " ",
+           "cost": 1781.4,
+           "breakdown": [
+               {
+                   "rendering_provider": " ",
+                   "rendering_address": " ",
+                   "rendering_phone": " ",
+                   "service": "Anesthesia",
+                   "code": "01967",
+                   "cost": 1781.4
+               }
+           ]
+       }
+   ]
+}
+
+
+# Example of an alert as a new bill comes in
+# -- If POST for a subscriber_id (potentially thinking by group?)
+
+{
+      "subscriber_id": "511750",
+      "member_id": "511751",
+      "event_id":"1d7edf85-3d95-11e8-a32c-fffc9eb27b83",
+      "event_title":"OBGYN Care",
+      "type":"medical",
+      "episode":"Labor and Childbirth",
+      "start_date":"2017-03-28",
+      "end_date":"2017-04-01",
+      "in_network":true,
+      "potential_savings":{  
+         "total":1643.8912,
+         "reimbursement":18400.0,
+         "appeal":0.0
+      },
+      "charge":6173.64,
+      "breakdown":[  
+         "Irl Pathology Services",
+         "Plantation General Hospital",
+         "Sheridan Healthcorp "
+      ],
+      "guidance_future":{  
+         "use_network_provider":false,
+         "postpone_treatment":false,
+         "plan_change":false,
+         "get_supplemental":false,
+         "use_urgent_care":false
+      },
+      "guidance_actionable":{  
+         "appeal_charges":false,
+         "file_reimbursement":true,
+         "use_hsa":true
+      },
+      "charge_split":{  
+         "carrier":15619.84,
+         "patient":6173.64
+      }
+}
+
+
+# Savings by reimbursement
+{  
+   "person_name":"Susan",
+   "event_id":"1d7edf85-3d95-11e8-a32c-fffc9eb27b83",
+   "service":"Maternity Care",
+   "type":"medical",
+   "event_category":"Labor and Childbirth",
+   "start_date":"2017-03-28",
+   "end_date":"2017-04-01",
+   "charge":6173.64,
+   "potential_savings":1150.0,
+   "savings_actions":[  
+      {  
+         "type":"reimbursement",
+         "policy":{  
+            "name":"Hospital Coverage",
+            "provider":"Aflac",
+            "phone":"8004333036",
+            "instruction_url":"https://www.aflac.com/docs/policyholders/claims-checklists/hospital-claims-checklist.pdf",
+            "action_url":"https://www.aflac.com/individuals/myaflac/file-electronically.aspx"
+         },
+         "potential_savings":1150.0,
+         "event_list":[  
+            {  
+               "bill_id":"f7732ee1-5288-11e8-87ca-4fe1ac138e20",
+               "provider":"Plantation General Hospital",
+               "start_date":"2017-03-28",
+               "savings":[  
+                  {  
+                     "label":"Lab Work",
+                     "amount":25.0
+                  },
+                  {  
+                     "label":"Hospitalization",
+                     "amount":1100.0
+                  }
+               ]
+            },
+            {  
+               "bill_id":"0282ab59-5289-11e8-81ff-8f924a4859a4",
+               "provider":"Irl Pathology Services",
+               "start_date":"2017-03-28",
+               "savings":[  
+                  {  
+                     "label":"Lab Work",
+                     "amount":25.0
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
+
+# Entire engine -- TODO
+
+{  
+   "current_plan":{  
+      "name":"HDHP Choice Plus (In/Out of network)",
+      "large_network":true,
+      "small_charges":false,
+      "low_premium":false
+   },
+   "user_preferences":{  
+      "travel_options":false,
+      "preferred_providers":true,
+      "better_network":false,
+      "large_network":false,
+      "small_charges":false,
+      "expected_surgery":true,
+      "expected_pregnancy":true,
+      "expected_retirement":false,
+      "expected_loss_of_income":false
+   },
+   "plan_options":[  
+      {  
+         "recommended":true,
+         "considerations":{  
+            "low_premium":true,
+            "large_network":false,
+            "small_charges":false
+         },
+         "name":"HDHP Choice Base Plus",
+         "confidence":0.98885,
+         "cost_lower":6015.33,
+         "cost_upper":6769.73,
+         "premium":5585.4,
+         "premium_period":"yearly",
+         "employer_hsa_deposit":3000,
+         "pharmacy_included":true,
+         "policy_documents_id":"",
+         "predicted_oop_lower":3500,
+         "predicted_oop_upper":4200,
+         "policy_details":[  
+            {  
+               "type":"medical",
+               "carrier":"United Health Care",
+               "has_hsa":true,
+               "has_hra":false,
+               "pharmacy_included":true,
+               "out_of_network_deductable":9999999.0,
+               "out_of_network_oop_max":9999999.0,
+               "out_of_network_coinsurance":100.0,
+               "in_network_deductable":3000.0,
+               "in_network_oop_max":9000.0,
+               "in_network_coinsurance":20.0
+            }
+         ]
+      },
+      {  
+         "recommended":false,
+         "considerations":{  
+            "low_premium":true,
+            "large_network":false,
+            "small_charges":false
+         },
+         "name":"HDHP Choice Low",
+         "confidence":0.01115,
+         "cost_lower":7215.33,
+         "cost_upper":7969.73,
+         "premium":6785.4,
+         "premium_period":"yearly",
+         "employer_hsa_deposit":3000,
+         "pharmacy_included":true,
+         "policy_documents_id":"",
+         "predicted_oop_lower":3500,
+         "predicted_oop_upper":4200,
+         "policy_details":[  
+            {  
+               "type":"medical",
+               "carrier":"United Health Care",
+               "has_hsa":true,
+               "has_hra":false,
+               "pharmacy_included":true,
+               "in_network_deductable":3000.0,
+               "in_network_oop_max":9000.0,
+               "in_network_coinsurance":20.0,
+               "out_of_network_deductable":5000.0,
+               "out_of_network_oop_max":18000.0,
+               "out_of_network_coinsurance":30.0
+            }
+         ]
+      },
+      {  
+         "recommended":false,
+         "considerations":{  
+            "low_premium":false,
+            "large_network":true,
+            "small_charges":false
+         },
+         "name":"HDHP Choice Plus (In/Out of network)",
+         "confidence":0.0,
+         "cost_lower":8415.33,
+         "cost_upper":9169.73,
+         "premium":7985.4,
+         "premium_period":"yearly",
+         "employer_hsa_deposit":3000,
+         "pharmacy_included":true,
+         "policy_documents_id":"",
+         "predicted_oop_lower":3500,
+         "predicted_oop_upper":4200,
+         "policy_details":[  
+            {  
+               "type":"medical",
+               "carrier":"United Health Care",
+               "has_hsa":true,
+               "has_hra":false,
+               "pharmacy_included":true,
+               "out_of_network_deductable":5000.0,
+               "out_of_network_oop_max":18000.0,
+               "out_of_network_coinsurance":30.0,
+               "in_network_deductable":3000.0,
+               "in_network_oop_max":9000.0,
+               "in_network_coinsurance":20.0
+            }
+         ]
+      },
+      {  
+         "recommended":false,
+         "considerations":{  
+            "low_premium":false,
+            "large_network":false,
+            "small_charges":false
+         },
+         "name":"HDHP Choice High",
+         "confidence":0.0,
+         "cost_lower":11415.33,
+         "cost_upper":12169.73,
+         "premium":7985.4,
+         "premium_period":"yearly",
+         "pharmacy_included":true,
+         "policy_documents_id":"",
+         "predicted_oop_lower":3500,
+         "predicted_oop_upper":4200,
+         "policy_details":[  
+            {  
+               "type":"medical",
+               "carrier":"United Health Care",
+               "has_hsa":false,
+               "has_hra":false,
+               "pharmacy_included":true,
+               "in_network_deductable":3000.0,
+               "in_network_oop_max":9000.0,
+               "in_network_coinsurance":20.0,
+               "out_of_network_deductable":5000.0,
+               "out_of_network_oop_max":18000.0,
+               "out_of_network_coinsurance":30.0
+            }
+         ]
+      }
+   ]
+}

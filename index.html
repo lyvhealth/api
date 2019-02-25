@@ -14,11 +14,15 @@
         top: 0;
         width: 100%;
         z-index: 100;
-      }
+      }   
     </style>
+    <STYLE TYPE="text/css">
+        <!--
+        TD{font-family: Arial; font-size: 10pt;}
+        --->
+    </STYLE>
   </head>
   <body>
-
     <!-- Top navigation placeholder 
     <nav>
       <ul id="links_container">
@@ -28,32 +32,95 @@
  
    <!-- <redoc scroll-y-offset="body > nav" spec-url='mya-health-api-myahealthapi-swagger-apigateway.yaml' lazy-rendering untrusted-spec></redoc>-->
   <redoc expand-responses="200"> </redoc>
-     
+
+<!--      
  <redoc scroll-y-offset="body > nav"></redoc>
-	<redoc spec-url="mya-health-api-myahealthapi-swagger-apigateway.yaml" lazy-rendering ></redoc>
+-->
+	<redoc spec-url="reclaim.yaml" lazy-rendering expand-responses hide-download-button x-expanded></redoc>
 	
 
    <!--<script src="https://rebilly.github.io/ReDoc/releases/v1.x.x/redoc.min.js"> </script>-->
    <!--<script src="https://rebilly.github.io/ReDoc/releases/v1.2.0/redoc.min.js"> </script>--> 
    <!--<script src="https://rebilly.github.io/ReDoc/releases/latest/redoc.min.js"> </script> -->
-	<script src="redoc1.js"> </script>
+	<script src="redoc.js"> </script>
+    <script src="expanding.js"> </script>
+    <script type='text/javascript' src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
+    <script type='text/javascript'>
+        
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            // CSV file
+            csvFile = new Blob([csv], {type: "text/csv"});
+
+            // Download link
+            downloadLink = document.createElement("a");
+
+            // File name
+            downloadLink.download = filename;
+
+            // Create a link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            // Hide download link
+            downloadLink.style.display = "none";
+
+            // Add the link to DOM
+            document.body.appendChild(downloadLink);
+
+            // Click download link
+            downloadLink.click();
+        }
+        
+        function exportTableToCSV(filename) {
+            var csv = [];
+            var rows = table.querySelectorAll("table tr");
+            console.log(rows)
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                for (var j = 0; j < cols.length; j++) 
+                    row.push(cols[j].innerText);
+
+                csv.push(row.join(","));        
+            }
+
+            // Download CSV file
+            downloadCSV(csv.join("\n"), filename);
+        }
+        
+        function exportTableToCSV2(filename) {
+            var csv = [];
+            var rows = table2.querySelectorAll("table tr");
+            console.log(rows)
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                for (var j = 0; j < cols.length; j++) 
+                    row.push(cols[j].innerText);
+
+                csv.push(row.join(","));        
+            }
+
+            // Download CSV file
+            downloadCSV(csv.join("\n"), filename);
+        }
+    </script>
+
     <script>
       // list of APIS
       var apis = [
         {
           //url: 'https://daxex1shlf4li.cloudfront.net/mya-health-api-myahealthapi-swagger-apigateway.yaml'
-            url: 'mya-health-api-myahealthapi-swagger-apigateway.yaml'
+            url: 'reclaim.yaml'
         }
       ];
 
       // initially render first API
       Redoc.init(apis[0].url);
-
-//      function onClick() {
-//        var url = this.getAttribute('data-link');
-//        Redoc.init(url);
-//      }
-
       // dynamically building navigation items
       var $list = document.getElementById('links_container');
       apis.forEach(function(api) {

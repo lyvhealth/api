@@ -1,0 +1,4775 @@
+---
+swagger: "2.0"
+info:
+  description: |
+    # Introduction
+    Our story started right out of MIT and after years of collaborations between the founders of Reclaim. With the ever-changing landscape of how our healthcare insurance is working, we decided to come together, bringing our passion for financial planning and data science with our expertise in the healthcare space. We came up with Reclaim, to seamlessly help make all of our finances around our healthcare more understandable, reasonably priced, and optimally planned for. 
+    
+    Our mission at Reclaim is to **make health finances simple, personal, just right**.
+
+
+  version: "2019-01-07"
+  title: "RECLAIM Backend APIs"
+host: "platform.reclaim.health"
+x-logo:
+  url: 'https://rebilly.github.io/ReDoc/petstore-logo.png'
+basePath: "/api"
+
+
+#![foo](https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png 'title')
+#You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/). For this sample, you can use the api key `special-key` to test the authorization filters.
+
+#This API is documented in **OpenAPI format** and is based on [Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team. It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo) tool and [ReDoc](https://github.com/Rebilly/ReDoc) documentation. In addition to standard OpenAPI syntax we use a few [vendor extensions](https://github.com/Rebilly/ReDoc/blob/master/docs/redoc-vendor-extensions.md).
+
+### OpenAPI Specification
+#    This API is documented in **OpenAPI format** and is based on
+#    [Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team.
+#    It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo)
+#    tool and [ReDoc](https://github.com/Rebilly/ReDoc) documentation. In addition to standard
+#    OpenAPI syntax we use a few [vendor extensions](https://github.com/Rebilly/ReDoc/blob/master/docs/redoc-vendor-extensions.md).
+#    # Cross-Origin Resource Sharing
+#    This API features Cross-Origin Resource Sharing (CORS) implemented in compliance with  [W3C spec](https://www.w3.org/TR/cors/).
+#    And that allows cross-domain communication from the browser.
+#    All responses have a wildcard same-origin which makes them completely public and accessible to everyone, including any code on any site.
+#    # Authentication
+#    Petstore offers two forms of authentication:
+#      - API Key
+#      - OAuth2
+#
+#    OAuth2 - an open protocol to allow secure authorization in a simple
+#    and standard method from web, mobile and desktop applications.
+#    <!-- ReDoc-Inject: <security-definitions> -->
+
+tags:
+- name: "Security and Authorization"
+  description: |   
+    ## Security
+    All calls to Reclaim’s APIs are encrypted over HTTPS. Our APIs support connections using TLS version 1.2 or higher. All modern languages and frameworks support TLS 1.2 (although specific older ones do not).
+    
+#    While these examples illustrate the typical process of obtaining an access token and then properly utilizing that token in an Authorization header for subsequent API requests, be aware that it is extremely inefficient to request a new token if you already obtained one that is still valid (note the number of seconds specified in the expires_in parameter in the cURL example’s response). For this reason we recommend using a PokitDok client library, giving you the ability to instantiate and use a long-lived PokitDok client connection that provides automatic handling of token retrieval, expiration, and rotation.
+- name: "Group-Specific Endpoints"
+  description: "This section documents the available endpoints associated with open enrollment. These endpoints come from the perspective of obtaining or updating information specific to a subscriber. Following the Reclaim terminology, an employee who enrolls their family in an employer-sponsored plan is the subscriber of the plan."
+- name: "Subscriber-Specific Endpoints"
+  description: "This section documents the available endpoints associated with open enrollment. These endpoints come from the perspective of obtaining or updating information specific to a subscriber. Following the Reclaim terminology, an employee who enrolls their family in an employer-sponsored plan is the subscriber of the plan."
+schemes:
+- "https"
+paths:
+  /oauth2/token:
+    post:
+      tags:
+      - "Security and Authorization"
+      summary: "Authorization via OAuth2"
+      description: |   
+       Access to our APIs is controlled via OAuth2 using the client credentials grant. This is a secure authorization workflow that allows you to obtain a **short-lived (1 hour)** access token that must be transmitted with your API request.
+    
+       The auth flow follows the following steps: 
+         - A client encodes its `client key` and `secret key` into a specially encoded set of credentials. 
+         - A client makes a request to the POST oauth2 / token endpoint to exchange these credentials for a bearer token.
+         - When accessing the REST API, the client uses the bearer token to authenticate.
+
+       In the cURL tab to the right you can see an example of obtaining an access token via the command line, then making a call to the Activities API with that token. Likewise, the Python tab contains an example of authorization from scratch using the popular requests library. 
+      x-code-samples:
+      - lang: "cURL"
+        source: |                             
+            # define your client id and secret
+            CLIENT_ID=<YOUR_CLIENT_ID>
+            CLIENT_SECRET=<YOUR_CLIENT_SECRET>
+
+            # remove control characters if necessary (may occur with base64 on some OS platforms)
+            CREDENTIALS=$(echo "$CLIENT_ID":"$CLIENT_SECRET" | base64 | tr -d "[:cntrl:]")
+
+            # request an access token
+            curl -i -X POST -H "Authorization: Basic $CREDENTIALS" -d "grant_type=client_credentials" https://platform.reclaim.health/oauth2/token; echo ""
+
+            # the response from https://platform.reclaim.health/oauth2/token
+            HTTP/1.1 200 OK
+            Content-Type: application/json;charset=UTF-8
+            {
+                "access_token": "s8KYRJGTO0rWMy0zz1CCSCwsSesDyDlbNdZoRqVR",
+                "token_type": "bearer",
+                "expires_in": 3600
+            }       
+      - lang: "Python"
+        source: |
+            from base64 import urlsafe_b64encode
+            import requests
+
+            client_id = 'your_client_id'
+            client_secret = 'your_client_secret'
+            bearer_token = requests.post('https://platform.reclaim.health/oauth2/token',
+                             headers={'Authorization': 'Basic ' + urlsafe_b64encode(client_id + ':' + client_secret)}, data={'grant_type': 'client_credentials'}).json()['bearer_token']  
+                             
+  /groups:
+    post:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Adding Groups"
+      description: "This endpoint allows the client to add an employer group to the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "AddGroupDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/AddGroupDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/AddGroupDetailOutput"
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "List Available Groups"
+      description: "This endpoints allows the client to list all the available group IDs in the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GroupListDetailOutput"  
+  /groups/[group_id]/eligibility:
+    post:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Upload Group Eligibility"
+      description: |
+        This endpoint allows the client to add subscribers' eligibility to a group in the Reclaim system. 
+        
+        <details>
+        <summary id="text" onClick="function()"><font color="blue"><u> Click for Reclaim's preferred eligibility file schema details </u></font></summary>
+        <p>
+        <table id="table" style="width:100%">
+          <tr>
+            <th>column</th>
+            <th>description</th> 
+            <th>type</th>
+            <th>example</th>
+          </tr>
+          <tr>
+            <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2019</td>
+          </tr>
+          <tr>
+            <td> group</td><td> Employer group code</td><td> string</td><td> acmecorp</td>
+          </tr>
+          <tr>
+            <td> division</td><td> Employer division code</td><td> string</td><td> corporate</td>
+          </tr>
+          <tr>
+            <td> subscriber_id</td><td> Plan subscriber ID</td><td> integer</td><td> 579635785</td>
+          </tr>
+          <tr>
+            <td> subscriber_ssn</td><td> Plan subscriber's social security </td><td> integer</td><td> 1234567890</td>
+          </tr>
+          <tr>
+            <td> subscriber_dob</td><td> Plan subscriber's date of birth</td><td> date</td><td> 1980-03-24</td>
+          </tr>
+          <tr>
+            <td> subscriber_gender</td><td> Plan subscriber's gender</td><td> string</td><td> female</td>
+          </tr>
+          <tr>
+            <td> subscriber_address</td><td> Plan subscriber street address</td><td> string</td><td> 123 Street #1</td>
+          </tr>
+          <tr>
+            <td> subscriber_city</td><td> Plan subscriber city address</td><td> string</td><td> Cambridge</td>
+          </tr>
+          <tr>
+            <td> subscriber_state</td><td> Plan subscriber state address</td><td> string</td><td> MA</td>
+          </tr>
+          <tr>
+            <td> subscriber_zip</td><td> Plan subscriber zip code</td><td> string</td><td> 02139</td>
+          </tr>
+          <tr>
+            <td> subscriber_status</td><td> Plan subscriber status</td><td> string</td><td> active</td>
+          </tr>
+          <tr>
+            <td> member_id</td><td> Plan member ID</td><td> integer</td><td> 579635786</td>
+          </tr>
+          <tr>
+            <td> member_ssn</td><td> Plan subscriber's social security</td><td> integer</td><td> 1234567891</td>
+          </tr>
+          <tr>
+            <td> member_dob</td><td> Plan member's date of birth</td><td> date</td><td> 2010-04-26</td>
+          </tr>
+          <tr>
+            <td> member_gender</td><td> Plan member's gender</td><td> string</td><td> female</td>
+          </tr>
+          <tr>
+            <td> member_address</td><td> Plan member street address</td><td> string</td><td> 123 Street #1</td>
+          </tr>
+          <tr>
+            <td> member_city</td><td> Plan member city address</td><td> string</td><td> Cambridge</td>
+          </tr>
+          <tr>
+            <td> member_state</td><td> Plan member state address</td><td> string</td><td> MA</td>
+          </tr>
+          <tr>
+            <td> member_zip</td><td> Plan member zip code</td><td> integer</td><td> 02139</td>
+          </tr>
+            <td> member_relation</td><td> Plan member zip code</td><td> integer</td><td> child</td>
+          </tr>
+          <tr>
+            <td> member_status</td><td> Plan member status</td><td> string</td><td> active</td>
+          </tr>
+          <tr>
+            <td> benefit</td><td> Benefit plan ID (if enrolled)</td><td> string</td><td> hdhp_13958</td>
+          </tr>
+          <tr>
+            <td> benefit_start</td><td> Coverage start date (if enrolled)</td><td> date</td><td> 2019-01-01</td
+          </tr>
+          <tr>
+            <td> benefit_end</td><td> Coverage end date (if known)</td><td> date</td><td></td>
+          </tr>
+          <tr>
+            <td> benefit_type</td><td> Benefit plan type (if enrolled)</td><td> string</td><td> basic</td>
+          </tr>
+          <tr>
+            <td> eligible_benefits</td><td> List of all eligible benefit IDs</td><td> string</td><td> hdhp_13958;ppo_14827 </td>
+          </tr>
+        </table>
+        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;" onclick="exportTableToCSV('eligibility_reclaim_schema.csv')">EXPORT SCHEMA TO CSV</button>
+        </p>
+        </details>
+#        | **Column**          | **Description**                   | **Type**  | **Example**        |
+#        |---------------------|-----------------------------------|-----------|--------------------|
+#        | plan_year           | Plan start date's year            | integer   | 2019               |
+#        | group               | Employer group code               | string    | acmecorp           |
+#        | division            | Employer division code            | string    | corporate          |
+#        | subscriber_id       | Plan subscriber ID                | integer   | 579635785          |
+#        | subscriber_ssn      | Plan subscriber's social security | integer | 1234567890           |
+#        | subscriber_dob      | Plan subscriber's date of birth   | date    | 1980-03-24           |
+#        | subscriber_gender   | Plan subscriber's gender          | string  | female               |
+#        | subscriber_address  | Plan subscriber street address    | string  | 123 Street #1        |
+#        | subscriber_city     | Plan subscriber city address      | string  | Cambridge            |
+#        | subscriber_state    | Plan subscriber state address     | string  | MA                   |
+#        | subscriber_zip      | Plan subscriber zip code          | string  | 02139                |
+#        | subscriber_status   | Plan subscriber status            | string  | active               |
+#        | member_id           | Plan member ID                    | integer | 579635786            |
+#        | member_ssn          | Plan subscriber's social security | integer | 1234567891           |
+#        | member_dob          | Plan member's date of birth       | date    | 2010-04-26           |
+#        | member_gender       | Plan member's gender              | string  | female               |
+#        | member_address      | Plan member street address        | string  | 123 Street #1        |
+#        | member_city         | Plan member city address          | string  | Cambridge            |
+#        | member_state        | Plan member state address         | string  | MA                   |
+#        | member_zip          | Plan member zip code              | integer | 02139                |
+#        | member_relation     | Plan member zip code              | integer | child                |
+#        | member_status       | Plan member status                | string  | active               |
+#        | benefit             | Benefit plan ID (if enrolled)     | string  | hdhp_13958           |
+#        | benefit_start       | Coverage start date (if enrolled) | date    | 2019-01-01           |
+#        | benefit_end         | Coverage end date (if known)      | date    |                      |
+#        | benefit_type        | Benefit plan type (if enrolled)   | string  | basic                |
+#        | eligible_benefits   | List of all eligible benefit IDs  | string  | hdhp_13958;ppo_14827 |
+
+
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "formData"
+        name: "file"
+        type: "file"
+        description: "Eligibility file to upload"
+        required: true  
+        x-mimetype: text/csv
+      - in: "formData"
+        name: "name"
+        description: "Description of the eligibility file to upload"
+      - in: "formData"
+        name: "id"
+        description: "Eligibility file ID that can be used to identify the status of the specific file upload into the Reclaim system"
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # post file including bearer token authorization in header
+            curl -X POST
+            -H 'authorization: [bearer_token]' \
+            -F 'file=@group_id_eligibility.csv' \
+            -F 'name=group_id_eligibility' \
+            -F 'id=group_id_elig_2019_4_5' \
+            https://platform.reclaim.health/api/groups/[group_id]/eligibility
+      - lang: "Python"
+        source: |
+            import requests
+
+            files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
+            payload = {'name': 'group_id_eligibility', 'id': 'group_id_elig_2019_4_5'}
+            headers = {'Authorization': 'bearer_token'}
+            
+            response = requests.put('https://platform.reclaim.health/api/groups/[group_id]/eligibility', files=files, data=payload, headers=headers).json()
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/EligibilityUploadDetailOutput"
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Eligibility Status Check"
+      description: "This endpoint checks the ingestion status of the eligibility data within the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/EligibilityStatusCheckDetailOutput"   
+  /groups/[group_id]/eligibility/[eligibility_id]:
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Specific Eligibility Status Check"
+      description: "This endpoint checks the ingestion status of the eligibility data within the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/EligibilityUploadDetailOutput"
+  /groups/[group_id]:
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Group Summary"
+      description: "This endpoint checks the ingestion status of the eligibility data within the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/EligibilityUploadDetailOutput"   
+  /groups/[group_id]/benefits:
+    post:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Upload Group Benefits"
+      description: |
+        This endpoint allows the client to upload the benefit and plan attributes offered by a specific employer group to their subscribers. 
+        
+        <details>
+    
+        <summary id="text" onClick="function()"><font color="blue"><u> Click for Reclaim's preferred benefits attributes file schema details </u></font></summary>
+        <p>
+        <table id="table2" style="width:100%">
+          <tr>
+            <th>column</th>
+            <th>description</th> 
+            <th>type</th>
+            <th>example</th>
+          </tr>
+          <tr>
+            <td> benefit_id</td><td> Benefit plan ID </td><td> string </td><td> hdhp_13958</td>
+          </tr>
+          <tr>
+            <td> benefit_type</td><td> Benefit plan type </td><td> string </td><td> basic </td>
+          </tr>
+          <tr>
+            <td> benefit_name</td><td> Benefit plan user-friendly name </td><td> string </td><td> HDHP Choice Base Plus </td>
+          </tr>
+          <tr> 
+            <td> group</td><td> Employer group code </td><td> string </td><td> acmecorp </td>
+          </tr>
+          <tr> 
+            <td> division</td><td> Employer group division code </td><td> string </td><td> corporate </td>
+          </tr>
+          <tr> 
+            <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2019</td>
+          </tr>
+          <tr>    
+            <td> start_date </td><td> Plan start date</td><td> date</td><td> 2019-01-01</td>
+          </tr>
+          <tr>
+            <td> end_date </td><td> Plan end date</td><td> date</td><td> 2019-12-31</td>
+          </tr>
+          <tr>    
+            <td> ee_premium </td><td> Monthly premium for subscriber only</td><td> float</td><td> 356.7</td>
+          </tr>
+          <tr>
+            <td> ec_premium </td><td> Monthly premium for subscriber and children dependents</td><td> float</td><td> 456.7</td>
+          </tr>
+          <tr>
+            <td> es_premium </td><td> Monthly premium for subscriber and spouse</td><td> float</td><td> 556.7</td>
+          </tr>
+          <tr>
+            <td> ef_premium </td><td> Monthly premium for subscriber and family (spouse and children)</td><td> float</td><td> 656.7</td>
+          </tr>
+          <tr>
+            <td> hra_included </td><td> Indicator whether benefit is associated with HRA</td><td> bool</td><td> true</td>
+          </tr>
+          <tr>
+            <td> ee_hra_contribution </td><td> Group HRA contribution to subscriber only; if applicable</td><td> float</td><td> 500</td>
+          </tr>
+          <tr>
+            <td> ef_hra_contribution </td><td> Group HRA contribution to subscriber and dependents; if applicable</td><td> float</td><td> 1000</td>
+          </tr>
+          <tr>
+            <td> hsa_included </td><td> Indicator whether benefit is associated with HSA</td><td> bool</td><td> true</td>
+          </tr>
+          <tr>
+            <td> ee_hsa_contribution </td><td> Group HSA contribution to subscriber only; if applicable</td><td> float</td><td> 500</td>
+          </tr>
+          <tr>
+            <td> ef_hsa_contribution </td><td> Group HSA contribution to subscriber and dependents; if applicable</td><td> float</td><td> 1000</td>
+          </tr>
+          <tr>
+            <td> hsa_bank </td><td> HSA bank name; if applicable</td><td> string</td><td> HSA Bank</td>
+          </tr> 
+          <tr>
+            <td> fsa_included </td><td> Indicator whether benefit is associated with FSA</td><td> bool</td><td> true</td>
+          </tr>
+          <tr>
+            <td> ee_fsa_contribution </td><td> Group FSA contribution to subscriber only; if applicable</td><td> float</td><td> 500</td>
+          </tr>
+          <tr>
+            <td> ef_fsa_contribution </td><td> Group FSA contribution to subscriber and dependents; if applicable</td><td> float</td><td> 1000</td>
+          </tr>
+          <tr>
+            <td> fsa_bank </td><td> FSA bank name; if applicable</td><td> string</td><td> Wageworks</td>
+          </tr> 
+          <tr>
+            <td> in_network_ee_deductible </td><td> In network deductible for subscriber only plan; if applicable</td><td> integer </td><td> 1500</td>
+          </tr>
+          <tr>
+            <td> in_network_ef_deductible </td><td> In network deductible for subscriber and dependents; if applicable</td><td> integer </td><td> 3000</td>
+          </tr>
+          <tr>
+            <td> out_network_ee_deductible </td><td> Out-of network deductible for subscriber only plan; if applicable</td><td> integer </td><td> 3000</td>
+          </tr>
+          <tr>
+            <td> out_network_ef_deductible </td><td> Out-of network deductible for subscriber and dependents; if applicable</td><td> integer </td><td> 6000</td>
+          </tr>
+          <tr>
+            <td> in_network_ee_oop_max </td><td> In network out-of-pocket max for subscriber only plan; if applicable</td><td> integer </td><td> 3000</td>
+          </tr>
+          <tr>
+            <td> in_network_ef_oop_max </td><td> In network out-of-pocket max for subscriber and dependents; if applicable</td><td> integer </td><td> 6000</td>
+          </tr>
+          <tr>
+            <td> out_network_ee_oop_max </td><td> Out-of network out-of-pocket max for subscriber only plan; if applicable</td><td> integer </td><td> 6000</td>
+          </tr>
+          <tr>
+            <td> out_network_ef_oop_max </td><td> Out-of network out-of-pocket max for subscriber and dependents; if applicable</td><td> integer </td><td> 10000</td>
+          </tr>
+          <tr>
+            <td> in_network_coinsurance </td><td> In network coinsurance; if applicable</td><td> integer </td><td> 20</td>
+          </tr>
+          <tr>
+            <td> out_network_coinsurance </td><td> Out-of network coinsurance; if applicable</td><td> integer </td><td> 30</td>
+          </tr>
+        </table>
+        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;" onclick="exportTableToCSV2('benefits_reclaim_schema.csv')">EXPORT SCHEMA TO CSV</button>
+
+    
+        </p>
+        </details>
+#        | **Column**          | **Description**                   | **Type**  | **Example**        |
+#        |---------------------|-----------------------------------|-----------|--------------------|
+#        | plan_year           | Plan start date's year            | integer   | 2019               |
+#        | group               | Employer group code               | string    | acmecorp           |
+#        | division            | Employer division code            | string    | corporate          |
+#        | subscriber_id       | Plan subscriber ID                | integer   | 579635785          |
+#        | subscriber_ssn      | Plan subscriber's social security | integer | 1234567890           |
+#        | subscriber_dob      | Plan subscriber's date of birth   | date    | 1980-03-24           |
+#        | subscriber_gender   | Plan subscriber's gender          | string  | female               |
+#        | subscriber_address  | Plan subscriber street address    | string  | 123 Street #1        |
+#        | subscriber_city     | Plan subscriber city address      | string  | Cambridge            |
+#        | subscriber_state    | Plan subscriber state address     | string  | MA                   |
+#        | subscriber_zip      | Plan subscriber zip code          | string  | 02139                |
+#        | subscriber_status   | Plan subscriber status            | string  | active               |
+#        | member_id           | Plan member ID                    | integer | 579635786            |
+#        | member_ssn          | Plan subscriber's social security | integer | 1234567891           |
+#        | member_dob          | Plan member's date of birth       | date    | 2010-04-26           |
+#        | member_gender       | Plan member's gender              | string  | female               |
+#        | member_address      | Plan member street address        | string  | 123 Street #1        |
+#        | member_city         | Plan member city address          | string  | Cambridge            |
+#        | member_state        | Plan member state address         | string  | MA                   |
+#        | member_zip          | Plan member zip code              | integer | 02139                |
+#        | member_relation     | Plan member zip code              | integer | child                |
+#        | member_status       | Plan member status                | string  | active               |
+#        | benefit             | Benefit plan ID (if enrolled)     | string  | hdhp_13958           |
+#        | benefit_start       | Coverage start date (if enrolled) | date    | 2019-01-01           |
+#        | benefit_end         | Coverage end date (if known)      | date    |                      |
+#        | benefit_type        | Benefit plan type (if enrolled)   | string  | basic                |
+#        | eligible_benefits   | List of all eligible benefit IDs  | string  | hdhp_13958;ppo_14827 |
+
+
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "formData"
+        name: "file"
+        type: "file"
+        description: "Benefit file to upload"
+        required: true  
+        x-mimetype: text/csv
+      - in: "formData"
+        name: "name"
+        description: "Description of the benefit file to upload"
+      - in: "formData"
+        name: "id"
+        description: "Benefit file ID that can be used to identify the status of the specific file upload into the Reclaim system"
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # post file including bearer token authorization in header
+            curl -X POST
+            -H 'authorization: [bearer_token]' \
+            -F 'file=@group_id_benefit.csv' \
+            -F 'name=group_id_benefit' \
+            -F 'id=group_id_ben_2019_4_5' \
+            https://platform.reclaim.health/api/groups/[group_id]/benefit
+      - lang: "Python"
+        source: |
+            import requests
+
+            files = {'file': open('/path/group_id_benefit.csv', 'rb')}
+            payload = {'name': 'group_id_benefit', 'id': 'group_id_ben_2019_4_5'}
+            headers = {'Authorization': 'bearer_token'}
+            
+            response = requests.put('https://platform.reclaim.health/api/groups/[group_id]/benefit', files=files, data=payload, headers=headers).json()
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/BenefitUploadDetailOutput"
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Benefit Upload Status Check"
+      description: "This endpoint checks the ingestion status of the benefit data within the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/BenefitStatusCheckDetailOutput"   
+  /groups/[group_id]/benefits/[upload_id]:
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Benefit File Upload Status Check"
+      description: "This endpoint checks the ingestion status of the benefit data within the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/EligibilityUploadDetailOutput"            
+  /subscribers/[subscriber_id]:
+    get:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Subscriber Details"
+      description: "This endpoints is designed to obtain information about a specific subscriber, including whether claims data is available in the Reclaim system for the subscriber, and if so, whether the subscriber has authorized Reclaim to use their claims data to personalize the optimization of their plan recommendations. The assumption is that the `subscriber_id` that identifies the subscriber for the client is known to the Reclaim platform."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SubscriberDetailOutput"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /subscribers/[subscriber_id]/authorize:
+    post:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Claim Authorization"
+      description: "This endpoint is designed to allow a subscriber to authorize Reclaim to make use of their claims data throughout the decision making process. The Reclaim platform recalls the subscriber's decision in its system and mirrors it in the mobile application for the continuous yearlong member engagement."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "AuthorizationDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/AuthorizationDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/AuthorizationDetailOutput"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+    get:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Check Claim Authorization"
+      description: "This endpoint is designed to allow the client to check if a subscriber has authorized Reclaim to make use of their claims data throughout the decision making process. This may be useful for subscribers that have access the continuous engagement Reclaim application or who have authorized Reclaim during last year's open enrollment."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/AuthorizationDetailOutput"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /subscribers/[subscriber_id]/review:
+    get:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Current Plan Review"
+      description: "This endpoint allows the client to output a review of how the subscriber's current plan has performed given their healthcare bills (and those of their dependents') for the year. The goal of this endpoint is to present information to the user about their current plan performance to frame the conversation around their next year's plan selections in a highly personalized manner. Please note that this is only available if Reclaim has the subscriber's claims data in its system and the subscriber has authorized Reclaim to utilize their claims data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ReviewDetailOutput"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"   
+  /subscribers/[subscriber_id]/survey:
+    get:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Enrollment Survey"
+      description: "This endpoint is designed to retrieve the subscriber's most updated responses to the survey questionnaires that have been saved in the Reclaim system. Note that this endpoint can be accessible even if the subscriber has no claims in the Reclaim system or has not authorized the use of their claims data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SurveyDetailOutput"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"  
+    post:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Enrollment Survey"
+      description: "This endpoint is designed to post the subscriber's responses to the survey questionnaires and share them with the Reclaim system. If the Reclaim system receives the subscriber's answers, it will feed them into its enrollment recommendation algorithm. Note that this endpoint can be accessible even if the subscriber has no claims in the Reclaim system or has not authorized the use of their claims data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "SurveyDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/SurveyDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SurveyDetailOutput"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"        
+  /subscribers/[subscriber_id]/recommendation:
+    get:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Recommended Plan Bundles"
+      description: "This endpoint allows the client to output a review of how the subscriber's current plan has performed given their healthcare bills (and those of their dependents') for the year. The goal of this endpoint is to present information to the user about their current plan performance to frame the conversation around their next year's plan selections in a highly personalized manner. Please note that this is only available if Reclaim has the subscriber's claims data in its system and the subscriber has authorized Reclaim to utilize their claims data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/RecommendationDetailOutput"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"                  
+definitions:
+# Add Group Detail Input
+  AddGroupDetailInput:
+    type: "object"
+    properties:
+      groups:
+        type: "array"
+        description: "Array of employer groups to add in the Reclaim system"
+        items:
+          type: "object"
+          properties:
+            id: 
+              type: "string"
+              description: "Slug name for the employer group"
+            name: 
+              type: "string"
+              description: "Detailed name for the employer group"
+    example:
+      groups:
+        - id: "acmecorp"
+          name: "ACME Corporation"
+        - id: "abc"
+          name: "ABC, Inc."
+# Group Eligibility Detail Input
+  GroupEligibilityDetailInput:
+    type: "object"
+    properties:
+      eligibility:
+        type: "array"
+        description: "Array of group members eligible to benefits offered by the employer group"
+        items:
+          type: "object"
+          properties:
+            plan_year: 
+              type: "integer"
+              description: "Plan year associated with the eligibility"
+            name: 
+              type: "string"
+              description: "Detailed name for the employer group"
+# Claim Authorization Detail Input
+  AuthorizationDetailInput:
+    type: "object"
+    properties:
+      authorized:
+        type: "boolean"
+        description: "True is the subscriber authorizes Reclaim to utilize their claims data for the decision support during open enrollment, False otherwise"
+    example:
+      authorized: true
+# Enrollment Survey Detail Input
+  SurveyDetailInput:
+    type: "object"
+    properties:
+      survey:
+        type: "array"
+        description: "Array containing the subscriber's questions and answers to the different types of questionnaires the client has selected to ask on their platform, if applicable. Note that the health related questions may only needed if the subscriber has no claims in the Reclaim system or whether they have elected to not use their claims"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "string"
+              description: "Slug describing the survey question. The first term defines the umbrella under which the question is served, e.g. **health**, **financial**, and **personality**. The remainder is a short description of the survey question"
+            value:
+              type: "string, integer, array"
+              description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`"  
+    example:
+      survey:
+        - id: "health_doctor_visits"
+          value: 8
+        - id: "health_prescriptions"
+          value: "low"
+        - id: "health_expected_events"
+          value: 
+            - "pregnancy"
+            - "income_loss"  
+# Add Group Detail Output
+  AddGroupDetailOutput:
+    type: "object"
+    properties:
+      groups:
+        type: "array"
+        description: "Array of employer groups just added in the Reclaim system by the client"
+        items:
+          type: "object"
+          properties:
+            id: 
+              type: "string"
+              description: "Slug name for the employer group"
+            name: 
+              type: "string"
+              description: "Detailed name for the employer group"
+    example:
+      groups:
+        - id: "acmecorp"
+          name: "ACME Corporation"
+        - id: "abc"
+          name: "ABC, Inc."            
+#Group List Detail Output
+  GroupListDetailOutput:
+    type: "object"
+    properties: 
+      count:   
+            type: "integer"
+            description: "Number of employer groups available in the Reclaim system"
+      groups:   
+            type: "array"
+            description: "Array containing all the employer groups available in the Reclaim system" 
+            items:
+              type: object
+              properties:
+                id:   
+                  type: "string"
+                  description: "Slug name for the employer group"  
+                name:
+                  type: "string"
+                  description: "Detailed name for the employer group"
+    example: 
+          count: 4
+          groups:
+            - id: "acmecorp"
+              name: "ACME Corporation"
+            - id: "abc"
+              name: "ABC, Inc."
+# Eligibility Upload Detail Output  
+  EligibilityUploadDetailOutput:
+    type: "object"
+    properties: 
+      id:   
+            type: "string"
+            description: "Eligibility upload ID as instructed by client upload post request"
+      status:   
+            type: "string"
+            description: |
+              Status of eligibility file upload and ingestion process into the Reclaim system. This can take one of three values:
+              
+              `processing` meaning the ingestion of the eligibility file is still processing
+              
+              `fail` meaning the ingestion of the eligibility file has failed
+              
+              `success` meaning the ingestion of the eligibility file has finished successfully
+      detail:
+            type: "string"
+            description: "Detailed description of failure error, if the ingestion of the eligibility were to encounter a failure"
+      updated: 
+            type: "timestamp"
+            description: "Timestamp of the most recent update on the status of the eligibility file upload"        
+    example: 
+          id: "group_id_elig_2019_4_5"
+          status: "processing"
+          updated: "2019-04-10 14:59:23"
+#Eligibility Status Check Detail Output      
+  EligibilityStatusCheckDetailOutput:
+    type: "object"
+    properties: 
+      eligibility:
+        type: "array"
+        description: "Array of objects describing the status of the most recent eligibility uploads by the client to the Reclaim system"
+        items:
+          type: "object"
+          properties:
+            id:   
+              type: "string"
+              description: "Eligibility upload ID as instructed by client upload post request"
+            status:   
+              type: "string"
+              description: |
+                Status of eligibility file upload and ingestion process into the Reclaim system. This can take one of three values:
+              
+                `processing` meaning the ingestion of the eligibility file is still processing
+              
+                `fail` meaning the ingestion of the eligibility file has failed
+              
+                `success` meaning the ingestion of the eligibility file has finished successfully
+            detail:
+              type: "string"
+              description: "Detailed description of failure error, if the ingestion of the eligibility were to encounter a failure"    
+            updated: 
+              type: "timestamp"
+              description: "Timestamp of the most recent update on the status of the eligibility file upload"
+    example: 
+      eligibility:
+        - id: "group_id_elig_2019_4_5"
+          status: "success"
+          updated: "2019-04-10 14:59:23"
+        - id: "group_id_elig_2019_5_5"  
+          status: "processing"
+          updated: "2019-05-10 12:59:29"
+        - id: "group_id_elig_2019_5_6"  
+          status: "fail"
+          updated: "2019-05-10 12:59:29"  
+          detail: "line 9, column 10 - found unexpected data format" 
+# Benefit Upload Detail Output  
+  BenefitUploadDetailOutput:
+    type: "object"
+    properties: 
+      id:   
+            type: "string"
+            description: "Benefit upload ID as instructed by client upload post request"
+      status:   
+            type: "string"
+            description: |
+              Status of benefits file upload and ingestion process into the Reclaim system. This can take one of three values:
+              
+              `processing` meaning the ingestion of the benefits file is still processing
+              
+              `fail` meaning the ingestion of the benefits file has failed
+              
+              `success` meaning the ingestion of the benefits file has finished successfully
+      detail:
+            type: "string"
+            description: "Detailed description of failure error, if the ingestion of the benefits file were to encounter a failure"
+      updated: 
+            type: "timestamp"
+            description: "Timestamp of the most recent update on the status of the benefits file upload"        
+    example: 
+          id: "group_id_ben_2019_4_5"
+          status: "processing"
+          updated: "2019-04-10 14:59:23"
+#Benefit Status Check Detail Output      
+  BenefitStatusCheckDetailOutput:
+    type: "object"
+    properties: 
+      eligibility:
+        type: "array"
+        description: "Array of objects describing the status of the most recent benefit file uploads by the client to the Reclaim system"
+        items:
+          type: "object"
+          properties:
+            id:   
+              type: "string"
+              description: "Benefit upload ID as instructed by client upload post request"
+            status:   
+              type: "string"
+              description: |
+                Status of benefit file upload and ingestion process into the Reclaim system. This can take one of three values:
+              
+                `processing` meaning the ingestion of the benefit file is still processing
+              
+                `fail` meaning the ingestion of the benefit file has failed
+              
+                `success` meaning the ingestion of the benefit file has finished successfully
+            detail:
+              type: "string"
+              description: "Detailed description of failure error, if the ingestion of the benefit were to encounter a failure"    
+            updated: 
+              type: "timestamp"
+              description: "Timestamp of the most recent update on the status of the benefit file upload"
+    example: 
+      eligibility:
+        - id: "group_id_ben_2019_4_5"
+          status: "success"
+          updated: "2019-04-10 14:59:23"
+        - id: "group_id_ben_2019_5_5"  
+          status: "processing"
+          updated: "2019-05-10 12:59:29"
+        - id: "group_id_ben_2019_5_6"  
+          status: "fail"
+          updated: "2019-05-10 12:59:29"  
+          detail: "line 9, column 10 - found unexpected data format"           
+#Subscriber Detail Output
+  SubscriberDetailOutput:
+    type: "object"
+    properties: 
+      subscriber:   
+            type: "integer"
+            description: "Subscriber ID"
+      group:   
+            type: "string"
+            description: "Employer group ID" 
+      division:   
+            type: "string"
+            description: "Employer group's division ID"    
+      claims_available:   
+            type: "boolean"
+            description: "True if Reclaim has mapped the medical and pharmacy claims of this subscriber and their dependants, False otherwise"
+      authorized:   
+            type: "boolean"
+            description: "True if the subscriber has authorized Reclaim to use their claims to personalize their decision support, False otherwise"
+    example:
+      subscriber: 57122389
+      group: "acmecorp"
+      division: "corporate"
+      claims_available: true
+      authorized: true
+    title: "subscriber_detail"  
+#Authorization Detail Output
+  AuthorizationDetailOutput:
+    type: "object"
+    properties: 
+      authorized:   
+            type: "boolean"
+            description: "True if the subscriber has authorized Reclaim to utilize their claims, False otherwise"
+    example: 
+      authorized: true
+    title: "claim_authorization" 
+#Current Plan Performance Review Detail Output
+  ReviewDetailOutput:
+    type: "object"
+    properties: 
+      authorized:   
+            type: "boolean"
+            description: "True if the subscriber has authorized Reclaim to utilize their claims, False otherwise"
+      members: 
+            type: "array"
+            description: "Array of all the current dependents on the subscriber's plan."
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                  description: "Plan member ID"
+                is_subscriber:
+                  type: "boolean"
+                  description: "True if the member is the plan subscriber, false otherwise"
+                name:
+                  type: "string"
+                  description: "Member's first name"  
+                relation:
+                  type: "string"
+                  description: |
+                    Slug describing the relation of the member to the subscriber. This takes three possible values
+                      
+                    `subscriber` referring to the member being the plan subscriber, 
+                      
+                    `spouse` referring to the member being the subscriber's spouse, 
+                      
+                    `child` referring to the member being the subscriber's child.            
+      plan_review: 
+            type: "object"
+            description: "Object describing the assessment of the subscriber's current plan performance"
+            properties:
+                plan: 
+                    type: "string"
+                    description: "Name of the subscriber's current health plan"
+                carrier: 
+                    type: "string"
+                    description: "Name of the subscriber's current insurance carrier"  
+                assessment: 
+                    type: "string"
+                    description: |
+                      Slug conferring an assessment of how the current plan has been performing, given the subscriber's claims and healthcare bills for the year thus far. This can take on three different values:
+                      
+                      `well_insured` signifies that the cureent year's selected plan was the best option for the subscriber, 
+                      
+                      `high_premium` signifies that the subscriber is overpaying on premiums while not needing that comprehensive of coverage, and 
+                      
+                      `high_oop` meaning the subscriber has paid more in out-of-pocket expenses with respect to other plans they could have chosen for the current year.
+                premium:
+                    type: "float"
+                    description: "Total amount of premiums paid by the subscriber thus far for the current plan year"
+                oop: 
+                    type: "float"
+                    description: "Total amount of out-of-pocket expenses (medical and pharmacy) paid by the subscriber thus far for the current plan year"
+                group_contribution: 
+                    type: "float"
+                    description: "Amount contributed by the employer group either through an HSA or an HRA contribution"
+                subscriber_contribution: 
+                    type: "float"
+                    description: "Amount contributed by the subscriber either to an HSA or an FSA, if known"    
+                alternative_savings: 
+                    type: "float"
+                    description: "Amount that the subscriber could have saved, had they selected another plan for the current year from the options that were made available to them during last year's open enrollment"   
+      episode_review: 
+            type: "array"
+            description: "Array describing the highlights of the subscriber and their dependents' healthcare episodes for the current year"
+            items:
+              type: "object"
+              properties:
+                episode:
+                  type: "string"
+                  description: "Episode description"
+                event:
+                  type: "string"
+                  description: "Episode description"
+                name:
+                  type: "string"
+                  description: "First name of the member associated with the episode of care"
+                start:
+                  type: "date"
+                  description: "Start date of the episode of care"
+                end:
+                  type: "date"
+                  description: "End date of the episode of care"  
+                charge:
+                  type: "float"
+                  description: "Out-of-pocket expense to the subscriber and their dependents"
+    example:
+      authorized: true
+      members:
+        - id: 511750
+          is_subscriber: true
+          name: "Susan"
+          relation: "subscriber"
+        - id: 511751
+          is_subscriber: false
+          name: "Cora"
+          relation: "Spouse"  
+      plan_review:
+        plan: "HDHP Choice Base Plus"
+        carrier: "United Healthcare"
+        assessment: "well_insured"
+        premium: 8800
+        oop: 3535
+        group_contribution: 1000
+        subscriber_contribution: 5500
+        alternative_savings: 500
+      episode_review:
+        - episode: "Pregnancy"
+          event: "Labor and Childbirth"
+          name: "Susan"
+          start: "2017-03-28"
+          end: "2017-04-02"
+          charge: 6173.4
+        - episode: "Dislocated Shoulder" 
+          event: "Urgent Care"
+          name: "Cora"
+          start: "2017-08-05"
+          end: "2017-08-05"
+          charge: 568.3  
+    title: "year_review"  
+# Enrollment Survey Detail Output
+  SurveyDetailOutput:
+    type: "object"
+    properties:
+      updated: 
+        type: "timestamp"
+        description: "Timestamp of latest updated responses saved into the Reclaim system, if applicable"
+      survey:
+        type: "array"
+        description: "Array containing the subscriber's questions and answers to the different types of questionnaires the client has selected to ask on their platform, if applicable. Note that the health related questions may only needed if the subscriber has no claims in the Reclaim system or whether they have elected to not use their claims"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "string"
+              description: "Slug describing the survey question. The first term defines the umbrella under which the question is served, e.g. **health**, **financial**, and **personality**. The remainder is a short description of the survey question"
+            description:
+              type: "string"
+              description: "Survey question verbiage, if necessary to include"  
+            type:
+              type: "string"
+              description: |
+                Slugs describing the type of the question. This can take the following values:
+                
+                `bool` if the answer to the question is True or False
+                
+                `int` if the answer to the question is an integer
+                
+                `select` if the answer involves selecting a single option from the available choices
+                
+                `multi` if the answer involves selecting at least one option from the available choices
+            min:
+              type: "integer"
+              description: "Minimum integer value to suggest to the subscriber, if applicable and if the expected answer to the question is of type `int`"
+            max:
+              type: "integer"
+              description: "Maximum integer value to suggest to the subscriber, if applicable and if the expected answer to the question is of type `int`"
+            options:
+              type: "array"
+              description: "Array of options to suggest to the subscriber, if the expected answer is of type `select` or `multi`"  
+              items:
+                type: "object"
+                properties:
+                  name: 
+                    type: "string"
+                    description: "User-friendly description of the option"
+                  value:
+                    description: "Slug or number identifying the option"
+            value:
+              type: "string, integer, array"
+              description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`"  
+    example:
+      updated: "2019-02-05 14:59:23"
+      survey:
+        - id: "health_doctor_visits"
+          description: "How many doctor visits do you and your dependents expect to need in the upcoming plan year?"
+          type: "int"
+          value: 8
+        - id: "health_prescriptions"
+          description: "How many prescriptions do you have in your drug cabinet?"
+          type: "select"
+          options: 
+            - name: "Less than 3 prescriptions"
+              value: "low"
+            - name: "Between 4 and 7 prescriptions"
+              value: "medium"
+            - name: "More than 8 prescriptions"
+              value: "high"
+          value: "low"
+        - id: "health_expected_events"
+          description: "Do you expect any especially significant events during the upcoming plan year? Select all that may apply."
+          type: "multi"
+          options:
+            - name: "Pregnancy / having a baby"
+              value: "pregnancy"
+            - name: "Elective surgery (e.g. knee replacement)" 
+              value: "surgery"
+            - name: "Retirement (you or your spouse)"
+              value: "retirement"
+            - name: "Loss of income (staying home with kids, etc.)"
+              value: "income_loss"
+          value: 
+            - "pregnancy"
+            - "income_loss"
+# Plan Recommendation Detail Output
+  RecommendationDetailOutput:
+    type: "object"
+    properties:
+      updated: 
+        type: "timestamp"
+        description: "Timestamp of latest updated recommendations computed in the Reclaim system"
+      authorized:   
+        type: "boolean"
+        description: "True if the subscriber has authorized Reclaim to utilize their claims, False otherwise"
+      survey:   
+        type: "boolean"
+        description: "True if the subscriber has taken the client's survey, False otherwise"
+      recommendations:
+        type: "array"
+        description: "Object containing the subscriber's recommended bundled plans. Note that the recommendations are based off of consumer data and survery answers (if available) for the case where the subscriber has no claims in the Reclaim system or if they have not authorized Reclaim to use their claims data. The recommendations are based off of consumer data, survey answers (if available) and the claims data associated with the subscriber and their dependents, if the the subscriber has claims in the Reclaim system and has authorized Reclaim to use their claims data"
+        items:
+              type: "object"
+              properties:
+                confidence:
+                  type: "float"
+                  description: "Proportion of people like the subscriber that would save by enrolling in this bundled plan"
+                cost:
+                  type: "object"
+                  properties:
+                    low:
+                      type: "float"
+                      description: "Lower end of predicted total cost (total premiums + out-of-pocket expenses - potential reimbursements - potential group contributions) for this bundled plan"
+                    high:
+                      type: "float"
+                      description: "Upper end of predicted total cost (total premiums + out-of-pocket expenses - potential reimbursements - potential group contributions) for this bundled plan"
+                benefits:
+                  type: "array"
+                  description: "Array containing the detailed policy information within this bundled plan"
+                  items:
+                    type: "object"
+                    properties:
+                      type:
+                        type: "string"
+                        description: |
+                          Slug describing the policy type. This can take any one of the following values:
+                          
+                          `basic` refers to the medical and rx plan (basic health plan)
+                          
+                          `hospital` refers to a supplemental hospital indemnity plan
+                          
+                          `accident` refers to a supplemental accident coverage plan
+                          
+                          `critical_illness` refers to a supplemental critical illness plan
+                          
+                          `disease_management` refers to a generic disease management benefit
+                      id:    
+                        type: "integer"
+                        description: "Policy unique ID"  
+                      premium:    
+                        type: "float"
+                        description: "Policy yearly premium"      
+                      oop:    
+                        type: "object"
+                        description: "Object containing the predicted out of pocket expenses under this policy. This is only applicable for the basic policy."
+                        properties:
+                          low:
+                            type: "float"
+                            description: "Lower end of predicted out-of-pocket cost for the policy, if applicable"
+                          high:
+                            type: "float"
+                            description: "Upper end of predicted out-of-pocket cost for the policy, if applicable"   
+                      hsa:
+                        type: "object"
+                        description: "Object containing the HSA related information, if applicable with the basic plan."
+                        properties:
+                          group_contribution:
+                            type: "float"
+                            description: "Subscriber's employer group's contribution to the HSA, if applicable"
+                          recommended_savings:
+                            type: "float"
+                            description: "Recommended subscriber's annual contribution to the HSA. Note that we do not have visibility into their retirement savings or contributions"      
+                      fsa:
+                        type: "object"
+                        description: "Object containing the FSA related information, if applicable with the basic plan."
+                        properties:
+                          group_contribution:
+                            type: "float"
+                            description: "Subscriber's employer group's contribution to the FSA, if applicable"
+                          recommended_savings:
+                            type: "float"
+                            description: "Recommended subscriber's contribution to the FSA based on their health needs for the upcoming plan year"                                
+                      reimbursement:    
+                        type: "object"
+                        description: "Object containing the predicted reimbursement to the subscriber under this policy. This is only applicable for the supplemental policies (hospital, accident, and critical illness)."
+                        properties:
+                          probability:
+                            type: "float"
+                            description: "Proportion of people like the subscriber who have benefitted from such supplemental policy"
+                          typical:
+                            type: "float"
+                            description: "Typical reimbursement implied from people like the subscriber who have benefitted from such supplemental policy"      
+    example:
+      updated: "2019-02-05 14:59:23"
+      authorized: true
+      survey: true
+      recommendations:
+        - confidence: 0.754
+          cost:
+            low: 6000
+            high: 7000
+          benefits:
+            - type: "basic"
+              id: 2579285709
+              premium: 4000
+              oop:
+                low: 3000
+                high: 4000
+              hsa:
+                group_contribution: 1000
+                recommended_savings: 5500
+            - type: "hospital"
+              id: 5128746926
+              premium: 500
+              reimbursement: 
+              probability: 0.30
+              typical_benefit: 2500
+            - type: "disease_management"
+              id: 35847948578
+#KEEP!  
+  CostPredictionDetailOutput:
+    type: "object"
+    properties: 
+      cost:
+        type: "object"
+        description: "Contains the overall predicted cost statsistics of the subscriber and their dependents"
+        properties:
+          median:   
+            type: "float"
+            description: "Median of the cost predicted before applying the plan logic"
+            default: 3500
+          percentile_75:   
+            type: "float"
+            description: "75th percentile of the cost predicted before applying the plan logic"
+            default: 5000
+          percentile_95:   
+            type: "float"
+            description: "95th percentile of the cost predicted before applying the plan logic"
+            default: 7500
+          services:   
+            type: "object"
+            description: "Year-to-date expenses broken down by service type. Note that these are umbrellas of services. We have about a couple of dozens of services that we can tease out based on your requirements. Here are a couple of examples."
+            properties:
+              pharmacy:   
+                type: "float"
+                description: "Future plan year's predicted pharmacy / prescription drugs out of pocket expenses"
+                default: 1000
+              primary_care:   
+                type: "float"
+                description: "Future plan year's predicted primary care out of pocket expenses"
+                default: 500
+              specialty_care:   
+                type: "float"
+                description: "Future plan year's predicted specialty care out of pocket expenses."
+                default: 750
+      members:
+        type: "array"
+        description: "This will include the details of the cost by member, including the subscriber of the plan."
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              description: "Plan member ID"
+              default: 511750
+            is_subscriber:
+              type: "boolean"
+              description: "True if the member is the plan subscriber, false otherwise"
+              default: true
+            future_cost:
+              type: "object"
+              properties:
+                median:   
+                  type: "float"
+                  description: "Median of the cost predicted before applying the plan logic"
+                  default: 3500
+                percentile_75:   
+                  type: "float"
+                  description: "75th percentile of the cost predicted before applying the plan logic"
+                  default: 5000
+                percentile_95:   
+                  type: "float"
+                  description: "95th percentile of the cost predicted before applying the plan logic"
+                  default: 7500
+                services:   
+                  type: "object"
+                  description: "Year-to-date expenses broken down by service type. Note that these are umbrellas of services. We have about a couple of dozens of services that we can tease out based on your requirements. Here are a couple of examples."
+                  properties:
+                    pharmacy:   
+                      type: "float"
+                      description: "Future plan year's predicted pharmacy / prescription drugs out of pocket expenses"
+                      default: 1000
+                    primary_care:   
+                      type: "float"
+                      description: "Future plan year's predicted primary care out of pocket expenses"
+                      default: 500
+                    specialty_care:   
+                      type: "float"
+                      description: "Future plan year's predicted specialty care out of pocket expenses."
+                      default: 750
+                episodes: 
+                  type: "array"
+                  description: "Breakdown of predicted cost by major healthcare episodes. Note that our system has about 500 episodes of care, e.g., diabetes type II, kidney failure, general health, etc."
+                  items:
+                    type: "object"
+                    properties:
+                      label:   
+                        type: "string"
+                        description: "Name of the episode"
+                        default: "Diabetes Type II"
+                      cost:   
+                        type: "object"
+                        properties:
+                          median:   
+                            type: "float"
+                            description: "Median of the cost predicted before applying the plan logic"
+                            default: 3500
+                          percentile_75:   
+                            type: "float"
+                            description: "75th percentile of the cost predicted before applying the plan logic"
+                            default: 5000
+                          percentile_95:   
+                            type: "float"
+                            description: "95th percentile of the cost predicted before applying the plan logic"
+                            default: 7500
+                          services:   
+                            type: "object"
+                            description: "Year-to-date expenses broken down by service type. Note that these are umbrellas of services. We have about a couple of dozens of services that we can tease out based on your requirements. Here are a couple of examples."
+                            properties:
+                              pharmacy:   
+                                type: "float"
+                                description: "Future plan year's predicted pharmacy / prescription drugs out of pocket expenses on the associated episode of care"
+                                default: 1000
+                              specialty_care:   
+                                type: "float"
+                                description: "Future plan year's predicted specialty care out of pocket expenses on the associated episode of care"
+                                default: 500
+                              lab_and_pathology:   
+                                type: "float"
+                                description: "Future plan year's predicted lab and pathology out of pocket expenses on the associated episode of care"
+                                default: 750
+    title: "cost_prediction"    
+#END    
+#KEEP!  
+  SupplementalDetailOutput:
+    type: "object"
+    properties: 
+      supplemental:
+        type: "array"
+        description: "Holds an array of specific supplemental insurance benefits available to the subscriber, if known. Else, holds an array of typical supplemental insurance plans"
+        items:
+          type: "object"
+          properties: 
+            product: 
+              type: "string"
+              description: "Slug name for the supplemental insurance plan"
+              default: "aflac-acme-gold"
+            type:
+              type: "string"
+              description: "Type of supplemental insurance plan, e.g. hospital, accident, disability, etc."
+              default: "hospital"
+            eligible: 
+              type: "boolean"
+              description: "True if the subscriber or the member is eligible for the plan. This takes into account any pre-existing conditions that may render eligibility for the plan challenging"
+              default: true
+            reimbursement:
+              type: "object"
+              description: "Predictions of the potential reimbursements to the subscriber or the member if they were to enroll for the next 2-3 plan years"
+              properties:
+                horizon: 
+                  type: "int"
+                  description: "Plan years for which predictions are made"
+                  "default": 3
+                stats: 
+                  type: "array"
+                  description: "Reimbursement statistics, including frequency and reimbursement values"
+                  items:
+                    type: "object"
+                    properties:
+                      value:
+                        type: "float"
+                        description: "Reimbursement value predicted"
+                        default: 1500
+                      frequency:
+                        type: "float"
+                        description: "Frequency or probability that this reimbursement value occurs"
+                        default: 0.25
+      wellness:
+        type: "array"
+        description: "Holds an array of specific wellness, care management or disease management products to the subscriber, if known, only if useful to the members associated with the plan subscriber."
+        items:
+          type: "object"
+          properties:
+            product: 
+              type: "string"
+              description: "Slug name for the supplemental insurance plan"
+              default: "virgin-diabetes"
+            type:
+              type: "string"
+              description: "Type of supplemental insurance plan, e.g. hospital, accident, disability, etc."
+              default: "diabetes-management"
+    title: "supplemental"    
+
+#KEEP!  
+  YearRecapDetailOutput:
+    type: "object"
+    properties: 
+      group: 
+        type: "string"
+        description: "Employer group ID"
+        default: "acme"
+      subscriber: 
+        type: "integer"
+        description: "Plan subscriber (employee) ID"
+        default: 511750
+      oop_expenses:   
+        type: "object"
+        properties:
+          premium:
+            type: "float"
+            description: "Cumulative year-to-date paycheck deduction from health plan subscriber for plan premiums"
+            default: 4000
+          deductible:   
+            type: "float"
+            description: "Cumulative year-to-date out of pocket expenses paid as deductibles"
+            default: 4000
+          coinsurance:
+            type: "float"
+            description: "Cumulative year-to-date out of pocket expenses paid as coinsurance payments"
+            default: 4000
+          copay:
+            type: "float"
+            description: "Cumulative year-to-date out of pocket expenses paid as copays"
+            default: 4000  
+          plan_paid:   
+            type: "float"
+            description: "Year-to-date expenses paid by the plan (insurer or self-insured group)"
+            default: 4000
+      plan_performance:  
+        type: "object"
+        properties:
+          plan:
+            type: "string"
+            description: "Health plan slug based on member enrollment"
+            default: "hdhp_base_plus"
+          plan_name:
+            type: "string"
+            description: "Health plan user friendly name"
+            default: "HDHP Choice Base Plus"
+          recommended:
+            type: "boolean"
+            description: "True if the current plan is still the best for the member given posted claims and bills, false otherwise"
+            default: true
+          savings:
+            type: "float"
+            description: "Savings of the member being on their current plan in comparison to the next best plan that was available to them in the current plan year"
+            default: 500        
+      members:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              description: "Plan member ID"
+              default: 511750
+            member_paid:   
+              type: "float"
+              description: "Year-to-date out of pocket expenses paid by the plan member towards their healthcare"
+              default: 4000
+            plan_paid:   
+              type: "float"
+              description: "Year-to-date expenses paid by the plan (insurer or self-insured group)"
+              default: 4000
+            services:
+              type: "object"
+              description: "Year-to-date expenses broken down by service type. Note that these are umbrellas of services. We have about a couple of dozens of services that we can tease out based on your requirements. Here are a couple of examples."
+              properties:
+                pharmacy:   
+                  type: "float"
+                  description: "Year-to-date pharmacy / prescription drugs out of pocket expenses"
+                  default: 1000
+                primary_care:   
+                  type: "float"
+                  description: "Year-to-date primary care out of pocket expenses"
+                  default: 500
+                specialty_care:   
+                  type: "float"
+                  description: "Year-to-date specialty care out of pocket expenses."
+                  default: 750
+            major_events:
+              type: "array"
+              items:
+                type: "object"
+                properties:
+                  service:   
+                    type: "string"
+                    description: "Main healthcare service rendered for the event. Note that an event is an aggregation of claims and provider bills based on an episode of care."
+                    default: "Maternity Care"
+                  episode:   
+                    type: "string"
+                    description: "Main diagnosis or description of the healthcare episode"
+                    default: "Labor and Childbirth"
+                  date:   
+                    type: "date"
+                    description: "Event date of service. Note this may be different that the date the digital bill posts to the system."
+                    default: "2018-03-28"
+                  charge:  
+                    type: "float"
+                    description: "Member's out of pocket expenses for the event"
+                    default: 6173.64
+                  in_network: 
+                    type: "boolean"
+                    description: "True if all claims for this event were billed in network, false otherwise"
+                    default: true
+                  providers:
+                    type: "array"
+                    description: "List of medical and pharmacy providers associated with the healthcare event"
+                    items:
+                      type: "string"
+                      default: "Plantation General Hospital"
+    title: "year_recap"
+#END
+  BillDetailOutput:
+    type: "object"
+    properties:
+      person_name:
+        type: "string"
+        description: "person first name"
+        default: "Anna"
+      family_order:
+        type: "integer"
+        description: "order of the family member based on their date of birth"
+      event_title:
+        type: "string"
+        description: "event_title for the selected event"
+        default: "Doctot Visit"
+      event_category:
+        type: "string"
+        description: "event category  for the selected event"
+        default: "Abnormal blood protein"
+      start_date:
+        type: "string"
+        description: "episode dos start"
+        default: "2016-03-05"
+      end_date:
+        type: "string"
+        description: "episode dos end"
+        default: "2016-03-05"
+      is_linked_to_upload:
+        type: "boolean"
+        description: "flag specifies whether the record is linked to upload ,exists\
+          \ only if the event type is episode of care"
+        default: true
+      uploads_link:
+        type: "object"
+        description: "upload link object contains the details of docuemnts associated\
+          \ with the record.If the type is uplaod_documents then only uploads_link\
+          \ will be shown in the API"
+        properties:
+          document_ids:
+            type: "array"
+            description: "document ids for the documents associated with the record"
+            items:
+              type: "object"
+              properties:
+                date:
+                  type: "string"
+                  default: "2018-04-16"
+                document_id:
+                  type: "string"
+                  default: "20180416212642"
+                title:
+                  type: "string"
+                  default: "Doctor Visit"
+          number_of_documents:
+            type: "integer"
+            format: "int32"
+            default: 1
+      event_list:
+        type: "object"
+        description: "Bills contains the detials of providers  visited  by the user\
+          \ and their assocaited bill details.This section exits if and only if the\
+          \ type is episode_of_care or pharamacy"
+        properties:
+          label:
+            type: "string"
+            description: "label shown in the screen"
+            default: "Services included in your health visit."
+          detail:
+            type: "object"
+            properties:
+              breakdown:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    label:
+                      type: "string"
+                    amount:
+                      type: "number"
+                      format: "double"
+                      default: 40.0
+                    procedures:
+                      type: "array"
+                      items:
+                        type: "object"
+                        properties:
+                          label:
+                            type: "string"
+                          amount:
+                            type: "number"
+                            format: "double"
+                            default: 40.0
+              total:
+                type: "number"
+                format: "double"
+                default: 40.0
+    title: "bill_detail"
+  FinancialEvent:
+    type: "object"
+    properties:
+      events:
+        type: "object"
+        properties:
+          person_name:
+            type: "string"
+            description: "peron first name"
+            default: "Anna"
+          family_order:
+            type: "integer"
+            format: "int32"
+            description: "family order of the member"
+            default: 0
+          is_user:
+            type: "boolean"
+            description: "determines whether the logged in user or not"
+            default: true
+          link:
+            type: "string"
+            description: "link to the particular event"
+            default: "/feed/a4936a7d-ea03-11e7-b2c8-19ee62d891e0"
+          view_id:
+            type: "string"
+            description: "event_view_id-id for the particular event"
+            default: "a4936a7d-ea03-11e7-b2c8-19ee62d891e0"
+          event_type:
+            type: "string"
+            description: "event type"
+            default: "episode_of_care"
+          event_category:
+            type: "string"
+            description: "event category associated with particular event"
+            default: "Abnormal Blood Protien"
+          event_title:
+            type: "string"
+            description: "event title associated with particular event"
+            default: "Doctor Visit"
+          start_date:
+            type: "string"
+            description: "episode dos start"
+            default: "2016-03-08"
+          end_date:
+            type: "string"
+            description: "episode dos end"
+            default: "2016-03-08"
+          event_charge:
+            type: "integer"
+            format: "int32"
+            description: "event charge will be null for uploaded documents"
+            default: 0
+          potential_savings:
+            type: "number"
+            format: "double"
+            default: 1618.0
+          breakdown:
+            type: "array"
+            description: "breakdown array conatins the list of breakdown"
+            items:
+              type: "string"
+              enum:
+              - "John Zubkus, MD"
+              - "John Zubkus"
+          guidance_future:
+            type: "object"
+            properties:
+              use_network_provider:
+                type: "boolean"
+                default: false
+              postpone_treatment:
+                type: "boolean"
+                default: false
+              plan_change:
+                type: "boolean"
+                default: false
+              get_supplemental:
+                type: "boolean"
+                default: false
+              use_urgent_care:
+                type: "boolean"
+                default: false
+          guidance_actionable:
+            type: "object"
+            properties:
+              appeal_charges:
+                type: "boolean"
+                default: false
+              file_reimbursement:
+                type: "boolean"
+                default: false
+              use_hsa:
+                type: "boolean"
+                default: false
+          charge_split:
+            type: "object"
+            properties:
+              carrier:
+                type: "number"
+                format: "double"
+                default: 15619.84
+              patient:
+                type: "number"
+                format: "double"
+                default: 6173.64
+    title: "FinancialEvent"
+  HomeTransactions:
+    type: "object"
+    properties:
+      hsa_flag:
+        type: "string"
+        default: "linked"
+      savings:
+        type: "object"
+        description: "Exists only if the hsa_flag is 'linked'"
+        properties:
+          hsa_balance:
+            type: "integer"
+            format: "int32"
+            description: "hsa_balance"
+            default: 3242
+          text:
+            type: "string"
+            default: "total health savings"
+          chart:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                date:
+                  type: "string"
+                  default: "2017-01-01"
+                amount:
+                  type: "number"
+                  format: "double"
+                  default: 350.0
+      charges:
+        type: "object"
+        properties:
+          year_to_date_spending:
+            type: "integer"
+            format: "int32"
+            description: "hsa_balance"
+            default: 3242
+          text:
+            type: "string"
+            default: "year-to-date expenses"
+          chart:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                date:
+                  type: "string"
+                  default: "2017-01-01"
+                amount:
+                  type: "number"
+                  format: "double"
+                  default: 350.0
+    title: "AddCustomerAccountsOut"
+  PlanMembers:
+    title: "GetPlnnMembers"
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          default: "Bill"
+        family_order:
+          type: "integer"
+          format: "int32"
+          default: 2
+        is_user:
+          type: "boolean"
+          default: false
+        has_access:
+          type: "boolean"
+          default: false
+  SaveAccountOutput:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        format: "int32"
+        default: 200
+    title: "AddCustomerAccountsOut"
+    description: "This is the response on success, if there is mfa challenge then\
+      \ the response will be mfa question"
+x-amazon-apigateway-documentation:
+  version: "dfsf"
+  createdDate: "2018-08-02T06:07:47Z"
+  documentationParts:
+  - location:
+      type: "API"
+    properties:
+      info:
+        description: "Mya health API documentation"
+      tags:
+      - name: "Health Feed"
+        description: "All about health feeds"
+      - name: "Uploads"
+        description: "All about uploads"
+  - location:
+      type: "METHOD"
+      path: "/api/activate-hsa"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for activate hsa"
+      description: "API for activate hsa"
+  - location:
+      type: "METHOD"
+      path: "/api/add-customer"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for adding customer"
+      description: "API for adding customer"
+  - location:
+      type: "METHOD"
+      path: "/api/add-discover-customer-account"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for adding customer"
+      description: "API for adding customer"
+  - location:
+      type: "METHOD"
+      path: "/api/bill-detail"
+      method: "POST"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for getting bill detail"
+      description: "API for getting bill detail"
+  - location:
+      type: "METHOD"
+      path: "/api/bill-save"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "API for saving bills "
+      description: "API for saving bills  "
+  - location:
+      type: "METHOD"
+      path: "/api/card-images-list"
+      method: "GET"
+    properties:
+      tags:
+      - "Coverage"
+      summary: "STEP-1 : API for showing all cards"
+      description: "STEP-1 : API for showing all cards"
+  - location:
+      type: "METHOD"
+      path: "/api/charges-detail"
+      method: "POST"
+    properties:
+      tags:
+      - "Health Purse"
+      summary: "API for getting charges details"
+      description: "API for getting charges details"
+  - location:
+      type: "METHOD"
+      path: "/api/charges-main"
+      method: "GET"
+    properties:
+      tags:
+      - "Health Purse"
+      summary: "API for getting charges information"
+      description: "API for getting charges information"
+  - location:
+      type: "METHOD"
+      path: "/api/charges-main"
+      method: "POST"
+    properties:
+      tags:
+      - "Health Purse"
+      summary: "API for getting charges information"
+      description: "API for getting charges information"
+  - location:
+      type: "METHOD"
+      path: "/api/charges-search-api"
+      method: "GET"
+    properties:
+      tags:
+      - "Charges"
+      summary: "API for getting search tags for charges"
+      description: "API for getting list of search tags for charges"
+  - location:
+      type: "METHOD"
+      path: "/api/check-claims"
+      method: "GET"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for getting claim status"
+      description: "API for getting claim status"
+  - location:
+      type: "METHOD"
+      path: "/api/check-hsa"
+      method: "GET"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for getting hsa link status"
+      description: "API for hsa link status"
+  - location:
+      type: "METHOD"
+      path: "/api/claim-reimbursement-5"
+      method: "GET"
+    properties:
+      tags:
+      - "Demo"
+      summary: "API for claim reibursement step 5"
+      description: "API for claim reibursement step 5"
+  - location:
+      type: "METHOD"
+      path: "/api/claim-reimbursement-step1"
+      method: "GET"
+    properties:
+      tags:
+      - "Demo"
+      summary: "API for claim reibursement step 1"
+      description: "API for claim reibursement step 1"
+  - location:
+      type: "METHOD"
+      path: "/api/claim-reimbursement-step2"
+      method: "GET"
+    properties:
+      tags:
+      - "Demo"
+      summary: "API for claim reibursement step 2"
+      description: "API for claim reibursement step 2"
+  - location:
+      type: "METHOD"
+      path: "/api/claim-reimbursement-step3"
+      method: "GET"
+    properties:
+      tags:
+      - "Demo"
+      summary: "API for claim reibursement step 3"
+      description: "API for claim reibursement step 3"
+  - location:
+      type: "METHOD"
+      path: "/api/claim-reimbursement-step4"
+      method: "GET"
+    properties:
+      tags:
+      - "Demo"
+      summary: "API for claim reibursement step 4"
+      description: "API for claim reibursement step 4"
+  - location:
+      type: "METHOD"
+      path: "/api/claims-link-status"
+      method: "GET"
+    properties:
+      tags:
+      - "User Identification"
+      summary: "API for getting the claims link status"
+      description: " API for getting the claims link status"
+  - location:
+      type: "METHOD"
+      path: "/api/confirm-pin-code"
+      method: "POST"
+    properties:
+      tags:
+      - "PINCODE"
+      summary: "API for confirming pin code"
+      description: "API for confirming pin code"
+  - location:
+      type: "METHOD"
+      path: "/api/connect-status"
+      method: "GET"
+    properties:
+      tags:
+      - "Home"
+      summary: "API for getting connect status"
+      description: "API for getting connect status"
+  - location:
+      type: "METHOD"
+      path: "/api/coverage-card-image-save"
+      method: "POST"
+    properties:
+      tags:
+      - "Coverage"
+      summary: "STEP-3 : API for saving card images"
+      description: "STEP-3 : API for saving card images"
+  - location:
+      type: "METHOD"
+      path: "/api/coverage-link-status"
+      method: "GET"
+    properties:
+      tags:
+      - "User Identification"
+      summary: "API for getting the coverage link status"
+      description: " API for getting the coverage link status"
+  - location:
+      type: "METHOD"
+      path: "/api/coverage-policy-types"
+      method: "GET"
+    properties:
+      tags:
+      - "Coverage"
+      summary: "STEP-2 : API for get all policy types"
+      description: "STEP-2 : API for get all policy types"
+  - location:
+      type: "METHOD"
+      path: "/api/delete-document"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "API for delete document "
+      description: "API for delete document  "
+  - location:
+      type: "METHOD"
+      path: "/api/disconnect-hsa-accounts"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for disconnect hsa accounts"
+      description: "API fordisconnect hsa accounts"
+  - location:
+      type: "METHOD"
+      path: "/api/discover-accounts"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for discover accounts"
+      description: "API for discover accounts"
+  - location:
+      type: "METHOD"
+      path: "/api/dismiss-hsa"
+      method: "GET"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for dismiss hsa accounts"
+      description: "API for dismiss hsa accounts"
+  - location:
+      type: "METHOD"
+      path: "/api/edit-document"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "API for edit document "
+      description: "API for edit document  "
+  - location:
+      type: "METHOD"
+      path: "/api/enrollment-current"
+      method: "GET"
+    properties:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "API for enrollment current "
+      description: "API for current enrollment status  "
+  - location:
+      type: "METHOD"
+      path: "/api/event-detail"
+      method: "POST"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for getting health feed detail information"
+      description: "API for getting health feed detail  information"
+  - location:
+      type: "METHOD"
+      path: "/api/event-main"
+      method: "GET"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for getting health feed information"
+      description: "API for getting health feed information"
+  - location:
+      type: "METHOD"
+      path: "/api/event-main"
+      method: "POST"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for getting health feed information"
+      description: "API for getting health feed information"
+  - location:
+      type: "METHOD"
+      path: "/api/feed-status"
+      method: "GET"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for feed status"
+      description: "API for feed status"
+  - location:
+      type: "METHOD"
+      path: "/api/financial-analysis"
+      method: "POST"
+    properties:
+      tags:
+      - "Financial Analysis"
+      summary: "API for financial analysis"
+      description: "API for financial analysis"
+  - location:
+      type: "METHOD"
+      path: "/api/financial-event"
+      method: "POST"
+    properties:
+      tags:
+      - "Financial Analysis"
+      summary: "API for   financial analysis event"
+      description: "API for  financial analysis event"
+  - location:
+      type: "METHOD"
+      path: "/api/financial-status"
+      method: "GET"
+    properties:
+      tags:
+      - "Home"
+      summary: "API for getting financial status"
+      description: "API for getting financial status"
+  - location:
+      type: "METHOD"
+      path: "/api/flatten-image"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "STEP-3 : API for flattening and cropping the image"
+      x-sort-order: 2
+      description: "STEP-3 : API for flattening and cropping the image"
+  - location:
+      type: "METHOD"
+      path: "/api/get-care-cash"
+      method: "POST"
+    properties:
+      tags:
+      - "Search"
+      summary: "API for get care cash"
+      description: "API for get care cash"
+  - location:
+      type: "METHOD"
+      path: "/api/get-care-cloud"
+      method: "POST"
+    properties:
+      tags:
+      - "Search"
+      summary: "API for get care using cloud search"
+      description: "API for getting the searched item using cloud search"
+  - location:
+      type: "METHOD"
+      path: "/api/get-care-detail-cloud"
+      method: "POST"
+    properties:
+      tags:
+      - "Search"
+      summary: "API for get care detail using cloud search"
+      description: "API for getting the searched item detail using cloud search"
+  - location:
+      type: "METHOD"
+      path: "/api/get-care-detail"
+      method: "POST"
+    properties:
+      tags:
+      - "Search"
+      summary: "API for get care detail"
+      description: "API for getting search care detail"
+  - location:
+      type: "METHOD"
+      path: "/api/get-care"
+      method: "POST"
+    properties:
+      tags:
+      - "Search"
+      summary: "API for get care"
+      description: "API for getting of the searched item"
+  - location:
+      type: "METHOD"
+      path: "/api/get-customer-account-login-form"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for getting customer account login form"
+      description: "API for getting  customer account login form from finicity"
+  - location:
+      type: "METHOD"
+      path: "/api/get-healthcare-status"
+      method: "GET"
+    properties:
+      tags:
+      - "User Identification"
+      summary: "API for getting the heathcare status"
+      description: " API for getting the heathcare status"
+  - location:
+      type: "METHOD"
+      path: "/api/get-hsa-banks"
+      method: "GET"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for getting hsa banks"
+      description: "API for getting hsa banks"
+  - location:
+      type: "METHOD"
+      path: "/api/get-hsa-transactions"
+      method: "GET"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for getting hsa transactions"
+      description: "API for getting hsa transactions"
+  - location:
+      type: "METHOD"
+      path: "/api/get-hsa-transactions"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for get hsa transactions"
+      description: "API for get hsa transactions"
+  - location:
+      type: "METHOD"
+      path: "/api/get-insurance-employer-list"
+      method: "GET"
+    properties:
+      tags:
+      - "SignUp"
+      summary: "STEP-2 : API for get employer and insurance list"
+      description: "STEP-2 : API for get employer and insurance list"
+  - location:
+      type: "METHOD"
+      path: "/api/get-login-form"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for getting login form"
+      description: "API for getting login form from finicity"
+  - location:
+      type: "METHOD"
+      path: "/api/get-permissions"
+      method: "GET"
+    properties:
+      tags:
+      - "Permissions"
+      summary: "API for get permission details"
+      description: "API for get permission details"
+  - location:
+      type: "METHOD"
+      path: "/api/get-plan-members"
+      method: "GET"
+    properties:
+      tags:
+      - "Search"
+      summary: "API for getting plan members"
+      description: "API for getting plan members"
+  - location:
+      type: "METHOD"
+      path: "/api/get-transactions"
+      method: "GET"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for getting transaction details"
+      description: "API for getting transaction details"
+  - location:
+      type: "METHOD"
+      path: "/api/grant-permissions"
+      method: "POST"
+    properties:
+      tags:
+      - "Permissions"
+      summary: "API for grant permission"
+      description: "API for grant permission"
+  - location:
+      type: "METHOD"
+      path: "/api/health-purse"
+      method: "GET"
+    properties:
+      tags:
+      - "Health Purse"
+      summary: "API for getting health purse information"
+      description: "API for getting health purse information"
+  - location:
+      type: "METHOD"
+      path: "/api/home-feed"
+      method: "POST"
+    properties:
+      tags:
+      - "Home"
+      summary: "API for getting home feed"
+      description: "API for getting home feed"
+  - location:
+      type: "METHOD"
+      path: "/api/home-messages"
+      method: "GET"
+    properties:
+      tags:
+      - "Home"
+      summary: "API for getting notification messages"
+      description: "API for getting notification messages if any"
+  - location:
+      type: "METHOD"
+      path: "/api/home-transactions"
+      method: "GET"
+    properties:
+      tags:
+      - "Home"
+      summary: "API for getting home transactions"
+      description: "API for getting home transactions"
+  - location:
+      type: "METHOD"
+      path: "/api/hsa-link-status"
+      method: "GET"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for get hsa link status"
+      description: "API for get hsa link statuss"
+  - location:
+      type: "METHOD"
+      path: "/api/hsa-main"
+      method: "GET"
+    properties:
+      tags:
+      - "Demo"
+      summary: "API for hsa main"
+      description: "API for hsa main"
+  - location:
+      type: "METHOD"
+      path: "/api/hsa-main"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for getting hsa details"
+      description: "API for getting hsa details"
+  - location:
+      type: "METHOD"
+      path: "/api/insert-transactions"
+      method: "GET"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for inserting transactions"
+      description: "API for inserting transactions"
+  - location:
+      type: "METHOD"
+      path: "/api/insert-transactions"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for insert hsa transactions"
+      description: "API for insert hsa transactions"
+  - location:
+      type: "METHOD"
+      path: "/api/link-claims-data"
+      method: "POST"
+    properties:
+      tags:
+      - "User Identification"
+      summary: " API for linking claims"
+      description: " API for linking claims"
+  - location:
+      type: "METHOD"
+      path: "/api/link-document"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "API for linking the document to record "
+      description: "API for linking the document to record"
+  - location:
+      type: "METHOD"
+      path: "/api/link-healthcare-coverage"
+      method: "GET"
+    properties:
+      tags:
+      - "User Identification"
+      summary: " API for linking coverage"
+      description: " API for linking coverage"
+  - location:
+      type: "METHOD"
+      path: "/api/link-healthcare-coverage"
+      method: "POST"
+    properties:
+      tags:
+      - "User Identification"
+      summary: " API for linking coverage"
+      description: " API for linking coverage"
+  - location:
+      type: "METHOD"
+      path: "/api/link-healthcare-record"
+      method: "GET"
+    properties:
+      tags:
+      - "SignUp"
+      summary: "STEP-5 : API for linking record"
+      description: "STEP-5 : API for linking record"
+  - location:
+      type: "METHOD"
+      path: "/api/link-healthcare-record"
+      method: "POST"
+    properties:
+      tags:
+      - "User Identification"
+      summary: " API for linking claims"
+      description: " API for linking claims"
+  - location:
+      type: "METHOD"
+      path: "/api/link-status"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "API for checking  document link status "
+      description: "API for checking  document link status "
+  - location:
+      type: "METHOD"
+      path: "/api/link-upload-to-record"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "STEP-5 : API for linking uploads to record"
+      x-sort-order: 5
+      description: "STEP-5 : API for linking uploads to record"
+  - location:
+      type: "METHOD"
+      path: "/api/list-accounts"
+      method: "GET"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for listing the  accounts in case of time out"
+      description: "API for listing the hsa accounts in case of time out"
+  - location:
+      type: "METHOD"
+      path: "/api/list-hsa-accounts"
+      method: "GET"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for listing the hsa accounts"
+      description: "API for listing the hsa accounts"
+  - location:
+      type: "METHOD"
+      path: "/api/load-hsa-transaction"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for load hsa transactions"
+      description: "API for load hsa transactions"
+  - location:
+      type: "METHOD"
+      path: "/api/modify-institution-login-credentials"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for modifying institution login credentials"
+      description: "API for modifying institution login credentials"
+  - location:
+      type: "METHOD"
+      path: "/api/optimal-coverage"
+      method: "GET"
+    properties:
+      tags:
+      - "Demo"
+      summary: "API for getting optimal coverage details"
+      description: "API for getting optimal coverage details"
+  - location:
+      type: "METHOD"
+      path: "/api/pin-code"
+      method: "POST"
+    properties:
+      tags:
+      - "PINCODE"
+      summary: "API for checking pin code"
+      description: "API for checking pin code on accessing the app"
+  - location:
+      type: "METHOD"
+      path: "/api/plan-members"
+      method: "GET"
+    properties:
+      tags:
+      - "Permissions"
+      summary: "API for getting plan member detais"
+      description: "API for getting plan member details"
+  - location:
+      type: "METHOD"
+      path: "/api/record-detail"
+      method: "POST"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for getting health feed detail information"
+      description: "API for getting health feed detail  information"
+  - location:
+      type: "METHOD"
+      path: "/api/record-main"
+      method: "GET"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for getting health feed information"
+      description: "API for getting health feed information"
+  - location:
+      type: "METHOD"
+      path: "/api/refresh-hsa"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for refresh hsa"
+      description: "API for refresh hsa"
+  - location:
+      type: "METHOD"
+      path: "/api/refresh-institution-login-accounts"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for refresh institution login"
+      description: "API for refresh institution login"
+  - location:
+      type: "METHOD"
+      path: "/api/render-upload-screen"
+      method: "GET"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "STEP-2 : API for getting upload screen details "
+      x-sort-order: 1
+      description: "STEP-2 : API for getting upload screen details  "
+  - location:
+      type: "METHOD"
+      path: "/api/save-account"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for saving account"
+      description: "API for saving and activating accounts"
+  - location:
+      type: "METHOD"
+      path: "/api/save-device-info"
+      method: "POST"
+    properties:
+      tags:
+      - "Notifications"
+      summary: "API for saving the device information"
+      description: "API for saving the device information"
+  - location:
+      type: "METHOD"
+      path: "/api/save-document"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "STEP 4: API for saving document"
+      x-sort-order: 3
+      description: "STEP 4: API for saving document"
+  - location:
+      type: "METHOD"
+      path: "/api/save-hsa-info"
+      method: "POST"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for saving hsa info"
+      description: "API for saving hsa info"
+  - location:
+      type: "METHOD"
+      path: "/api/save-image"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "STEP 4: API for saving bills "
+      x-sort-order: 3
+      description: "STEP 4: API for saving bills  "
+  - location:
+      type: "METHOD"
+      path: "/api/save-pin-code"
+      method: "POST"
+    properties:
+      tags:
+      - "PINCODE"
+      summary: "API for saving pin code"
+      description: "API for saving pin code"
+  - location:
+      type: "METHOD"
+      path: "/api/save-provider-price"
+      method: "POST"
+    properties:
+      tags:
+      - "Search"
+      summary: "API for save provider price"
+      description: "API for save provider price"
+  - location:
+      type: "METHOD"
+      path: "/api/save-upload"
+      method: "POST"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "STEP-5 : API for checking data availability to link upload"
+      x-sort-order: 4
+      description: "STEP-5 : API for checking data availability to link upload"
+  - location:
+      type: "METHOD"
+      path: "/api/savings-detail"
+      method: "POST"
+    properties:
+      tags:
+      - "Financial Analysis"
+      summary: "API for getting savings detail"
+      description: "API for getting savings detail"
+  - location:
+      type: "METHOD"
+      path: "/api/search-charges"
+      method: "GET"
+    properties:
+      tags:
+      - "Health Purse"
+      summary: "API for getting search keywords for charges"
+      description: "API for getting list of search keywords for charges"
+  - location:
+      type: "METHOD"
+      path: "/api/search-event"
+      method: "GET"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for searching the events"
+      description: "API for searching the events"
+  - location:
+      type: "METHOD"
+      path: "/api/search-event"
+      method: "POST"
+    properties:
+      tags:
+      - "Health Feed"
+      summary: "API for searching the events"
+      description: "API for searching the events"
+  - location:
+      type: "METHOD"
+      path: "/api/search-for-care"
+      method: "POST"
+    properties:
+      tags:
+      - "Search"
+      summary: "API for search care"
+      description: "API for getting of the searched item"
+  - location:
+      type: "METHOD"
+      path: "/api/search-keys"
+      method: "GET"
+    properties:
+      tags:
+      - "Search"
+      summary: "API for listing the search keywords"
+      description: "API for listing the search keywords"
+  - location:
+      type: "METHOD"
+      path: "/api/set-dob-ssn"
+      method: "POST"
+    properties:
+      tags:
+      - "SignUp"
+      summary: "STEP-1 : API for saving date of birth and ssn "
+      description: "STEP-1 : API for saving date of birth and ssns"
+  - location:
+      type: "METHOD"
+      path: "/api/set-insurance-employer"
+      method: "POST"
+    properties:
+      tags:
+      - "SignUp"
+      summary: "STEP-3 : API for saving employer and insurance details"
+      description: "STEP-3 : API for saving employer and insurance details"
+  - location:
+      type: "METHOD"
+      path: "/api/show-documents"
+      method: "GET"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "STEP-1 : API for showing all documents "
+      x-sort-order: 0
+      description: "STEP-1 : API for showing all documents for the logged in employee"
+  - location:
+      type: "METHOD"
+      path: "/api/show-uploads"
+      method: "GET"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "STEP-1 : API for showing all documents "
+      x-sort-order: 0
+      description: "STEP-1 : API for showing all documents for the logged in employee"
+  - location:
+      type: "METHOD"
+      path: "/api/upload-document"
+      method: "GET"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "STEP-2 : API for getting upload screen details "
+      description: "STEP-2 : API for getting upload screen details  "
+  - location:
+      type: "METHOD"
+      path: "/api/upload-screen"
+      method: "GET"
+    properties:
+      tags:
+      - "Uploads"
+      summary: "API for getting uplaod scren details "
+      description: "API for getting upload screen details  "
+  - location:
+      type: "RESOURCE"
+    properties:
+      description: ""
+  - location:
+      type: "RESOURCE"
+      path: "/api/event-main"
+    properties:
+      description: "All about health feed inforamtion"
+  - location:
+      type: "RESOURCE"
+      path: "/api/get-healthcare-status"
+    properties:
+      description: ""
+  - location:
+      type: "RESOURCE"
+      path: "/api/get-hsa-transactions"
+    properties:
+      tags:
+      - "HSA"
+      summary: "API for getting transactions"
+      description: "API for getting transactions"
+  - location:
+      type: "RESOURCE"
+      path: "/api/home-transactions"
+    properties:
+      tags:
+      - "Home"
+      summary: "API for getting home transactions"
+      description: "API for getting home transactions"
+  - location:
+      type: "RESOURCE"
+      path: "/api/pin-code"
+    properties:
+      tags:
+      - "PINCODE"
+      summary: "API for checking pin code"
+      description: "API for checking pin code on accessing the app"
+  - location:
+      type: "RESPONSE"
+      path: "/api/activate-hsa"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/add-customer"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/add-discover-customer-account"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/bill-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/bill-save"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/card-images-list"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/charges-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/charges-main"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/charges-main"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/charges-search-api"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/check-claims"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/check-hsa"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/claim-reimbursement-5"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/claim-reimbursement-step1"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/claims-link-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/confirm-pin-code"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/connect-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/coverage-card-image-save"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/coverage-link-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/coverage-policy-types"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/delete-document"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/disconnect-hsa-accounts"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/discover-accounts"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/dismiss-hsa"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/edit-document"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/enrollment-current"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/event-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/event-main"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/event-main"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/feed-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/financial-analysis"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/financial-event"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/financial-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/flatten-image"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-care-cash"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-care-cloud"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-care-detail-cloud"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-care-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-care"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-customer-account-login-form"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-healthcare-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-hsa-banks"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-hsa-transactions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-hsa-transactions"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-insurance-employer-list"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-login-form"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-permissions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-plan-members"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/get-transactions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/grant-permissions"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/health-purse"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/home-feed"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/home-messages"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/home-transactions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/hsa-link-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/hsa-main"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/hsa-main"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/insert-transactions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/insert-transactions"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/link-claims-data"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/link-document"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/link-healthcare-coverage"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/link-healthcare-coverage"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/link-healthcare-record"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/link-healthcare-record"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/link-status"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/link-upload-to-record"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/list-accounts"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/list-hsa-accounts"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/load-hsa-transaction"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/modify-institution-login-credentials"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/optimal-coverage"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/pin-code"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/plan-members"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/record-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/record-main"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/refresh-hsa"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/refresh-institution-login-accounts"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/render-upload-screen"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/save-account"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/save-device-info"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/save-document"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/save-hsa-info"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/save-image"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/save-pin-code"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/save-provider-price"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/save-upload"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/savings-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/search-charges"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/search-event"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/search-event"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/search-for-care"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/search-keys"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/set-dob-ssn"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/set-insurance-employer"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/show-documents"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/show-uploads"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/upload-document"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE"
+      path: "/api/upload-screen"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/activate-hsa"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/add-customer"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/add-discover-customer-account"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/bill-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/bill-save"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/card-images-list"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/charges-main"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/charges-main"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/charges-search-api"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/check-claims"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/check-hsa"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/claim-reimbursement-5"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/claim-reimbursement-step1"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/claims-link-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/confirm-pin-code"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/connect-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/coverage-card-image-save"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/coverage-link-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/coverage-policy-types"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/delete-document"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/disconnect-hsa-accounts"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/discover-accounts"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/dismiss-hsa"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/edit-document"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/enrollment-current"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/event-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/event-main"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/event-main"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/feed-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/financial-analysis"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/financial-event"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/financial-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/flatten-image"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-care-cash"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-care-cloud"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-care-detail-cloud"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-care-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-care"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-customer-account-login-form"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-healthcare-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-hsa-banks"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-hsa-transactions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-hsa-transactions"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-insurance-employer-list"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-login-form"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-permissions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-plan-members"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/get-transactions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/grant-permissions"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/health-purse"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/home-feed"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/home-messages"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/home-transactions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/hsa-link-status"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/hsa-main"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/hsa-main"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/insert-transactions"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/insert-transactions"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/link-claims-data"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/link-document"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/link-healthcare-coverage"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/link-healthcare-coverage"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/link-healthcare-record"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/link-healthcare-record"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/link-status"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/link-upload-to-record"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/list-accounts"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/list-hsa-accounts"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/load-hsa-transaction"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/modify-institution-login-credentials"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/optimal-coverage"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/pin-code"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/plan-members"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/record-detail"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/record-main"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/refresh-hsa"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/refresh-institution-login-accounts"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/render-upload-screen"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/save-account"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/save-device-info"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/save-document"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/save-hsa-info"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/save-image"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/save-pin-code"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/save-provider-price"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/save-upload"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/search-charges"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/search-event"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/search-event"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/search-keys"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/set-dob-ssn"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/set-insurance-employer"
+      method: "POST"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/show-documents"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/show-uploads"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/upload-document"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/api/upload-screen"
+      method: "GET"
+      statusCode: "200"
+    properties:
+      description: "Success"
+  - location:
+      type: "RESPONSE_BODY"
+      path: "/charges-main-api"
+      method: "POST"
+      statusCode: "*"
+    properties:
+      charges_main:
+        page_title: "Charges and Bills"
+        people:
+        - name: "BILL"
+          is_user: false
+          family_order: 3
+          user_access_granted: false
+        - name: "TANIA"
+          is_user: false
+          family_order: 2
+          user_access_granted: false
+        - name: "ANNA"
+          is_user: true
+          family_order: 1
+          user_access_granted: true
+      episodes:
+      - person_name: "ANNA"
+        person_details:
+        - view_id: "a78b9ccc-ea03-11e7-8f83-0b9430036e2a"
+          episode_title: "ABNORMAL BLOOD PROTEIN"
+          charge_title: "Doctor Visit"
+          start_date: "2016-03-08"
+          end_date: "2016-03-08"
+          total_charge: 40.0
+          providers:
+          - label: "Brenna Green, DO"
+            amount: "$40.0"
+        - view_id: "a4936a7d-ea03-11e7-b2c8-19ee62d891e0"
+          episode_title: "ABNORMAL BLOOD PROTEIN"
+          charge_title: "Doctor Visit"
+          start_date: "2016-03-08"
+          end_date: "2016-03-08"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "aad57c9c-ea03-11e7-b323-2f7037eeafd5"
+          episode_title: "ABNORMAL BLOOD PROTEIN"
+          charge_title: "Physical Therapy"
+          start_date: "2016-03-08"
+          end_date: "2016-03-08"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "a86cef91-ea03-11e7-8553-19ee62d891e0"
+          episode_title: "BACK PAIN"
+          charge_title: "Physical Therapy"
+          start_date: "2016-03-31"
+          end_date: "2016-03-31"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "ab00797d-ea03-11e7-b215-19ee62d891e0"
+          episode_title: "BACK PAIN"
+          charge_title: "Physical Therapy"
+          start_date: "2016-03-17"
+          end_date: "2016-03-17"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "ab1bf575-ea03-11e7-94eb-19ee62d891e0"
+          episode_title: "BACK PAIN"
+          charge_title: "Physical Therapy"
+          start_date: "2016-03-03"
+          end_date: "2016-03-03"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "a850f83d-ea03-11e7-84af-0b9430036e2a"
+          episode_title: "BACK PAIN"
+          charge_title: "Physical Therapy"
+          start_date: "2016-02-18"
+          end_date: "2016-02-18"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "a86a3573-ea03-11e7-951b-19ee62d891e0"
+          episode_title: "BACK PAIN"
+          charge_title: "Physical Therapy"
+          start_date: "2016-02-11"
+          end_date: "2016-02-11"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "a29acef3-ea03-11e7-bf78-9dbae45c6984"
+          episode_title: "ECZEMA / SKIN RASH"
+          charge_title: "Hospitalization"
+          start_date: "2016-04-13"
+          end_date: "2016-04-14"
+          total_charge: 25.8
+          providers:
+          - label: "John Pearson, MD"
+            amount: "$25.8"
+        - view_id: "a49a6302-ea03-11e7-ba7e-2f7037eeafd5"
+          episode_title: "KIDNEY DEVICE COMPLICATIONS"
+          charge_title: "Doctor Visit"
+          start_date: "2016-04-07"
+          end_date: "2016-04-07"
+          total_charge: 40.0
+          providers:
+          - label: "Patrick Meacham, MD"
+            amount: "$40.0"
+        - view_id: "a78356b5-ea03-11e7-8d8f-0b9430036e2a"
+          episode_title: "KIDNEY DEVICE COMPLICATIONS"
+          charge_title: "Doctor Visit"
+          start_date: "2016-02-04"
+          end_date: "2016-02-04"
+          total_charge: 40.0
+          providers:
+          - label: "Patrick Meacham, MD"
+            amount: "$40.0"
+        - view_id: "a4a1e94f-ea03-11e7-b7a8-9dbae45c6984"
+          episode_title: "KIDNEY DEVICE COMPLICATIONS"
+          charge_title: "Physical Therapy"
+          start_date: "2016-04-07"
+          end_date: "2016-04-07"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "a858501c-ea03-11e7-959b-2f7037eeafd5"
+          episode_title: "KIDNEY DEVICE COMPLICATIONS"
+          charge_title: "Physical Therapy"
+          start_date: "2016-02-04"
+          end_date: "2016-02-04"
+          total_charge: 14.2
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$14.2"
+        - view_id: "a4a110c7-ea03-11e7-8068-9dbae45c6984"
+          episode_title: "KIDNEY FAILURE"
+          charge_title: "Dialysis"
+          start_date: "2016-02-01"
+          end_date: "2016-02-01"
+          total_charge: 80.0
+          providers:
+          - label: "Jyotheen Karam, MD"
+            amount: "$80.0"
+        - view_id: "a49a8f9e-ea03-11e7-975a-19ee62d891e0"
+          episode_title: "KIDNEY FAILURE"
+          charge_title: "Dialysis"
+          start_date: "2016-01-01"
+          end_date: "2016-01-01"
+          total_charge: 380.0
+          providers:
+          - label: "Jyotheen Karam, MD"
+            amount: "$380.0"
+        - view_id: "a49ab6ba-ea03-11e7-b039-9dbae45c6984"
+          episode_title: "KIDNEY FAILURE"
+          charge_title: "Doctor Visit"
+          start_date: "2016-01-20"
+          end_date: "2016-01-20"
+          total_charge: 40.0
+          providers:
+          - label: "Stacey Goodman, MD"
+            amount: "$40.0"
+        - view_id: "a490b6ae-ea03-11e7-aaac-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Biopsy"
+          start_date: "2016-03-10"
+          end_date: "2016-03-10"
+          total_charge: 80.0
+          providers:
+          - label: "Stacey Goodman, MD"
+            amount: "$40.0"
+          - label: "Leslie Goebel, RN"
+            amount: "$40.0"
+        - view_id: "a4af7473-ea03-11e7-ae2e-9dbae45c6984"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-03-29"
+          end_date: "2016-03-29"
+          total_charge: 40.0
+          providers:
+          - label: "Yanjun Ma, MD"
+            amount: "$40.0"
+        - view_id: "a49ef9ee-ea03-11e7-86b2-9dbae45c6984"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-03-22"
+          end_date: "2016-03-22"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "a77ea5a8-ea03-11e7-a780-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-03-15"
+          end_date: "2016-03-15"
+          total_charge: 40.0
+          providers:
+          - label: "Victor Gian, MD"
+            amount: "$40.0"
+        - view_id: "a493cee8-ea03-11e7-91c3-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-02-23"
+          end_date: "2016-02-23"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "a49afdf0-ea03-11e7-9831-9dbae45c6984"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-02-16"
+          end_date: "2016-02-16"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "a49697ba-ea03-11e7-b320-2f7037eeafd5"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-02-09"
+          end_date: "2016-02-09"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "a48cc575-ea03-11e7-ae33-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-02-02"
+          end_date: "2016-02-02"
+          total_charge: 40.0
+          providers:
+          - label: "Victor Gian, MD"
+            amount: "$40.0"
+        - view_id: "a48c11a1-ea03-11e7-9494-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-01-26"
+          end_date: "2016-01-26"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "a48d94a8-ea03-11e7-873b-19ee62d891e0"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-01-19"
+          end_date: "2016-01-19"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "a48e7e51-ea03-11e7-a47a-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-01-12"
+          end_date: "2016-01-12"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "a4953711-ea03-11e7-9fe1-9dbae45c6984"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Chemotherapy"
+          start_date: "2016-01-05"
+          end_date: "2016-01-05"
+          total_charge: 40.0
+          providers:
+          - label: "Victor Gian, MD"
+            amount: "$40.0"
+        - view_id: "a86c9e3d-ea03-11e7-a877-19ee62d891e0"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Dialysis"
+          start_date: "2016-03-01"
+          end_date: "2016-03-01"
+          total_charge: 80.0
+          providers:
+          - label: "Jyotheen Karam, MD"
+            amount: "$80.0"
+        - view_id: "a4970c35-ea03-11e7-8eb3-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Doctor Visit"
+          start_date: "2016-04-05"
+          end_date: "2016-04-05"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "aaa2c53d-ea03-11e7-a220-2f7037eeafd5"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Doctor Visit"
+          start_date: "2016-03-29"
+          end_date: "2016-03-29"
+          total_charge: 25.0
+          providers:
+          - label: "Samuel Robbins, APRNBC"
+            amount: "$25.0"
+        - view_id: "a49585f0-ea03-11e7-ab61-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Doctor Visit"
+          start_date: "2016-03-10"
+          end_date: "2016-03-10"
+          total_charge: 40.6
+          providers:
+          - label: "David Slosky, MD"
+            amount: "$40.0"
+          - label: "Vanderbilt University Medical Center"
+            amount: "$0.6"
+        - view_id: "a4aa8811-ea03-11e7-8b96-9dbae45c6984"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Doctor Visit"
+          start_date: "2016-03-01"
+          end_date: "2016-03-01"
+          total_charge: 80.0
+          providers:
+          - label: "Brenna Green, DO"
+            amount: "$40.0"
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "aab43a07-ea03-11e7-a89a-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Doctor Visit"
+          start_date: "2016-02-02"
+          end_date: "2016-02-02"
+          total_charge: 40.0
+          providers:
+          - label: "John Zubkus, MD"
+            amount: "$40.0"
+        - view_id: "a49d46a8-ea03-11e7-af8a-2f7037eeafd5"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Doctor Visit"
+          start_date: "2016-01-05"
+          end_date: "2016-01-05"
+          total_charge: 40.0
+          providers:
+          - label: "Brenna Green, DO"
+            amount: "$40.0"
+        - view_id: "aae02923-ea03-11e7-9c27-9dbae45c6984"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Physical Therapy"
+          start_date: "2016-03-22"
+          end_date: "2016-03-22"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "ab1ca000-ea03-11e7-bffe-9dbae45c6984"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Physical Therapy"
+          start_date: "2016-03-15"
+          end_date: "2016-03-15"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "a77ff5fd-ea03-11e7-a15a-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Physical Therapy"
+          start_date: "2016-03-01"
+          end_date: "2016-03-01"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "aa97ed91-ea03-11e7-8f78-2f7037eeafd5"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Physical Therapy"
+          start_date: "2016-02-23"
+          end_date: "2016-02-23"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "aaff0e3d-ea03-11e7-b29b-2f7037eeafd5"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Physical Therapy"
+          start_date: "2016-02-16"
+          end_date: "2016-02-16"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
+        - view_id: "a78c670f-ea03-11e7-aca9-0b9430036e2a"
+          episode_title: "MULTIPLE MYELOMA"
+          charge_title: "Physical Therapy"
+          start_date: "2016-02-09"
+          end_date: "2016-02-09"
+          total_charge: 21.4
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$21.4"
+        - view_id: "a4944dca-ea03-11e7-9c43-19ee62d891e0"
+          episode_title: "SLEEPING DISORDER"
+          charge_title: "Medical Supplies"
+          start_date: "2016-02-25"
+          end_date: "2016-02-25"
+          total_charge: 41.8
+          providers:
+          - label: "William Noah, MD"
+            amount: "$41.8"
+        - view_id: "aa97b08f-ea03-11e7-9cfb-0b9430036e2a"
+          episode_title: "SLEEPING DISORDER"
+          charge_title: "Physical Therapy"
+          start_date: "2016-02-25"
+          end_date: "2016-02-25"
+          total_charge: 28.6
+          providers:
+          - label: "Hiral Vakilwala"
+            amount: "$28.6"
