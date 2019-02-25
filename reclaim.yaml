@@ -13,7 +13,6 @@ info:
 host: "platform.reclaim.health"
 x-logo:
   url: 'https://rebilly.github.io/ReDoc/petstore-logo.png'
-basePath: "/api"
 
 
 #![foo](https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png 'title')
@@ -97,14 +96,13 @@ paths:
             client_id = 'your_client_id'
             client_secret = 'your_client_secret'
             bearer_token = requests.post('https://platform.reclaim.health/oauth2/token',
-                             headers={'Authorization': 'Basic ' + urlsafe_b64encode(client_id + ':' + client_secret)}, data={'grant_type': 'client_credentials'}).json()['bearer_token']  
-                             
-  /groups:
+                             headers={'Authorization': 'Basic ' + urlsafe_b64encode(client_id + ':' + client_secret)}, data={'grant_type': 'client_credentials'}).json()['bearer_token']                           
+  /api/groups:
     post:
       tags:
       - "Group-Specific Endpoints"
       summary: "Adding Groups"
-      description: "This endpoint allows the client to add an employer group to the Reclaim system."
+      description: "This endpoint allows the client to add employer groups to the Reclaim system."
       consumes:
       - "application/json"
       produces:
@@ -134,7 +132,40 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/GroupListDetailOutput"  
-  /groups/[group_id]/eligibility:
+  /api/group/[group_id]:
+    delete:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Delete Existing Group"
+      description: "This endpoints allows the client to delete an existing employer group in the Reclaim system. This is especially helpful at the beginning of the integration process."
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/DeleteGroupDetailOutput"   
+    put:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Update Existing Group"
+      description: "This endpoint allows the client to update the information of an existing employer group in the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "UpdateGroupDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateGroupDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/UpdateGroupDetailOutput"          
+  /api/group/[group_id]/eligibility_files:
     post:
       tags:
       - "Group-Specific Endpoints"
@@ -281,9 +312,6 @@ paths:
       - in: "formData"
         name: "name"
         description: "Description of the eligibility file to upload"
-      - in: "formData"
-        name: "id"
-        description: "Eligibility file ID that can be used to identify the status of the specific file upload into the Reclaim system"
       x-code-samples:
       - lang: "cURL"
         source: |                              
@@ -292,17 +320,16 @@ paths:
             -H 'authorization: [bearer_token]' \
             -F 'file=@group_id_eligibility.csv' \
             -F 'name=group_id_eligibility' \
-            -F 'id=group_id_elig_2019_4_5' \
-            https://platform.reclaim.health/api/groups/[group_id]/eligibility
+            https://platform.reclaim.health/api/group/[group_id]/eligibility_files
       - lang: "Python"
         source: |
             import requests
 
             files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
-            payload = {'name': 'group_id_eligibility', 'id': 'group_id_elig_2019_4_5'}
+            payload = {'name': 'group_id_eligibility'}
             headers = {'Authorization': 'bearer_token'}
             
-            response = requests.put('https://platform.reclaim.health/api/groups/[group_id]/eligibility', files=files, data=payload, headers=headers).json()
+            response = requests.put('https://platform.reclaim.health/api/group/[group_id]/eligibility_files', files=files, data=payload, headers=headers).json()
       responses:
         200:
           description: "Success"
@@ -312,7 +339,7 @@ paths:
       tags:
       - "Group-Specific Endpoints"
       summary: "Eligibility Status Check"
-      description: "This endpoint checks the ingestion status of the eligibility data within the Reclaim system."
+      description: "This endpoint checks the ingestion status of the eligibility files for an existing employer group within the Reclaim system."
       consumes:
       - "application/json"
       produces:
@@ -322,12 +349,12 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/EligibilityStatusCheckDetailOutput"   
-  /groups/[group_id]/eligibility/[eligibility_id]:
+  /group/[group_id]/eligibility_file/[file_id]:
     get:
       tags:
       - "Group-Specific Endpoints"
       summary: "Specific Eligibility Status Check"
-      description: "This endpoint checks the ingestion status of the eligibility data within the Reclaim system."
+      description: "This endpoint checks the ingestion status of a specific eligibility file within the Reclaim system."
       consumes:
       - "application/json"
       produces:
@@ -337,6 +364,63 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/EligibilityUploadDetailOutput"
+    delete:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Delete Existing Eligibility File"
+      description: "This endpoint deletes an existng eligibility file within the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/DeleteEligibilityDetailOutput" 
+    put:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Update Group Eligibility"
+      description: |
+        This endpoint allows the client to add subscribers' eligibility to a group in the Reclaim system. Refer to the eligibility schema above.
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "formData"
+        name: "file"
+        type: "file"
+        description: "Eligibility file to upload"
+        required: true  
+        x-mimetype: text/csv
+      - in: "formData"
+        name: "name"
+        description: "Description of the eligibility file to upload"
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # post file including bearer token authorization in header
+            curl -X POST
+            -H 'authorization: [bearer_token]' \
+            -F 'file=@group_id_eligibility.csv' \
+            -F 'name=group_id_eligibility' \
+            https://platform.reclaim.health/api/group/[group_id]/eligibility_file/[file_id]
+      - lang: "Python"
+        source: |
+            import requests
+
+            files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
+            payload = {'name': 'group_id_eligibility'}
+            headers = {'Authorization': 'bearer_token'}
+            
+            response = requests.put('https://platform.reclaim.health/api/group/[group_id]/eligibility_file/[file_id]', files=files, data=payload, headers=headers).json()
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/UpdateEligibilityDetailOutput"        
   /groups/[group_id]/benefits:
     post:
       tags:
@@ -561,7 +645,7 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/EligibilityUploadDetailOutput"            
+            $ref: "#/definitions/BenefitUploadDetailOutput"            
   /subscribers/[subscriber_id]:
     get:
       tags:
@@ -872,12 +956,85 @@ definitions:
             name: 
               type: "string"
               description: "Detailed name for the employer group"
+            updated:
+              type: "timestamp"
+              description: "Timestamp recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
+            detail: 
+              type: "array"
+              description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"  
+              items:
+                type: "string"
     example:
       groups:
         - id: "acmecorp"
           name: "ACME Corporation"
+          updated: "2019-04-10 14:59:23"
         - id: "abc"
-          name: "ABC, Inc."            
+          name: "ABC, Inc."  
+          updated: "2019-04-04 14:59:23"
+          detail: 
+            - "Client attempted to add a group that already existed"
+# Update Group Detail Input
+  UpdateGroupDetailInput:
+    type: "object"
+    properties:
+      id: 
+        type: "string"
+        description: "Slug name for the employer group"
+      name: 
+        type: "string"
+        description: "Detailed name for the employer group"
+    example:
+      id: "abc"
+      name: "ABC, Inc."   
+# Update Group Detail Output
+  UpdateGroupDetailOutput:
+    type: "object"
+    properties:
+      id: 
+        type: "string"
+        description: "Slug name for the employer group"
+      name: 
+        type: "string"
+        description: "Detailed name for the employer group"
+      updated:
+        type: "timestamp"
+        description: "Timestamp recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
+      detail: 
+        type: "array"
+        description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"  
+        items:
+          type: "string"
+    example:
+      id: "abc"
+      name: "ABC, Inc."  
+      updated: "2019-04-04 14:59:23"
+      detail: 
+        - "ABC group name updated from ABC Corp to ABC, Inc."  
+# Delete Group Detail Output
+  DeleteGroupDetailOutput:
+    type: "object"
+    properties:
+      id: 
+        type: "string"
+        description: "Slug name for the employer group"
+      name: 
+        type: "string"
+        description: "Detailed name for the employer group"
+      updated:
+        type: "timestamp"
+        description: "Timestamp recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
+      detail: 
+        type: "array"
+        description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"  
+        items:
+          type: "string"
+    example:
+      id: "abc"
+      name: "ABC, Inc."  
+      updated: "2019-04-04 14:59:23"
+      detail: 
+        - "Group ABC, Inc. has been deleted successfully."          
 #Group List Detail Output
   GroupListDetailOutput:
     type: "object"
@@ -897,20 +1054,41 @@ definitions:
                 name:
                   type: "string"
                   description: "Detailed name for the employer group"
+                updated:
+                  type: "timestamp"
+                  description: "Timestamp recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC"  
+                detail: 
+                  type: "array"
+                  description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"
+                  items:
+                    type: "string"
     example: 
           count: 4
           groups:
             - id: "acmecorp"
               name: "ACME Corporation"
+              updated: "2019-04-10 14:59:23"
             - id: "abc"
               name: "ABC, Inc."
+              updated: "2019-04-04 14:59:23"
+              detail: 
+                - "Client attempted to add a group that already existed"
+            - id: "def"
+              name: "DEF LLC."
+              updated: "2019-04-10 14:59:23"
+            - id: "xyz"
+              name: "XYZ, Inc."
+              updated: "2019-04-04 14:59:23"   
 # Eligibility Upload Detail Output  
   EligibilityUploadDetailOutput:
     type: "object"
     properties: 
       id:   
             type: "string"
-            description: "Eligibility upload ID as instructed by client upload post request"
+            description: "Eligibility file upload ID created by the Reclaim system to refer to the upload activity"
+      name: 
+            type: "string"
+            description: "Description of the eligibility file to upload as provided by the client"        
       status:   
             type: "string"
             description: |
@@ -922,13 +1100,16 @@ definitions:
               
               `success` meaning the ingestion of the eligibility file has finished successfully
       detail:
-            type: "string"
+            type: "array"
             description: "Detailed description of failure error, if the ingestion of the eligibility were to encounter a failure"
+            items: 
+              type: "string"
       updated: 
             type: "timestamp"
             description: "Timestamp of the most recent update on the status of the eligibility file upload"        
     example: 
           id: "group_id_elig_2019_4_5"
+          name: "group_id_eligibility"
           status: "processing"
           updated: "2019-04-10 14:59:23"
 #Eligibility Status Check Detail Output      
@@ -937,13 +1118,16 @@ definitions:
     properties: 
       eligibility:
         type: "array"
-        description: "Array of objects describing the status of the most recent eligibility uploads by the client to the Reclaim system"
+        description: "Eligibility file upload ID created by the Reclaim system to refer to the upload activity"
         items:
           type: "object"
           properties:
             id:   
               type: "string"
               description: "Eligibility upload ID as instructed by client upload post request"
+            name:
+              type: "string"
+              description: "Description of the eligibility file to upload as provided by the client"  
             status:   
               type: "string"
               description: |
@@ -955,23 +1139,97 @@ definitions:
               
                 `success` meaning the ingestion of the eligibility file has finished successfully
             detail:
-              type: "string"
-              description: "Detailed description of failure error, if the ingestion of the eligibility were to encounter a failure"    
+              type: "array"
+              description: "Detailed description of failure error, if the ingestion of the eligibility were to encounter a failure"   
+              items: 
+                type: "string"
             updated: 
               type: "timestamp"
-              description: "Timestamp of the most recent update on the status of the eligibility file upload"
+              description: "Timestamp (in UTC) of the most recent update on the status of the eligibility file upload"
     example: 
       eligibility:
         - id: "group_id_elig_2019_4_5"
+          name: "group_id_eligibility"
           status: "success"
           updated: "2019-04-10 14:59:23"
         - id: "group_id_elig_2019_5_5"  
+          name: "group_id_eligibility"
           status: "processing"
           updated: "2019-05-10 12:59:29"
         - id: "group_id_elig_2019_5_6"  
+          name: "group_id_eligibility"
           status: "fail"
           updated: "2019-05-10 12:59:29"  
-          detail: "line 9, column 10 - found unexpected data format" 
+          detail: 
+            - "line 9, column 10 - found unexpected data format" 
+# Update Eligibility Detail Output  
+  UpdateEligibilityDetailOutput:
+    type: "object"
+    properties: 
+      id:   
+            type: "string"
+            description: "Eligibility file ID that the client requested be updated"
+      name:
+            type: "string"
+            description: "Description of the eligibility file to upload as provided by the client"        
+      status:   
+            type: "string"
+            description: |
+              Status of eligibility file upload and ingestion process into the Reclaim system. This can take one of three values:
+              
+              `processing` meaning the ingestion of the eligibility file is still processing
+              
+              `fail` meaning the ingestion of the eligibility file has failed
+              
+              `success` meaning the ingestion of the eligibility file has finished successfully
+      detail:
+            type: "array"
+            description: "Detailed description of failure error, if the ingestion of the eligibility were to encounter a failure"
+            items: 
+              type: "string"
+      updated: 
+            type: "timestamp"
+            description: "Timestamp (in UTC) of the most recent update on the status of the eligibility file upload"        
+    example: 
+          id: "group_id_elig_2019_4_5"
+          name: "group_id_eligibility"
+          status: "processing"
+          updated: "2019-04-10 14:59:23"    
+# Delete Eligibility Detail Output  
+  DeleteEligibilityDetailOutput:
+    type: "object"
+    properties: 
+      id:   
+            type: "string"
+            description: "Eligibility file ID that the client requested be deleted"
+      name:
+            type: "string"
+            description: "Description of the eligibility file to upload as provided by the client"        
+      status:   
+            type: "string"
+            description: |
+              Status of eligibility file upload and ingestion process into the Reclaim system. This can take one of three values:
+              
+              `processing` meaning the ingestion of the eligibility file is still processing
+              
+              `fail` meaning the ingestion of the eligibility file has failed
+              
+              `success` meaning the ingestion of the eligibility file has finished successfully
+      detail:
+            type: "array"
+            description: "Detailed description of failure error, if the deletion of the eligibility were to encounter a failure"
+            items: 
+              type: "string"
+      updated: 
+            type: "timestamp"
+            description: "Timestamp (in UTC) of the most recent update on the deletion status of the eligibility file"        
+    example: 
+          id: "group_id_elig_2019_4_5"
+          name: "group_id_eligibility"
+          status: "success"
+          updated: "2019-04-10 14:59:23" 
+          detail: 
+            - "The file 'group_id_eligibility.csv' was successfully deleted."
 # Benefit Upload Detail Output  
   BenefitUploadDetailOutput:
     type: "object"
