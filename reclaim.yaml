@@ -3,9 +3,8 @@ swagger: "2.0"
 info:
   description: |
     # Introduction
-    Our story started right out of MIT and after years of collaborations between the founders of Reclaim. With the ever-changing landscape of how our healthcare insurance is working, we decided to come together, bringing our passion for financial planning and data science with our expertise in the healthcare space. We came up with Reclaim, to seamlessly help make all of our finances around our healthcare more understandable, reasonably priced, and optimally planned for. 
     
-    Our mission at Reclaim is to **make health finances simple, personal, just right**.
+    The Reclaim Partner API provides secure access to our hosted subscriber and group information and is available only to trusted partners under legal contract. Authorization is required for all endpoints (See Security and Authorization for the process of acquiring and access token). The api follows conventional REST guidelines. Two primary sets of resources are available, group and subscriber. Group endpoints are primarily for creating new employer groups and uploading eligibility data in csv format. Subscriber endpoints provide enrollment recommendation-related resources for individual subscribers.
 
 
   version: "2019-01-07"
@@ -66,7 +65,7 @@ paths:
          - A client makes a request to the POST oauth2 / token endpoint to exchange these credentials for a bearer token.
          - When accessing the REST API, the client uses the bearer token to authenticate.
 
-       In the cURL tab to the right you can see an example of obtaining an access token via the command line, then making a call to the Activities API with that token. Likewise, the Python tab contains an example of authorization from scratch using the popular requests library. 
+       In the cURL tab to the right you can see an example of obtaining an access token via the command line. Likewise, the Python tab contains an example of authorization from scratch using the popular requests library. 
       x-code-samples:
       - lang: "cURL"
         source: |                             
@@ -165,17 +164,25 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/UpdateGroupDetailOutput"          
-  /api/group/[group_id]/eligibility_files:
+  /api/group/[group_id]/files:
     post:
       tags:
       - "Group-Specific Endpoints"
-      summary: "Upload Group Eligibility File"
+      summary: "Upload Eligibility/Benefit File"
       description: |
-        This endpoint allows the client to add subscribers' eligibility to a group in the Reclaim system. 
+        This endpoint allows the client to add a group eligibility or benefit file in the Reclaim system. Note that the type of file to upload should be provided in the header of the API. File types include
+        
+        `eligibility` referring to a group's eligibility file. 
+        
+        `basic` referring to a group's basic plans offerings and their attributes.
+        
+        `hospital` referring to a group's supplemental hospital indemnity offerings and their attributes.
         
         <details>
-        <summary id="text" onClick="function()"><font color="blue"><u> Click for Reclaim's preferred eligibility file schema details </u></font></summary>
+        <summary id="text" onClick="function()"><font color="blue"><u> Click for Reclaim's preferred schema details for each of the file types</u></font></summary>
         <p>
+        <br/>
+        <b> Eligibility file schema </b>
         <table id="table" style="width:100%">
           <tr>
             <th>column</th>
@@ -264,175 +271,12 @@ paths:
             <td> eligible_benefits</td><td> List of all eligible benefit IDs</td><td> string</td><td> hdhp_13958;ppo_14827 </td>
           </tr>
         </table>
-        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;" onclick="exportTableToCSV('eligibility_reclaim_schema.csv')">EXPORT SCHEMA TO CSV</button>
+        <button type="button" style="background-color:#4CAF50;color:white;width:300px;height:40px;font-size:14px;" onclick="exportTableToCSV('eligibility_reclaim_schema.csv')">EXPORT ELIGIBILITY SCHEMA TO CSV</button>
         </p>
-        </details>
-#        | **Column**          | **Description**                   | **Type**  | **Example**        |
-#        |---------------------|-----------------------------------|-----------|--------------------|
-#        | plan_year           | Plan start date's year            | integer   | 2019               |
-#        | group               | Employer group code               | string    | acmecorp           |
-#        | division            | Employer division code            | string    | corporate          |
-#        | subscriber_id       | Plan subscriber ID                | integer   | 579635785          |
-#        | subscriber_ssn      | Plan subscriber's social security | integer | 1234567890           |
-#        | subscriber_dob      | Plan subscriber's date of birth   | date    | 1980-03-24           |
-#        | subscriber_gender   | Plan subscriber's gender          | string  | female               |
-#        | subscriber_address  | Plan subscriber street address    | string  | 123 Street #1        |
-#        | subscriber_city     | Plan subscriber city address      | string  | Cambridge            |
-#        | subscriber_state    | Plan subscriber state address     | string  | MA                   |
-#        | subscriber_zip      | Plan subscriber zip code          | string  | 02139                |
-#        | subscriber_status   | Plan subscriber status            | string  | active               |
-#        | member_id           | Plan member ID                    | integer | 579635786            |
-#        | member_ssn          | Plan subscriber's social security | integer | 1234567891           |
-#        | member_dob          | Plan member's date of birth       | date    | 2010-04-26           |
-#        | member_gender       | Plan member's gender              | string  | female               |
-#        | member_address      | Plan member street address        | string  | 123 Street #1        |
-#        | member_city         | Plan member city address          | string  | Cambridge            |
-#        | member_state        | Plan member state address         | string  | MA                   |
-#        | member_zip          | Plan member zip code              | integer | 02139                |
-#        | member_relation     | Plan member zip code              | integer | child                |
-#        | member_status       | Plan member status                | string  | active               |
-#        | benefit             | Benefit plan ID (if enrolled)     | string  | hdhp_13958           |
-#        | benefit_start       | Coverage start date (if enrolled) | date    | 2019-01-01           |
-#        | benefit_end         | Coverage end date (if known)      | date    |                      |
-#        | benefit_type        | Benefit plan type (if enrolled)   | string  | basic                |
-#        | eligible_benefits   | List of all eligible benefit IDs  | string  | hdhp_13958;ppo_14827 |
-
-
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "formData"
-        name: "file"
-        type: "file"
-        description: "Eligibility file to upload"
-        required: true  
-        x-mimetype: text/csv
-      - in: "formData"
-        name: "name"
-        description: "Description of the eligibility file to upload"
-      x-code-samples:
-      - lang: "cURL"
-        source: |                              
-            # post file including bearer token authorization in header
-            curl -X POST
-            -H 'authorization: [bearer_token]' \
-            -F 'file=@group_id_eligibility.csv' \
-            -F 'name=group_id_eligibility' \
-            https://platform.reclaim.health/api/group/[group_id]/eligibility_files
-      - lang: "Python"
-        source: |
-            import requests
-
-            files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
-            payload = {'name': 'group_id_eligibility'}
-            headers = {'Authorization': 'bearer_token'}
-            
-            response = requests.put('https://platform.reclaim.health/api/group/[group_id]/eligibility_files', files=files, data=payload, headers=headers).json()
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/EligibilityUploadDetailOutput"
-    get:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Eligibility Status Check"
-      description: "This endpoint checks the ingestion status of the eligibility files for an existing employer group within the Reclaim system."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/EligibilityStatusCheckDetailOutput"   
-  /group/[group_id]/eligibility_file/[file_id]:
-    get:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Specific Eligibility Status Check"
-      description: "This endpoint checks the ingestion status of a specific eligibility file within the Reclaim system."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/EligibilityUploadDetailOutput"
-    delete:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Delete Existing Eligibility File"
-      description: "This endpoint deletes an existng eligibility file within the Reclaim system."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/DeleteEligibilityDetailOutput" 
-    put:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Update Existing Eligibility File"
-      description: |
-        This endpoint allows the client to add subscribers' eligibility to a group in the Reclaim system. Refer to the eligibility schema above.
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "formData"
-        name: "file"
-        type: "file"
-        description: "Eligibility file to upload"
-        required: true  
-        x-mimetype: text/csv
-      - in: "formData"
-        name: "name"
-        description: "Description of the eligibility file to upload"
-      x-code-samples:
-      - lang: "cURL"
-        source: |                              
-            # post file including bearer token authorization in header
-            curl -X POST
-            -H 'authorization: [bearer_token]' \
-            -F 'file=@group_id_eligibility.csv' \
-            -F 'name=group_id_eligibility' \
-            https://platform.reclaim.health/api/group/[group_id]/eligibility_file/[file_id]
-      - lang: "Python"
-        source: |
-            import requests
-
-            files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
-            payload = {'name': 'group_id_eligibility'}
-            headers = {'Authorization': 'bearer_token'}
-            
-            response = requests.put('https://platform.reclaim.health/api/group/[group_id]/eligibility_file/[file_id]', files=files, data=payload, headers=headers).json()
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/UpdateEligibilityDetailOutput"        
-  /group/[group_id]/benefits:
-    post:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Upload Group Benefits File"
-      description: |
-        This endpoint allows the client to upload the benefit and plan attributes offered by a specific employer group to their subscribers. 
         
-        <details>
-    
-        <summary id="text" onClick="function()"><font color="blue"><u> Click for Reclaim's preferred benefits attributes file schema details </u></font></summary>
         <p>
+        <br/>
+        <b> Basic health plan file schema </b>
         <table id="table2" style="width:100%">
           <tr>
             <th>column</th>
@@ -540,11 +384,29 @@ paths:
             <td> out_network_coinsurance </td><td> Out-of network coinsurance; if applicable</td><td> integer </td><td> 30</td>
           </tr>
         </table>
+        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;" onclick="exportTableToCSV2('benefits_reclaim_schema.csv')">EXPORT SCHEMA TO CSV</button>   
+        </p>
+        
+        <p>
+        <br/>
+        <b> Supplemental hospital indemnity file schema </b>
+        <table id="table2" style="width:100%">
+          <tr>
+            <th>column</th>
+            <th>description</th> 
+            <th>type</th>
+            <th>example</th>
+          </tr>
+          <tr>
+            <td> TODO </td><td> TODO </td><td> TODO </td><td> TODO</td>
+          </tr>
+        </table>
         <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;" onclick="exportTableToCSV2('benefits_reclaim_schema.csv')">EXPORT SCHEMA TO CSV</button>
-
-    
         </p>
         </details>
+        
+        
+         
 #        | **Column**          | **Description**                   | **Type**  | **Example**        |
 #        |---------------------|-----------------------------------|-----------|--------------------|
 #        | plan_year           | Plan start date's year            | integer   | 2019               |
@@ -575,7 +437,40 @@ paths:
 #        | benefit_type        | Benefit plan type (if enrolled)   | string  | basic                |
 #        | eligible_benefits   | List of all eligible benefit IDs  | string  | hdhp_13958;ppo_14827 |
 
-
+#        | **Column**          | **Description**                   | **Type**  | **Example**        |
+#        |---------------------|-----------------------------------|-----------|--------------------|
+#        | plan_year           | Plan start date's year            | integer   | 2019               |
+#        | group               | Employer group code               | string    | acmecorp           |
+#        | division            | Employer division code            | string    | corporate          |
+#        | subscriber_id       | Plan subscriber ID                | integer   | 579635785          |
+#        | subscriber_ssn      | Plan subscriber's social security | integer | 1234567890           |
+#        | subscriber_dob      | Plan subscriber's date of birth   | date    | 1980-03-24           |
+#        | subscriber_gender   | Plan subscriber's gender          | string  | female               |
+#        | subscriber_address  | Plan subscriber street address    | string  | 123 Street #1        |
+#        | subscriber_city     | Plan subscriber city address      | string  | Cambridge            |
+#        | subscriber_state    | Plan subscriber state address     | string  | MA                   |
+#        | subscriber_zip      | Plan subscriber zip code          | string  | 02139                |
+#        | subscriber_status   | Plan subscriber status            | string  | active               |
+#        | member_id           | Plan member ID                    | integer | 579635786            |
+#        | member_ssn          | Plan subscriber's social security | integer | 1234567891           |
+#        | member_dob          | Plan member's date of birth       | date    | 2010-04-26           |
+#        | member_gender       | Plan member's gender              | string  | female               |
+#        | member_address      | Plan member street address        | string  | 123 Street #1        |
+#        | member_city         | Plan member city address          | string  | Cambridge            |
+#        | member_state        | Plan member state address         | string  | MA                   |
+#        | member_zip          | Plan member zip code              | integer | 02139                |
+#        | member_relation     | Plan member zip code              | integer | child                |
+#        | member_status       | Plan member status                | string  | active               |
+#        | benefit             | Benefit plan ID (if enrolled)     | string  | hdhp_13958           |
+#        | benefit_start       | Coverage start date (if enrolled) | date    | 2019-01-01           |
+#        | benefit_end         | Coverage end date (if known)      | date    |                      |
+#        | benefit_type        | Benefit plan type (if enrolled)   | string  | basic                |
+#        | eligible_benefits   | List of all eligible benefit IDs  | string  | hdhp_13958;ppo_14827 |
+       
+#        | **Column**          | **Description**                   | **Type**  | **Example**        |
+#        |---------------------|-----------------------------------|-----------|--------------------|
+#        | plan_year           | Plan start date's year            | integer   | 2019               |
+#        
       consumes:
       - "multipart/form-data"
       produces:
@@ -584,44 +479,41 @@ paths:
       - in: "formData"
         name: "file"
         type: "file"
-        description: "Benefit file to upload"
+        description: "Eligibility/benefit file to upload"
         required: true  
         x-mimetype: text/csv
       - in: "formData"
         name: "name"
-        description: "Description of the benefit file to upload"
-      - in: "formData"
-        name: "id"
-        description: "Benefit file ID that can be used to identify the status of the specific file upload into the Reclaim system"
+        description: "Description of the file to upload"
       x-code-samples:
       - lang: "cURL"
         source: |                              
             # post file including bearer token authorization in header
             curl -X POST
             -H 'authorization: [bearer_token]' \
-            -F 'file=@group_id_benefit.csv' \
-            -F 'name=group_id_benefit' \
-            -F 'id=group_id_ben_2019_4_5' \
-            https://platform.reclaim.health/api/groups/[group_id]/benefit
+            -H 'type: eligibility' \
+            -F 'file=@group_id_eligibility.csv' \
+            -F 'name=group_id_eligibility' \
+            https://platform.reclaim.health/api/group/[group_id]/eligibility_files
       - lang: "Python"
         source: |
             import requests
 
-            files = {'file': open('/path/group_id_benefit.csv', 'rb')}
-            payload = {'name': 'group_id_benefit', 'id': 'group_id_ben_2019_4_5'}
-            headers = {'Authorization': 'bearer_token'}
+            files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
+            payload = {'name': 'group_id_eligibility'}
+            headers = {'Authorization': 'bearer_token', 'Type': 'eligibility'}
             
-            response = requests.put('https://platform.reclaim.health/api/groups/[group_id]/benefit', files=files, data=payload, headers=headers).json()
+            response = requests.put('https://platform.reclaim.health/api/group/[group_id]/files', files=files, data=payload, headers=headers).json()
       responses:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/BenefitUploadDetailOutput"
+            $ref: "#/definitions/UploadDetailOutput"
     get:
       tags:
       - "Group-Specific Endpoints"
-      summary: "Benefit Upload Status Check"
-      description: "This endpoint checks the ingestion status of the benefit data within the Reclaim system."
+      summary: "Files Upload Status"
+      description: "This endpoint checks the status of all uploaded data files for an existing employer group in the Reclaim system."
       consumes:
       - "application/json"
       produces:
@@ -630,13 +522,13 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/BenefitStatusCheckDetailOutput"   
-  /groups/[group_id]/benefits/[upload_id]:
+            $ref: "#/definitions/StatusCheckDetailOutput"   
+  /group/[group_id]/file/[file_id]:
     get:
       tags:
       - "Group-Specific Endpoints"
-      summary: "Benefit File Upload Status Check"
-      description: "This endpoint checks the ingestion status of the benefit data within the Reclaim system."
+      summary: "Specific File Upload Status"
+      description: "This endpoint checks the status of a single uploaded data file in the Reclaim system."
       consumes:
       - "application/json"
       produces:
@@ -645,7 +537,290 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/BenefitUploadDetailOutput"            
+            $ref: "#/definitions/UploadDetailOutput"
+    delete:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Delete Existing File"
+      description: "This endpoint deletes an existng file in the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/DeleteDetailOutput" 
+    put:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Update Existing File"
+      description: |
+        This endpoint allows the client to update an existing file in the Reclaim system. Refer to the data files schema above.
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "formData"
+        name: "file"
+        type: "file"
+        description: "Data file to upload"
+        required: true  
+        x-mimetype: text/csv
+      - in: "formData"
+        name: "name"
+        description: "Description of the data file to upload"
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # post file including bearer token authorization in header
+            curl -X POST
+            -H 'authorization: [bearer_token]' \
+            -H 'type: eligibility' \
+            -F 'file=@group_id_eligibility.csv' \
+            -F 'name=group_id_eligibility' \
+            https://platform.reclaim.health/api/group/[group_id]/file/[file_id]
+      - lang: "Python"
+        source: |
+            import requests
+
+            files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
+            payload = {'name': 'group_id_eligibility'}
+            headers = {'Authorization': 'bearer_token', 'Type': 'eligibility'}
+            
+            response = requests.put('https://platform.reclaim.health/api/group/[group_id]/file/[file_id]', files=files, data=payload, headers=headers).json()
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/UpdateDetailOutput"        
+#  /group/[group_id]/benefits:
+#    post:
+#      tags:
+#      - "Group-Specific Endpoints"
+#      summary: "Upload Group Benefits File"
+#      description: |
+#        This endpoint allows the client to upload the benefit and plan attributes offered by a specific employer group to their subscribers. 
+#        
+#        <details>
+#    
+#        <summary id="text" onClick="function()"><font color="blue"><u> Click for Reclaim's preferred benefits attributes file schema details </u></font></summary>
+#        <p>
+#        <table id="table2" style="width:100%">
+#          <tr>
+#            <th>column</th>
+#            <th>description</th> 
+#            <th>type</th>
+#            <th>example</th>
+#          </tr>
+#          <tr>
+#            <td> benefit_id</td><td> Benefit plan ID </td><td> string </td><td> hdhp_13958</td>
+#          </tr>
+#          <tr>
+#            <td> benefit_type</td><td> Benefit plan type </td><td> string </td><td> basic </td>
+#          </tr>
+#          <tr>
+#            <td> benefit_name</td><td> Benefit plan user-friendly name </td><td> string </td><td> HDHP Choice Base Plus </td>
+#          </tr>
+#          <tr> 
+#            <td> group</td><td> Employer group code </td><td> string </td><td> acmecorp </td>
+#          </tr>
+#          <tr> 
+#            <td> division</td><td> Employer group division code </td><td> string </td><td> corporate </td>
+#          </tr>
+#          <tr> 
+#            <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2019</td>
+#          </tr>
+#          <tr>    
+#            <td> start_date </td><td> Plan start date</td><td> date</td><td> 2019-01-01</td>
+#          </tr>
+#          <tr>
+#            <td> end_date </td><td> Plan end date</td><td> date</td><td> 2019-12-31</td>
+#          </tr>
+#          <tr>    
+#            <td> ee_premium </td><td> Monthly premium for subscriber only</td><td> float</td><td> 356.7</td>
+#          </tr>
+#          <tr>
+#            <td> ec_premium </td><td> Monthly premium for subscriber and children dependents</td><td> float</td><td> 456.7</td>
+#          </tr>
+#          <tr>
+#            <td> es_premium </td><td> Monthly premium for subscriber and spouse</td><td> float</td><td> 556.7</td>
+#          </tr>
+#          <tr>
+#            <td> ef_premium </td><td> Monthly premium for subscriber and family (spouse and children)</td><td> float</td><td> 656.7</td>
+#          </tr>
+#          <tr>
+#            <td> hra_included </td><td> Indicator whether benefit is associated with HRA</td><td> bool</td><td> true</td>
+#          </tr>
+#          <tr>
+#            <td> ee_hra_contribution </td><td> Group HRA contribution to subscriber only; if applicable</td><td> float</td><td> 500</td>
+#          </tr>
+#          <tr>
+#            <td> ef_hra_contribution </td><td> Group HRA contribution to subscriber and dependents; if applicable</td><td> float</td><td> 1000</td>
+#          </tr>
+#          <tr>
+#            <td> hsa_included </td><td> Indicator whether benefit is associated with HSA</td><td> bool</td><td> true</td>
+#          </tr>
+#          <tr>
+#            <td> ee_hsa_contribution </td><td> Group HSA contribution to subscriber only; if applicable</td><td> float</td><td> 500</td>
+#          </tr>
+#          <tr>
+#            <td> ef_hsa_contribution </td><td> Group HSA contribution to subscriber and dependents; if applicable</td><td> float</td><td> 1000</td>
+#          </tr>
+#          <tr>
+#            <td> hsa_bank </td><td> HSA bank name; if applicable</td><td> string</td><td> HSA Bank</td>
+#          </tr> 
+#          <tr>
+#            <td> fsa_included </td><td> Indicator whether benefit is associated with FSA</td><td> bool</td><td> true</td>
+#          </tr>
+#          <tr>
+#            <td> ee_fsa_contribution </td><td> Group FSA contribution to subscriber only; if applicable</td><td> float</td><td> 500</td>
+#          </tr>
+#          <tr>
+#            <td> ef_fsa_contribution </td><td> Group FSA contribution to subscriber and dependents; if applicable</td><td> float</td><td> 1000</td>
+#          </tr>
+#          <tr>
+#            <td> fsa_bank </td><td> FSA bank name; if applicable</td><td> string</td><td> Wageworks</td>
+#          </tr> 
+#          <tr>
+#            <td> in_network_ee_deductible </td><td> In network deductible for subscriber only plan; if applicable</td><td> integer </td><td> 1500</td>
+#          </tr>
+#          <tr>
+#            <td> in_network_ef_deductible </td><td> In network deductible for subscriber and dependents; if applicable</td><td> integer </td><td> 3000</td>
+#          </tr>
+#          <tr>
+#            <td> out_network_ee_deductible </td><td> Out-of network deductible for subscriber only plan; if applicable</td><td> integer </td><td> 3000</td>
+#          </tr>
+#          <tr>
+#            <td> out_network_ef_deductible </td><td> Out-of network deductible for subscriber and dependents; if applicable</td><td> integer </td><td> 6000</td>
+#          </tr>
+#          <tr>
+#            <td> in_network_ee_oop_max </td><td> In network out-of-pocket max for subscriber only plan; if applicable</td><td> integer </td><td> 3000</td>
+#          </tr>
+#          <tr>
+#            <td> in_network_ef_oop_max </td><td> In network out-of-pocket max for subscriber and dependents; if applicable</td><td> integer </td><td> 6000</td>
+#          </tr>
+#          <tr>
+#            <td> out_network_ee_oop_max </td><td> Out-of network out-of-pocket max for subscriber only plan; if applicable</td><td> integer </td><td> 6000</td>
+#          </tr>
+#          <tr>
+#            <td> out_network_ef_oop_max </td><td> Out-of network out-of-pocket max for subscriber and dependents; if applicable</td><td> integer </td><td> 10000</td>
+#          </tr>
+#          <tr>
+#            <td> in_network_coinsurance </td><td> In network coinsurance; if applicable</td><td> integer </td><td> 20</td>
+#          </tr>
+#          <tr>
+#            <td> out_network_coinsurance </td><td> Out-of network coinsurance; if applicable</td><td> integer </td><td> 30</td>
+#          </tr>
+#        </table>
+#        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;" onclick="exportTableToCSV2('benefits_reclaim_schema.csv')">EXPORT SCHEMA TO CSV</button>
+#
+#    
+#        </p>
+#        </details>
+##        | **Column**          | **Description**                   | **Type**  | **Example**        |
+##        |---------------------|-----------------------------------|-----------|--------------------|
+##        | plan_year           | Plan start date's year            | integer   | 2019               |
+##        | group               | Employer group code               | string    | acmecorp           |
+##        | division            | Employer division code            | string    | corporate          |
+##        | subscriber_id       | Plan subscriber ID                | integer   | 579635785          |
+##        | subscriber_ssn      | Plan subscriber's social security | integer | 1234567890           |
+##        | subscriber_dob      | Plan subscriber's date of birth   | date    | 1980-03-24           |
+##        | subscriber_gender   | Plan subscriber's gender          | string  | female               |
+##        | subscriber_address  | Plan subscriber street address    | string  | 123 Street #1        |
+##        | subscriber_city     | Plan subscriber city address      | string  | Cambridge            |
+##        | subscriber_state    | Plan subscriber state address     | string  | MA                   |
+##        | subscriber_zip      | Plan subscriber zip code          | string  | 02139                |
+##        | subscriber_status   | Plan subscriber status            | string  | active               |
+##        | member_id           | Plan member ID                    | integer | 579635786            |
+##        | member_ssn          | Plan subscriber's social security | integer | 1234567891           |
+##        | member_dob          | Plan member's date of birth       | date    | 2010-04-26           |
+##        | member_gender       | Plan member's gender              | string  | female               |
+##        | member_address      | Plan member street address        | string  | 123 Street #1        |
+##        | member_city         | Plan member city address          | string  | Cambridge            |
+##        | member_state        | Plan member state address         | string  | MA                   |
+##        | member_zip          | Plan member zip code              | integer | 02139                |
+##        | member_relation     | Plan member zip code              | integer | child                |
+##        | member_status       | Plan member status                | string  | active               |
+##        | benefit             | Benefit plan ID (if enrolled)     | string  | hdhp_13958           |
+##        | benefit_start       | Coverage start date (if enrolled) | date    | 2019-01-01           |
+##        | benefit_end         | Coverage end date (if known)      | date    |                      |
+##        | benefit_type        | Benefit plan type (if enrolled)   | string  | basic                |
+##        | eligible_benefits   | List of all eligible benefit IDs  | string  | hdhp_13958;ppo_14827 |
+#
+#
+#      consumes:
+#      - "multipart/form-data"
+#      produces:
+#      - "application/json"
+#      parameters:
+#      - in: "formData"
+#        name: "file"
+#        type: "file"
+#        description: "Benefit file to upload"
+#        required: true  
+#        x-mimetype: text/csv
+#      - in: "formData"
+#        name: "name"
+#        description: "Description of the benefit file to upload"
+#      - in: "formData"
+#        name: "id"
+#        description: "Benefit file ID that can be used to identify the status of the specific file upload into the Reclaim system"
+#      x-code-samples:
+#      - lang: "cURL"
+#        source: |                              
+#            # post file including bearer token authorization in header
+#            curl -X POST
+#            -H 'authorization: [bearer_token]' \
+#            -F 'file=@group_id_benefit.csv' \
+#            -F 'name=group_id_benefit' \
+#            -F 'id=group_id_ben_2019_4_5' \
+#            https://platform.reclaim.health/api/groups/[group_id]/benefit
+#      - lang: "Python"
+#        source: |
+#            import requests
+#
+#            files = {'file': open('/path/group_id_benefit.csv', 'rb')}
+#            payload = {'name': 'group_id_benefit', 'id': 'group_id_ben_2019_4_5'}
+#            headers = {'Authorization': 'bearer_token'}
+#            
+#            response = requests.put('https://platform.reclaim.health/api/groups/[group_id]/benefit', files=files, data=payload, headers=headers).json()
+#      responses:
+#        200:
+#          description: "Success"
+#          schema:
+#            $ref: "#/definitions/BenefitUploadDetailOutput"
+#    get:
+#      tags:
+#      - "Group-Specific Endpoints"
+#      summary: "Benefit Upload Status Check"
+#      description: "This endpoint checks the status of all uploaded benefit data files for an existing employer group in the Reclaim system."
+#      consumes:
+#      - "application/json"
+#      produces:
+#      - "application/json"
+#      responses:
+#        200:
+#          description: "Success"
+#          schema:
+#            $ref: "#/definitions/BenefitStatusCheckDetailOutput"   
+#  /groups/[group_id]/benefits/[upload_id]:
+#    get:
+#      tags:
+#      - "Group-Specific Endpoints"
+#      summary: "Benefit File Upload Status Check"
+#      description: "This endpoint checks the status of a single uploaded benefit data file in the Reclaim system."
+#      consumes:
+#      - "application/json"
+#      produces:
+#      - "application/json"
+#      responses:
+#        200:
+#          description: "Success"
+#          schema:
+#            $ref: "#/definitions/BenefitUploadDetailOutput"            
   /subscriber/[subscriber_id]:
     get:
       tags:
@@ -774,7 +949,7 @@ definitions:
           properties:
             id: 
               type: "string"
-              description: "Slug name for the employer group"
+              description: "Short identifier for the employer group"
             name: 
               type: "string"
               description: "Detailed name for the employer group"
@@ -784,22 +959,6 @@ definitions:
           name: "ACME Corporation"
         - id: "abc"
           name: "ABC, Inc."
-# Group Eligibility Detail Input
-  GroupEligibilityDetailInput:
-    type: "object"
-    properties:
-      eligibility:
-        type: "array"
-        description: "Array of group members eligible to benefits offered by the employer group"
-        items:
-          type: "object"
-          properties:
-            plan_year: 
-              type: "integer"
-              description: "Plan year associated with the eligibility"
-            name: 
-              type: "string"
-              description: "Detailed name for the employer group"
 # Claim Authorization Detail Input
   AuthorizationDetailInput:
     type: "object"
@@ -824,17 +983,22 @@ definitions:
               description: "Slug describing the survey question. The first term defines the umbrella under which the question is served, e.g. **health**, **financial**, and **personality**. The remainder is a short description of the survey question"
             value:
               type: "string, integer, array"
-              description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`"  
+              description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`" 
+            ignore:
+              type: "bool"
+              description: "Indicator whether the question can be ignored for the purposes of the recommendation. This is for instance applicable if the client chooses not to ask health questions to subscribers that have claims data in the Reclaim system and have authorized Reclaim to utilize their claims data"
     example:
       survey:
         - id: "health_doctor_visits"
           value: 8
+          ignore: false
         - id: "health_prescriptions"
-          value: "low"
+          ignore: true
         - id: "health_expected_events"
           value: 
             - "pregnancy"
-            - "income_loss"  
+            - "income_loss" 
+          ignore: false 
 # Add Group Detail Output
   AddGroupDetailOutput:
     type: "object"
@@ -847,13 +1011,13 @@ definitions:
           properties:
             id: 
               type: "string"
-              description: "Slug name for the employer group"
+              description: "Short identifier for the employer group"
             name: 
               type: "string"
               description: "Detailed name for the employer group"
             updated:
               type: "timestamp"
-              description: "Timestamp recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
+              description: "Timestamp (in UTC) recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
             detail: 
               type: "array"
               description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"  
@@ -875,7 +1039,7 @@ definitions:
     properties:
       id: 
         type: "string"
-        description: "Slug name for the employer group"
+        description: "Short identifier for the employer group"
       name: 
         type: "string"
         description: "Detailed name for the employer group"
@@ -888,13 +1052,13 @@ definitions:
     properties:
       id: 
         type: "string"
-        description: "Slug name for the employer group"
+        description: "Short identifier for the employer group"
       name: 
         type: "string"
         description: "Detailed name for the employer group"
       updated:
         type: "timestamp"
-        description: "Timestamp recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
+        description: "Timestamp (in UTC) recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
       detail: 
         type: "array"
         description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"  
@@ -912,13 +1076,13 @@ definitions:
     properties:
       id: 
         type: "string"
-        description: "Slug name for the employer group"
+        description: "Short identifier for the employer group"
       name: 
         type: "string"
         description: "Detailed name for the employer group"
       updated:
         type: "timestamp"
-        description: "Timestamp recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
+        description: "Timestamp (in UTC) recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
       detail: 
         type: "array"
         description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"  
@@ -945,13 +1109,13 @@ definitions:
               properties:
                 id:   
                   type: "string"
-                  description: "Slug name for the employer group"  
+                  description: "Short identifier for the employer group"  
                 name:
                   type: "string"
                   description: "Detailed name for the employer group"
                 updated:
                   type: "timestamp"
-                  description: "Timestamp recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC"  
+                  description: "Timestamp (in UTC) recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC"  
                 detail: 
                   type: "array"
                   description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"
@@ -975,224 +1139,243 @@ definitions:
               name: "XYZ, Inc."
               updated: "2019-04-04 14:59:23"   
 # Eligibility Upload Detail Output  
-  EligibilityUploadDetailOutput:
+  UploadDetailOutput:
     type: "object"
     properties: 
       id:   
             type: "string"
-            description: "Eligibility file upload ID created by the Reclaim system to refer to the upload activity"
+            description: "Data file upload ID created by the Reclaim system to refer to the upload activity"
+      type:   
+            type: "string"
+            description: "Data file type, e.g., eligibility, basic, hospital, etc."        
       name: 
             type: "string"
-            description: "Description of the eligibility file to upload as provided by the client"        
+            description: "Description of the data file to upload as provided by the client"        
       status:   
             type: "string"
             description: |
-              Status of eligibility file upload and ingestion process into the Reclaim system. This can take one of three values:
+              Status of the data file upload in the Reclaim system. This can take one of three values:
               
-              `processing` meaning the ingestion of the eligibility file is still processing
+              `processing` meaning the ingestion of the data file is still processing
               
-              `fail` meaning the ingestion of the eligibility file has failed
+              `fail` meaning the ingestion of the data file has failed
               
-              `success` meaning the ingestion of the eligibility file has finished successfully
+              `success` meaning the ingestion of the data file has finished successfully
       detail:
             type: "array"
-            description: "Detailed description of failure error, if the ingestion of the eligibility were to encounter a failure"
+            description: "Detailed description of failure error, if the ingestion of the data file were to encounter a failure"
             items: 
               type: "string"
       updated: 
             type: "timestamp"
-            description: "Timestamp of the most recent update on the status of the eligibility file upload"        
+            description: "Timestamp (in UTC) of the most recent update on the status of the data file upload"        
     example: 
           id: "group_id_elig_2019_4_5"
+          type: "eligibility"
           name: "group_id_eligibility"
           status: "processing"
           updated: "2019-04-10 14:59:23"
 #Eligibility Status Check Detail Output      
-  EligibilityStatusCheckDetailOutput:
+  StatusCheckDetailOutput:
     type: "object"
     properties: 
-      eligibility:
+      files:
         type: "array"
-        description: "Eligibility file upload ID created by the Reclaim system to refer to the upload activity"
+        description: "Array of all data files uploaded to the Reclaim system"
         items:
           type: "object"
           properties:
             id:   
               type: "string"
-              description: "Eligibility upload ID as instructed by client upload post request"
+              description: "Data file upload ID created by the Reclaim system to refer to the upload activity"
+            type:   
+              type: "string"
+              description: "Data file type, e.g., eligibility, basic, hospital, etc."    
             name:
               type: "string"
-              description: "Description of the eligibility file to upload as provided by the client"  
+              description: "Description of the data file to upload as provided by the client"  
             status:   
               type: "string"
               description: |
-                Status of eligibility file upload and ingestion process into the Reclaim system. This can take one of three values:
+                Status of the data file upload in the Reclaim system. This can take one of three values:
               
-                `processing` meaning the ingestion of the eligibility file is still processing
+                `processing` meaning the ingestion of the data file is still processing
               
-                `fail` meaning the ingestion of the eligibility file has failed
+                `fail` meaning the ingestion of the data file has failed
               
-                `success` meaning the ingestion of the eligibility file has finished successfully
+                `success` meaning the ingestion of the data file has finished successfully
             detail:
               type: "array"
-              description: "Detailed description of failure error, if the ingestion of the eligibility were to encounter a failure"   
+              description: "Detailed description of failure error, if the ingestion of the data file were to encounter a failure"   
               items: 
                 type: "string"
             updated: 
               type: "timestamp"
-              description: "Timestamp (in UTC) of the most recent update on the status of the eligibility file upload"
+              description: "Timestamp (in UTC) of the most recent update on the status of the data file upload"
     example: 
-      eligibility:
+      files:
         - id: "group_id_elig_2019_4_5"
+          type: "eligibility"
           name: "group_id_eligibility"
           status: "success"
           updated: "2019-04-10 14:59:23"
-        - id: "group_id_elig_2019_5_5"  
-          name: "group_id_eligibility"
+        - id: "group_id_basic_2019_5_5"  
+          type: "basic_plans"
+          name: "group_id_basic"
           status: "processing"
           updated: "2019-05-10 12:59:29"
-        - id: "group_id_elig_2019_5_6"  
-          name: "group_id_eligibility"
+        - id: "group_id_supplemental_2019_5_6" 
+          type: "supplemental_plans"
+          name: "group_id_supplemental"
           status: "fail"
           updated: "2019-05-10 12:59:29"  
           detail: 
             - "line 9, column 10 - found unexpected data format" 
+            - "line 145, column 74 - found unexpected character"
 # Update Eligibility Detail Output  
-  UpdateEligibilityDetailOutput:
+  UpdateDetailOutput:
     type: "object"
     properties: 
       id:   
             type: "string"
-            description: "Eligibility file ID that the client requested be updated"
+            description: "Data file ID created by the Reclaim system to refer to the upload activity"
+      type:   
+            type: "string"
+            description: "Data file type, e.g., eligibility, basic, hospital, etc."         
       name:
             type: "string"
-            description: "Description of the eligibility file to upload as provided by the client"        
+            description: "Description of the data file to upload as provided by the client"        
       status:   
             type: "string"
             description: |
-              Status of eligibility file upload and ingestion process into the Reclaim system. This can take one of three values:
+              Status of the data file upload in the Reclaim system. This can take one of three values:
               
-              `processing` meaning the ingestion of the eligibility file is still processing
+              `processing` meaning the ingestion of the data file is still processing
               
-              `fail` meaning the ingestion of the eligibility file has failed
+              `fail` meaning the ingestion of the data file has failed
               
-              `success` meaning the ingestion of the eligibility file has finished successfully
+              `success` meaning the ingestion of the data file has finished successfully
       detail:
             type: "array"
-            description: "Detailed description of failure error, if the ingestion of the eligibility were to encounter a failure"
+            description: "Detailed description of failure error, if the ingestion of the data file were to encounter a failure"
             items: 
               type: "string"
       updated: 
             type: "timestamp"
-            description: "Timestamp (in UTC) of the most recent update on the status of the eligibility file upload"        
+            description: "Timestamp (in UTC) of the most recent update on the status of the data file upload"        
     example: 
           id: "group_id_elig_2019_4_5"
+          type: "eligibility"
           name: "group_id_eligibility"
           status: "processing"
           updated: "2019-04-10 14:59:23"    
 # Delete Eligibility Detail Output  
-  DeleteEligibilityDetailOutput:
+  DeleteDetailOutput:
     type: "object"
     properties: 
       id:   
             type: "string"
-            description: "Eligibility file ID that the client requested be deleted"
+            description: "Data file ID created by the Reclaim system to refer to the upload activity"
+      type:   
+            type: "string"
+            description: "Data file type, e.g., eligibility, basic, hospital, etc."           
       name:
             type: "string"
-            description: "Description of the eligibility file to upload as provided by the client"        
+            description: "Description of the data file to upload as provided by the client"        
       status:   
             type: "string"
             description: |
-              Status of eligibility file upload and ingestion process into the Reclaim system. This can take one of three values:
+              Status of the data file upload in the Reclaim system. This can take one of three values:
               
-              `processing` meaning the ingestion of the eligibility file is still processing
+              `processing` meaning the ingestion of the data file is still processing
               
-              `fail` meaning the ingestion of the eligibility file has failed
+              `fail` meaning the ingestion of the data file has failed
               
-              `success` meaning the ingestion of the eligibility file has finished successfully
+              `success` meaning the ingestion of the data file has finished successfully
       detail:
             type: "array"
-            description: "Detailed description of failure error, if the deletion of the eligibility were to encounter a failure"
+            description: "Detailed description of failure error, if the deletion of the data file were to encounter a failure"
             items: 
               type: "string"
       updated: 
             type: "timestamp"
-            description: "Timestamp (in UTC) of the most recent update on the deletion status of the eligibility file"        
+            description: "Timestamp (in UTC) of the most recent update on the deletion status of the data file"        
     example: 
           id: "group_id_elig_2019_4_5"
+          type: "eligibility"
           name: "group_id_eligibility"
           status: "success"
           updated: "2019-04-10 14:59:23" 
           detail: 
             - "The file 'group_id_eligibility.csv' was successfully deleted."
-# Benefit Upload Detail Output  
-  BenefitUploadDetailOutput:
-    type: "object"
-    properties: 
-      id:   
-            type: "string"
-            description: "Benefit upload ID as instructed by client upload post request"
-      status:   
-            type: "string"
-            description: |
-              Status of benefits file upload and ingestion process into the Reclaim system. This can take one of three values:
-              
-              `processing` meaning the ingestion of the benefits file is still processing
-              
-              `fail` meaning the ingestion of the benefits file has failed
-              
-              `success` meaning the ingestion of the benefits file has finished successfully
-      detail:
-            type: "string"
-            description: "Detailed description of failure error, if the ingestion of the benefits file were to encounter a failure"
-      updated: 
-            type: "timestamp"
-            description: "Timestamp of the most recent update on the status of the benefits file upload"        
-    example: 
-          id: "group_id_ben_2019_4_5"
-          status: "processing"
-          updated: "2019-04-10 14:59:23"
-#Benefit Status Check Detail Output      
-  BenefitStatusCheckDetailOutput:
-    type: "object"
-    properties: 
-      eligibility:
-        type: "array"
-        description: "Array of objects describing the status of the most recent benefit file uploads by the client to the Reclaim system"
-        items:
-          type: "object"
-          properties:
-            id:   
-              type: "string"
-              description: "Benefit upload ID as instructed by client upload post request"
-            status:   
-              type: "string"
-              description: |
-                Status of benefit file upload and ingestion process into the Reclaim system. This can take one of three values:
-              
-                `processing` meaning the ingestion of the benefit file is still processing
-              
-                `fail` meaning the ingestion of the benefit file has failed
-              
-                `success` meaning the ingestion of the benefit file has finished successfully
-            detail:
-              type: "string"
-              description: "Detailed description of failure error, if the ingestion of the benefit were to encounter a failure"    
-            updated: 
-              type: "timestamp"
-              description: "Timestamp of the most recent update on the status of the benefit file upload"
-    example: 
-      eligibility:
-        - id: "group_id_ben_2019_4_5"
-          status: "success"
-          updated: "2019-04-10 14:59:23"
-        - id: "group_id_ben_2019_5_5"  
-          status: "processing"
-          updated: "2019-05-10 12:59:29"
-        - id: "group_id_ben_2019_5_6"  
-          status: "fail"
-          updated: "2019-05-10 12:59:29"  
-          detail: "line 9, column 10 - found unexpected data format"           
+## Benefit Upload Detail Output  
+#  BenefitUploadDetailOutput:
+#    type: "object"
+#    properties: 
+#      id:   
+#            type: "string"
+#            description: "Benefit upload ID as instructed by client upload post request"
+#      status:   
+#            type: "string"
+#            description: |
+#              Status of benefits file upload and ingestion process into the Reclaim system. This can take one of three values:
+#              
+#              `processing` meaning the ingestion of the benefits file is still processing
+#              
+#              `fail` meaning the ingestion of the benefits file has failed
+#              
+#              `success` meaning the ingestion of the benefits file has finished successfully
+#      detail:
+#            type: "string"
+#            description: "Detailed description of failure error, if the ingestion of the benefits file were to encounter a failure"
+#      updated: 
+#            type: "timestamp"
+#            description: "Timestamp of the most recent update on the status of the benefits file upload"        
+#    example: 
+#          id: "group_id_ben_2019_4_5"
+#          status: "processing"
+#          updated: "2019-04-10 14:59:23"
+##Benefit Status Check Detail Output      
+#  BenefitStatusCheckDetailOutput:
+#    type: "object"
+#    properties: 
+#      eligibility:
+#        type: "array"
+#        description: "Array of objects describing the status of the most recent benefit file uploads by the client to the Reclaim system"
+#        items:
+#          type: "object"
+#          properties:
+#            id:   
+#              type: "string"
+#              description: "Benefit upload ID as instructed by client upload post request"
+#            status:   
+#              type: "string"
+#              description: |
+#                Status of benefit file upload and ingestion process into the Reclaim system. This can take one of three values:
+#              
+#                `processing` meaning the ingestion of the benefit file is still processing
+#              
+#                `fail` meaning the ingestion of the benefit file has failed
+#              
+#                `success` meaning the ingestion of the benefit file has finished successfully
+#            detail:
+#              type: "string"
+#              description: "Detailed description of failure error, if the ingestion of the benefit were to encounter a failure"    
+#            updated: 
+#              type: "timestamp"
+#              description: "Timestamp of the most recent update on the status of the benefit file upload"
+#    example: 
+#      eligibility:
+#        - id: "group_id_ben_2019_4_5"
+#          status: "success"
+#          updated: "2019-04-10 14:59:23"
+#        - id: "group_id_ben_2019_5_5"  
+#          status: "processing"
+#          updated: "2019-05-10 12:59:29"
+#        - id: "group_id_ben_2019_5_6"  
+#          status: "fail"
+#          updated: "2019-05-10 12:59:29"  
+#          detail: "line 9, column 10 - found unexpected data format"           
 #Subscriber Detail Output
   SubscriberDetailOutput:
     type: "object"
@@ -1214,7 +1397,7 @@ definitions:
                 description: "True if Reclaim has mapped the medical and pharmacy claims of this subscriber and their dependants, False otherwise"
               updated: 
                 type: "timestamp"
-                description: "Timestamp of the time (in UTC) where the flag was updated to the current value, if applicable"
+                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"
       authorized:   
             type: "object"
             properties:
@@ -1223,7 +1406,7 @@ definitions:
                 description: "True if the subscriber has authorized Reclaim to use their claims to personalize their decision support, False otherwise"
               updated: 
                 type: "timestamp"
-                description: "Timestamp of the time (in UTC) where the flag was updated to the current value, if applicable"
+                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"
       survey:   
             type: "object"
             properties:
@@ -1232,7 +1415,7 @@ definitions:
                 description: "True if the subscriber has taken the subscriber enrollment survey, False otherwise"
               updated: 
                 type: "timestamp"
-                description: "Timestamp of the time (in UTC) where the flag was updated to the current value, if applicable"        
+                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"        
     example:
       subscriber: 57122389
       group: "acmecorp"
@@ -1258,7 +1441,7 @@ definitions:
                 description: "True if the subscriber has authorized Reclaim to use their claims to personalize their decision support, False otherwise"
               updated: 
                 type: "timestamp"
-                description: "Timestamp of the time (in UTC) where the flag was updated to the current value, if applicable"
+                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"
     example: 
       authorized: 
         flag: true
@@ -1276,7 +1459,7 @@ definitions:
                 description: "True if the subscriber has authorized Reclaim to use their claims to personalize their decision support, False otherwise"
               updated: 
                 type: "timestamp"
-                description: "Timestamp of the time (in UTC) where the flag was updated to the current value, if applicable"
+                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"
       members: 
             type: "array"
             description: "Array of all the current dependents on the subscriber's plan."
@@ -1403,7 +1586,7 @@ definitions:
     properties:
       updated: 
         type: "timestamp"
-        description: "Timestamp of latest updated responses saved into the Reclaim system, if applicable"
+        description: "Timestamp (in UTC) of latest updated responses saved into the Reclaim system, if applicable"
       survey:
         type: "array"
         description: "Array containing the subscriber's questions and answers to the different types of questionnaires the client has selected to ask on their platform, if applicable. Note that the health related questions may only needed if the subscriber has no claims in the Reclaim system or whether they have elected to not use their claims"
@@ -1487,7 +1670,7 @@ definitions:
     properties:
       updated: 
         type: "timestamp"
-        description: "Timestamp of latest updated recommendations computed in the Reclaim system"
+        description: "Timestamp (in UTC) of latest updated recommendations computed in the Reclaim system"
       claims_available: 
             type: "object"
             properties:
@@ -1496,7 +1679,7 @@ definitions:
                 description: "True if Reclaim has mapped the medical and pharmacy claims of this subscriber and their dependants, False otherwise"
               updated: 
                 type: "timestamp"
-                description: "Timestamp of the time (in UTC) where the flag was updated to the current value, if applicable"
+                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"
       authorized:   
             type: "object"
             properties:
@@ -1505,7 +1688,7 @@ definitions:
                 description: "True if the subscriber has authorized Reclaim to use their claims to personalize their decision support, False otherwise"
               updated: 
                 type: "timestamp"
-                description: "Timestamp of the time (in UTC) where the flag was updated to the current value, if applicable"
+                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"
       survey:   
             type: "object"
             properties:
@@ -1514,7 +1697,7 @@ definitions:
                 description: "True if the subscriber has taken the subscriber enrollment survey, False otherwise"
               updated: 
                 type: "timestamp"
-                description: "Timestamp of the time (in UTC) where the flag was updated to the current value, if applicable"    
+                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"    
       recommendations:
         type: "array"
         description: "Object containing the subscriber's recommended bundled plans. Note that the recommendations are based off of consumer data and survery answers (if available) for the case where the subscriber has no claims in the Reclaim system or if they have not authorized Reclaim to use their claims data. The recommendations are based off of consumer data, survey answers (if available) and the claims data associated with the subscriber and their dependents, if the the subscriber has claims in the Reclaim system and has authorized Reclaim to use their claims data"
@@ -1529,10 +1712,10 @@ definitions:
                   properties:
                     low:
                       type: "float"
-                      description: "Lower end of predicted total cost (total premiums + out-of-pocket expenses - potential reimbursements - potential group contributions) for this bundled plan"
+                      description: "Lower end of predicted total annual cost (total premiums + out-of-pocket expenses - potential reimbursements - potential group contributions) for this bundled plan"
                     high:
                       type: "float"
-                      description: "Upper end of predicted total cost (total premiums + out-of-pocket expenses - potential reimbursements - potential group contributions) for this bundled plan"
+                      description: "Upper end of predicted total annual cost (total premiums + out-of-pocket expenses - potential reimbursements - potential group contributions) for this bundled plan"
                 benefits:
                   type: "array"
                   description: "Array containing the detailed policy information within this bundled plan"
@@ -1561,14 +1744,14 @@ definitions:
                         description: "Policy yearly premium"      
                       oop:    
                         type: "object"
-                        description: "Object containing the predicted out of pocket expenses under this policy. This is only applicable for the basic policy."
+                        description: "Object containing the predicted annual out of pocket expenses under this policy. This is only applicable for the basic policy."
                         properties:
                           low:
                             type: "float"
-                            description: "Lower end of predicted out-of-pocket cost for the policy, if applicable"
+                            description: "Lower end of predicted annual out-of-pocket cost for the policy, if applicable"
                           high:
                             type: "float"
-                            description: "Upper end of predicted out-of-pocket cost for the policy, if applicable"   
+                            description: "Upper end of predicted annual out-of-pocket cost for the policy, if applicable"   
                       hsa:
                         type: "object"
                         description: "Object containing the HSA related information, if applicable with the basic plan."
@@ -1588,7 +1771,7 @@ definitions:
                             description: "Subscriber's employer group's contribution to the FSA, if applicable"
                           recommended_savings:
                             type: "float"
-                            description: "Recommended subscriber's contribution to the FSA based on their health needs for the upcoming plan year"                                
+                            description: "Recommended subscriber's annual contribution to the FSA based on their health needs for the upcoming plan year"                                
                       reimbursement:    
                         type: "object"
                         description: "Object containing the predicted reimbursement to the subscriber under this policy. This is only applicable for the supplemental policies (hospital, accident, and critical illness)."
@@ -1629,7 +1812,7 @@ definitions:
               id: 5128746926
               premium: 500
               reimbursement: 
-              probability: 0.30
-              typical_benefit: 2500
+                probability: 0.30
+                typical_benefit: 2500
             - type: "disease_management"
               id: 35847948578
