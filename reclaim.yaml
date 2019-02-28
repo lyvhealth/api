@@ -178,6 +178,8 @@ paths:
         
         `hospital` referring to a group's supplemental hospital indemnity offerings and their attributes.
         
+        <b> Discuss with client types of voluntary benefits to include in recommendations. </b>
+        
         <details>
         <summary id="text" onClick="function()"><font color="blue"><u> Click for Reclaim's preferred schema details for each of the file types</u></font></summary>
         <p>
@@ -398,7 +400,55 @@ paths:
             <th>example</th>
           </tr>
           <tr>
-            <td> TODO </td><td> TODO </td><td> TODO </td><td> TODO</td>
+            <td> benefit_id</td><td> Benefit plan ID </td><td> string </td><td> aflac_bronze_13958</td>
+          </tr>
+          <tr>
+            <td> benefit_type</td><td> Benefit plan type </td><td> string </td><td> hospital </td>
+          </tr>
+          <tr>
+            <td> benefit_name</td><td> Benefit plan user-friendly name </td><td> string </td><td> Aflac Hospital Benefit (Bronze) </td>
+          </tr>
+          <tr> 
+            <td> group</td><td> Employer group code </td><td> string </td><td> acmecorp </td>
+          </tr>
+          <tr> 
+            <td> division</td><td> Employer group division code </td><td> string </td><td> corporate </td>
+          </tr>
+          <tr> 
+            <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2019</td>
+          </tr>
+          <tr>    
+            <td> start_date </td><td> Plan start date</td><td> date</td><td> 2019-01-01</td>
+          </tr>
+          <tr>
+            <td> end_date </td><td> Plan end date</td><td> date</td><td> 2019-12-31</td>
+          </tr>
+          <tr>    
+            <td> ee_premium </td><td> Monthly premium for subscriber only</td><td> float</td><td> 50.7</td>
+          </tr>
+          <tr>
+            <td> ec_premium </td><td> Monthly premium for subscriber and children dependents</td><td> float</td><td> 66.7</td>
+          </tr>
+          <tr>
+            <td> es_premium </td><td> Monthly premium for subscriber and spouse</td><td> float</td><td> 76.7</td>
+          </tr>
+          <tr>
+            <td> ef_premium </td><td> Monthly premium for subscriber and family (spouse and children)</td><td> float</td><td> 86.7</td>
+          </tr>
+          <tr>
+            <td> service </td> <td> Service for which the benefit applies </td><td> string</td><td> intensive_care_unit</td>
+          </tr>
+          <tr>
+            <td> limit </td> <td> Maximum limit (days, number of visits, etc.) eligible for benefit</td><td> integer</td><td> 39</td>
+          </tr>
+          <tr>
+            <td> limit_unit </td> <td> Unit corresponding to maximum limit  </td><td> string</td><td> days/confinement</td>
+          </tr>
+          <tr>
+            <td> reimbursement </td> <td> Benefit reimbursement potential for given service</td><td> float</td><td> 50.0</td>
+          </tr>
+          <tr>
+            <td> reimbursement_unit </td> <td> Unit corresponding to reimbursement</td><td> string</td><td> day</td>
           </tr>
         </table>
         <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;" onclick="exportTableToCSV2('benefits_reclaim_schema.csv')">EXPORT SCHEMA TO CSV</button>
@@ -538,64 +588,64 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/UploadDetailOutput"
-    delete:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Delete Existing File"
-      description: "This endpoint deletes an existng file in the Reclaim system."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/DeleteDetailOutput" 
-    put:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Update Existing File"
-      description: |
-        This endpoint allows the client to update an existing file in the Reclaim system. Refer to the data files schema above.
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "formData"
-        name: "file"
-        type: "file"
-        description: "Data file to upload"
-        required: true  
-        x-mimetype: text/csv
-      - in: "formData"
-        name: "name"
-        description: "Description of the data file to upload"
-      x-code-samples:
-      - lang: "cURL"
-        source: |                              
-            # post file including bearer token authorization in header
-            curl -X POST
-            -H 'authorization: [bearer_token]' \
-            -H 'type: eligibility' \
-            -F 'file=@group_id_eligibility.csv' \
-            -F 'name=group_id_eligibility' \
-            https://platform.reclaim.health/api/group/[group_id]/file/[file_id]
-      - lang: "Python"
-        source: |
-            import requests
-
-            files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
-            payload = {'name': 'group_id_eligibility'}
-            headers = {'Authorization': 'bearer_token', 'Type': 'eligibility'}
-            
-            response = requests.put('https://platform.reclaim.health/api/group/[group_id]/file/[file_id]', files=files, data=payload, headers=headers).json()
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/UpdateDetailOutput"        
+#    delete:
+#      tags:
+#      - "Group-Specific Endpoints"
+#      summary: "Delete Existing File"
+#      description: "This endpoint deletes an existng file in the Reclaim system."
+#      consumes:
+#      - "application/json"
+#      produces:
+#      - "application/json"
+#      responses:
+#        200:
+#          description: "Success"
+#          schema:
+#            $ref: "#/definitions/DeleteDetailOutput" 
+#    put:
+#      tags:
+#      - "Group-Specific Endpoints"
+#      summary: "Update Existing File"
+#      description: |
+#        This endpoint allows the client to update an existing file in the Reclaim system. Refer to the data files schema above.
+#      consumes:
+#      - "multipart/form-data"
+#      produces:
+#      - "application/json"
+#      parameters:
+#      - in: "formData"
+#        name: "file"
+#        type: "file"
+#        description: "Data file to upload"
+#        required: true  
+#        x-mimetype: text/csv
+#      - in: "formData"
+#        name: "name"
+#        description: "Description of the data file to upload"
+#      x-code-samples:
+#      - lang: "cURL"
+#        source: |                              
+#            # post file including bearer token authorization in header
+#            curl -X POST
+#            -H 'authorization: [bearer_token]' \
+#            -H 'type: eligibility' \
+#            -F 'file=@group_id_eligibility.csv' \
+#            -F 'name=group_id_eligibility' \
+#            https://platform.reclaim.health/api/group/[group_id]/file/[file_id]
+#      - lang: "Python"
+#        source: |
+#            import requests
+#
+#            files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
+#            payload = {'name': 'group_id_eligibility'}
+#            headers = {'Authorization': 'bearer_token', 'Type': 'eligibility'}
+#            
+#            response = requests.put('https://platform.reclaim.health/api/group/[group_id]/file/[file_id]', files=files, data=payload, headers=headers).json()
+#      responses:
+#        200:
+#          description: "Success"
+#          schema:
+#            $ref: "#/definitions/UpdateDetailOutput"        
 #  /group/[group_id]/benefits:
 #    post:
 #      tags:
