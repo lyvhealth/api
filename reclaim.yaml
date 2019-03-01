@@ -7,7 +7,7 @@ info:
     The Reclaim Partner API provides secure access to our hosted subscriber and group information and is available only to trusted partners under legal contract. Authorization is required for all endpoints (See Security and Authorization for the process of acquiring and access token). The api follows conventional REST guidelines. Two primary sets of resources are available, group and subscriber. Group endpoints are primarily for creating new employer groups and uploading eligibility data in csv format. Subscriber endpoints provide enrollment recommendation-related resources for individual subscribers.
 
 
-  version: "2019-01-07"
+  version: "0.1"
   title: "RECLAIM Backend APIs"
 host: "platform.reclaim.health"
 x-logo:
