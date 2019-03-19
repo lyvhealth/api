@@ -871,7 +871,7 @@ paths:
 #          description: "Success"
 #          schema:
 #            $ref: "#/definitions/BenefitUploadDetailOutput"            
-  /subscriber/[subscriber_id]:
+  /subscribers:
     get:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -886,7 +886,42 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/SubscriberDetailOutput"
+    post:
+      post:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Add Subscriber"
+      description: "This endpoint is designed to post a subscriber's information, should their information not have been communicated through the eligibility file upload."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "SubscriberDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/SubscriberDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SubscriberDetailOutput"        
   /subscriber/[subscriber_id]/authorize:
+    get:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Check Claim Authorization"
+      description: "This endpoint is designed to allow the client to check if a subscriber has authorized Reclaim to make use of their claims data throughout the decision making process. This may be useful for subscribers that have access the continuous engagement Reclaim application or who have authorized Reclaim during last year's open enrollment."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/AuthorizationDetailOutput"
     post:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -902,20 +937,6 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/AuthorizationDetailInput"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/AuthorizationDetailOutput"
-    get:
-      tags:
-      - "Subscriber-Specific Endpoints"
-      summary: "Check Claim Authorization"
-      description: "This endpoint is designed to allow the client to check if a subscriber has authorized Reclaim to make use of their claims data throughout the decision making process. This may be useful for subscribers that have access the continuous engagement Reclaim application or who have authorized Reclaim during last year's open enrollment."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "Success"
@@ -972,6 +993,26 @@ paths:
           schema:
             $ref: "#/definitions/SurveyDetailOutput"
   /subscriber/[subscriber_id]/recommendation:
+    post:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Recommended Plan Bundles"
+      description: "This endpoint allows the client to post the list of members that the subscriber would like to include in their plan, as well as their eligibility to a specific array of benefits from their employer group. Note that the benefit features have been already shared and processed by Reclaim. The eligibility to these benefits in this POST API is designed to reference the particular benefit IDs that the subscriber is eligible to select. The API then outputs a review of how the subscriber's current plan has performed given their healthcare bills (and those of their dependents') for the year. The goal of this endpoint is to present information to the user about their current plan performance to frame the conversation around their next year's plan selections in a highly personalized manner. Please note that this is only available if Reclaim has the subscriber's claims data in its system and the subscriber has authorized Reclaim to utilize their claims data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "RecommendationDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/RecommendationDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/RecommendationDetailOutput"
     get:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1425,7 +1466,60 @@ definitions:
 #        - id: "group_id_ben_2019_5_6"  
 #          status: "fail"
 #          updated: "2019-05-10 12:59:29"  
-#          detail: "line 9, column 10 - found unexpected data format"           
+#          detail: "line 9, column 10 - found unexpected data format"   
+
+#Subscriber Detail Iutput
+  SubscriberDetailInput:
+    type: "object"
+    properties: 
+      subscriber:   
+            type: "integer"
+            description: "Subscriber ID"
+      group:   
+            type: "string"
+            description: "Employer group ID" 
+      division:   
+            type: "string"
+            description: "Employer group's division ID"  
+      members: 
+            type: "array"
+            description: "Array of all the current dependents on the subscriber's plan."
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                  description: "Plan member ID"
+                is_subscriber:
+                  type: "boolean"
+                  description: "True if the member is the plan subscriber, false otherwise"
+                name:
+                  type: "string"
+                  description: "Member's first name"  
+                relation:
+                  type: "string"
+                  description: |
+                    Slug describing the relation of the member to the subscriber. This takes three possible values
+                      
+                    `subscriber` referring to the member being the plan subscriber, 
+                      
+                    `spouse` referring to the member being the subscriber's spouse, 
+                      
+                    `child` referring to the member being the subscriber's child.         
+    example:
+      subscriber: 57122389
+      group: "acmecorp"
+      division: "corporate"
+      members:
+        - id: 57122389
+          is_subscriber: true
+          name: "Susan"
+          relation: "subscriber"
+        - id: 57122390
+          is_subscriber: false
+          name: "Cora"
+          relation: "Spouse"   
+          
 #Subscriber Detail Output
   SubscriberDetailOutput:
     type: "object"
@@ -1465,7 +1559,32 @@ definitions:
                 description: "True if the subscriber has taken the subscriber enrollment survey, False otherwise"
               updated: 
                 type: "timestamp"
-                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"        
+                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"   
+      members: 
+            type: "array"
+            description: "Array of all the current dependents on the subscriber's plan."
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                  description: "Plan member ID"
+                is_subscriber:
+                  type: "boolean"
+                  description: "True if the member is the plan subscriber, false otherwise"
+                name:
+                  type: "string"
+                  description: "Member's first name"  
+                relation:
+                  type: "string"
+                  description: |
+                    Slug describing the relation of the member to the subscriber. This takes three possible values
+                      
+                    `subscriber` referring to the member being the plan subscriber, 
+                      
+                    `spouse` referring to the member being the subscriber's spouse, 
+                      
+                    `child` referring to the member being the subscriber's child.             
     example:
       subscriber: 57122389
       group: "acmecorp"
@@ -1478,6 +1597,15 @@ definitions:
         updated: "2019-05-10 12:59:29"
       survey: 
         flag: false
+      members:
+        - id: 57122389
+          is_subscriber: true
+          name: "Susan"
+          relation: "subscriber"
+        - id: 57122390
+          is_subscriber: false
+          name: "Cora"
+          relation: "Spouse"      
     title: "subscriber_detail"  
 #Authorization Detail Output
   AuthorizationDetailOutput:
@@ -1714,6 +1842,82 @@ definitions:
           value: 
             - "pregnancy"
             - "income_loss"
+#Recommendation Detail Iutput
+  RecommendationDetailInput:
+    type: "object"
+    properties: 
+      subscriber:   
+            type: "integer"
+            description: "Subscriber ID"
+      group:   
+            type: "string"
+            description: "Employer group ID" 
+      division:   
+            type: "string"
+            description: "Employer group's division ID"  
+      members: 
+            type: "array"
+            description: "Array of all the current dependents on the subscriber's plan."
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                  description: "Plan member ID"
+                is_subscriber:
+                  type: "boolean"
+                  description: "True if the member is the plan subscriber, false otherwise"
+                name:
+                  type: "string"
+                  description: "Member's first name"  
+                relation:
+                  type: "string"
+                  description: |
+                    Slug describing the relation of the member to the subscriber. This takes three possible values
+                      
+                    `subscriber` referring to the member being the plan subscriber, 
+                      
+                    `spouse` referring to the member being the subscriber's spouse, 
+                      
+                    `child` referring to the member being the subscriber's child.      
+      eligibility: 
+            type: "array"
+            description: "Array of all the benefits that the subscriber has access to."
+            items:
+              type: "object"
+              properties:
+                benefit_id:
+                  type: "string"
+                  description: "Benefit plan ID"
+                benefit_type:
+                  type: "boolean"
+                  description: |
+                    Type of the benefit plan. This takes the following possible values
+                      
+                    `medical` referring to the basic health plan, 
+                      
+                    `hospital` referring to hospital indemnity benefits.      
+                
+                    
+    example:
+      subscriber: 57122389
+      group: "acmecorp"
+      division: "corporate"
+      members:
+        - id: 57122389
+          is_subscriber: true
+          name: "Susan"
+          relation: "subscriber"
+        - id: 57122390
+          is_subscriber: false
+          name: "Cora"
+          relation: "Spouse"  
+      eligibility:
+        - benefit_id: "HumanaCDHP"
+          type: "medical"
+        - benefit_id: "UnumHospitalGold"
+          type: "hospital"     
+            
 # Plan Recommendation Detail Output
   RecommendationDetailOutput:
     type: "object"
