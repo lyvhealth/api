@@ -871,7 +871,7 @@ paths:
 #          description: "Success"
 #          schema:
 #            $ref: "#/definitions/BenefitUploadDetailOutput"            
-  /subscribers:
+  /subscriber/[subscriber_id]:
     get:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -886,8 +886,8 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/SubscriberDetailOutput"
+  /subscribers:            
     post:
-      post:
       tags:
       - "Subscriber-Specific Endpoints"
       summary: "Add Subscriber"
@@ -1676,25 +1676,61 @@ definitions:
                 assessment: 
                     type: "string"
                     description: |
-                      Slug conferring an assessment of how the current plan has been performing, given the subscriber's claims and healthcare bills for the year thus far. This can take on three different values:
+                      Short descriptor conferring an assessment of how the current plan has been performing, given the subscriber's claims and healthcare bills for the year thus far. This can take on three different values:
                       
                       `well_insured` signifies that the cureent year's selected plan was the best option for the subscriber, 
                       
                       `high_premium` signifies that the subscriber is overpaying on premiums while not needing that comprehensive of coverage, and 
                       
                       `high_oop` meaning the subscriber has paid more in out-of-pocket expenses with respect to other plans they could have chosen for the current year.
-                premium:
-                    type: "float"
-                    description: "Total amount of premiums paid by the subscriber thus far for the current plan year"
-                oop: 
-                    type: "float"
-                    description: "Total amount of out-of-pocket expenses (medical and pharmacy) paid by the subscriber thus far for the current plan year"
-                group_contribution: 
-                    type: "float"
-                    description: "Amount contributed by the employer group either through an HSA or an HRA contribution"
-                subscriber_contribution: 
-                    type: "float"
-                    description: "Amount contributed by the subscriber either to an HSA or an FSA, if known"    
+                detail: 
+                    type: "string"
+                    description: |
+                      Detailed text associated with the short assessment descriptor
+                spending:    
+                  type: "object"
+                  description: "Object describing the assessment of the subscriber's current plan performance"
+                  properties:
+                    premium:
+                        type: "float"
+                        description: "Total amount of premiums paid by the subscriber thus far for the current plan year"
+                    oop: 
+                        type: "float"
+                        description: "Total amount of out-of-pocket expenses (medical and pharmacy) paid by the subscriber thus far for the current plan year"
+                    chart: 
+                        type: "array"
+                        description: "Array to display spending chart on a monthly basis" 
+                        items:
+                            type: "object"
+                            properties:
+                              date: 
+                                type: "date"
+                                description: "Month on the current plan year"
+                              amount:
+                                type: "float"
+                                description: "Subscriber's total cost for the associated month in the current plan year"          
+                savings:    
+                  type: "object"
+                  description: "Object describing the assessment of the subscriber's savings during the current plan year, if applicable"
+                  properties:
+                    group:
+                        type: "float"
+                        description: "Amount contributed by the employer group either through an HSA or an FSA contribution"
+                    subscriber: 
+                        type: "float"
+                        description: "Amount contributed by the subscriber either to an HSA or an FSA, if known" 
+                    chart: 
+                        type: "array"
+                        description: "Array to display savings contributions chart on a monthly basis" 
+                        items:
+                            type: "object"
+                            properties:
+                              date: 
+                                type: "date"
+                                description: "Month on the current plan year"
+                              amount:
+                                type: "float"
+                                description: "Subscriber's total saving contributions for the associated month in the current plan year"  
                 alternative_savings: 
                     type: "float"
                     description: "Amount that the subscriber could have saved, had they selected another plan for the current year from the options that were made available to them during last year's open enrollment"   
@@ -1739,10 +1775,31 @@ definitions:
         plan: "HDHP Choice Base Plus"
         carrier: "United Healthcare"
         assessment: "well_insured"
-        premium: 8800
-        oop: 3535
-        group_contribution: 1000
-        subscriber_contribution: 5500
+        detail: "Your health costs are well managed under the current plan."
+        spending:
+          premium: 8800
+          oop: 3535
+          chart: 
+            - date: "2018-01-01"
+              amount: 258.4
+            - date: "2018-02-01"
+              amount: 258.4
+            - date: "2018-03-01"
+              amount: 6173.49     
+            - date: "2018-04-01"
+              amount: 258.40  
+        savings:
+          group: 1000
+          subscriber: 5500
+          chart: 
+            - date: "2018-01-01"
+              amount: 475.0
+            - date: "2018-02-01"
+              amount: 1475.0
+            - date: "2018-03-01"
+              amount: 475.0      
+            - date: "2018-04-01"
+              amount: 475.0        
         alternative_savings: 500
       events:
         - episode: "Pregnancy"
