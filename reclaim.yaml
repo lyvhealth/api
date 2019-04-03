@@ -996,7 +996,7 @@ paths:
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
             response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
-   /subscriber'[subscriber_id]/members:            
+  /subscriber'[subscriber_id]/members:            
     post:
       tags:
       - "Subscriber-Specific Endpoints"
