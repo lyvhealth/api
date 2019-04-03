@@ -28,7 +28,7 @@ info:
     
     Below is a summary flowchart indicating the minimum steps required for the open enrollment API flow. Click on the POST and GET methods below to delve into the details of the schemas of the expected request payload and the expected outputs, along with sample examples.
     
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="630px" height="1061px" viewBox="-0.5 -0.5 630 1061" style="background-color: rgb(255, 255, 255);"><defs/><g><rect x="0" y="0" width="180" height="50" fill="#ffffff" stroke="#000000" pointer-events="none"/><g transform="translate(1.5,4.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="176" height="40" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 176px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber (employee) ready to enroll in next year's benefits on Client platform.</font></div></div></foreignObject><text x="88" y="26" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><rect x="217.5" y="107.5" width="158" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(222.5,106.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="148" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 150px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'status': 'success'</font></div></div></foreignObject><text x="74" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 298 100 L 298 70" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="385.5" y="94.5" width="150" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(390.5,93.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="140" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 142px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'status' = 'error'</font></div></div></foreignObject><text x="70" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 460.5 115 L 460.5 133.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 138.88 L 457 131.88 L 460.5 133.63 L 464 131.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 297 128 L 297 143 Q 297 153 297.07 163 L 297.95 283.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 297.99 288.88 L 294.44 281.91 L 297.95 283.63 L 301.44 281.86 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="101" y="292" width="510" height="50" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(102.5,303.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="506" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 506px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">The output will indicate whether the subscriber and their members have claims data available and whether they have authorized their use, or not.</font></div></div></foreignObject><text x="253" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">&lt;font color="#333333" style="font-size: 12px"&gt;The output will indicate whether the subscriber and their members have claims data available and whether they have authorized their use, or not.&lt;/font&gt;</text></switch></g><path d="M 90 452 L 90 583.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 90 588.88 L 86.5 581.88 L 90 583.63 L 93.5 581.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 90 L 460.5 70" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="378" y="238" width="165" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(381.5,237.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="157" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 157px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'status' = 'success'</font></div></div></foreignObject><text x="79" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 460.5 260 L 460.5 283.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 288.88 L 457 281.88 L 460.5 283.63 L 464 281.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 233 L 460.5 213" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="388.5" y="372" width="223" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(390.5,371.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="219" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 219px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'claims.available' = 'false'</font></div></div></foreignObject><text x="110" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">&lt;font style="font-size: 13px"&gt;'claims.available' = 'false'&lt;/font&gt;</text></switch></g><path d="M 499 391 L 499.49 683.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 499.5 688.88 L 495.99 681.89 L 499.49 683.63 L 502.99 681.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="69.5" y="372" width="223" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(75.5,371.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="211" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 211px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'claims.available' = 'true'</font></div></div></foreignObject><text x="106" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">&lt;font style="font-size: 13px"&gt;'claims.available' = 'true'&lt;/font&gt;</text></switch></g><path d="M 180.5 368 L 180.5 346" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="2" y="432" width="175" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(7.5,431.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="163" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 165px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized' = 'true'</font></div></div></foreignObject><text x="82" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 89 428 L 89 390" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="182.5" y="412.5" width="180" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(186.5,411.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="172" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 172px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized' = 'false'</font></div></div></foreignObject><text x="86" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 272 410 L 272 391" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 272 430.5 L 272 443.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 272 448.88 L 268.5 441.88 L 272 443.63 L 275.5 441.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="96" y="546" width="168" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(97.5,545.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="164" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 164px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized' = 'true'</font></div></div></foreignObject><text x="82" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 179.5 543 L 179.5 524" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 180 566 L 180 582.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 180 587.38 L 176.5 580.38 L 180 582.13 L 183.5 580.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="282.5" y="546" width="178" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(285.5,545.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="172" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 172px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized' = 'false'</font></div></div></foreignObject><text x="86" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 371 540 L 371 525.5" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 372 566.5 L 372 681.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 372 686.88 L 368.5 679.88 L 372 681.63 L 375.5 679.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 136 663.5 L 136 681.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 136 686.88 L 132.5 679.88 L 136 681.63 L 139.5 679.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 186 25 L 249.63 24.55" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 254.88 24.51 L 247.91 28.06 L 249.63 24.55 L 247.86 21.06 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 499 347 L 499 367" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="70" y="693" width="540" height="25" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(76.5,699.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="526" height="12" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 526px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber now starts the survey. Client can filter survey questions based on flag 'ignore_if_claims'.</font></div></div></foreignObject><text x="263" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">&lt;font color="#333333" style="font-size: 12px"&gt;Subscriber now starts the survey. Client can filter survey questions based on flag 'ignore_if_claims'.&lt;/font&gt;</text></switch></g><path d="M 350 722 L 350 740.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 350 745.38 L 346.5 738.38 L 350 740.13 L 353.5 738.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 351.5 804 L 351.5 822.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 351.5 827.38 L 348 820.38 L 351.5 822.13 L 355 820.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="69" y="912" width="560" height="50" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(70.5,923.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="556" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 556px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber now is ready to get their optimal bundle recommendations. Client may auto-enroll subscriber iteratively into basic plans before posting subscriber's eligible plans to Reclaim. </font></div></div></foreignObject><text x="278" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><path d="M 350 887 L 350 900.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 350 905.88 L 346.5 898.88 L 350 900.63 L 353.5 898.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 352.5 966 L 352.5 984.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 352.5 989.38 L 349 982.38 L 352.5 984.13 L 356 982.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="261" y="0" width="240" height="65" fill="#ffffff" stroke="#000000" pointer-events="none"/><g transform="translate(262.5,34.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="236" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 236px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Check if Reclaim has subscriber info from an earlier eligibility file ingest.</font></div></div></foreignObject><text x="118" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1api~1subscriber~1[subscriber_id]/get"><rect x="260.5" y="0" width="240" height="28" fill="#60a917" stroke="none"/><g transform="translate(289.5,7.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="182" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 184px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">GET /subscriber/[subscriber_id]</div></div></foreignObject><text x="91" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">GET /subscriber/[subscriber_id]</text></switch></g></a><rect x="340.5" y="145" width="240" height="65" fill="#ffffff" stroke="#000000"/><g transform="translate(342.5,179.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="236" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 236px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber is not in Reclaim system. Add subscriber and their member information.</font></div></div></foreignObject><text x="118" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscribers/post"><rect x="340.5" y="145" width="240" height="28" fill="#3399ff" stroke="none"/><g transform="translate(409.5,152.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="102" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 104px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">POST /subscriber</div></div></foreignObject><text x="51" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">POST /subscriber</text></switch></g></a><rect x="147.5" y="454.5" width="250" height="65" fill="#ffffff" stroke="#000000"/><g transform="translate(149.5,489.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="246" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 246px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber authorize claims through Client. Client posts subscriber response.</font></div></div></foreignObject><text x="123" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1authorize/post"><rect x="147.5" y="454.5" width="250" height="28" fill="#3399ff" stroke="none"/><g transform="translate(152.5,461.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="240" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 242px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">POST /subscriber/subscriber_id/authorize</font></div></div></foreignObject><text x="120" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">&lt;font style="font-size: 13px"&gt;POST /subscriber/subscriber_id/authorize&lt;/font&gt;</text></switch></g></a><rect x="10.5" y="595.5" width="250" height="65" fill="#ffffff" stroke="#000000"/><g transform="translate(12.5,630.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="246" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 246px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber reviews current year claims and plan performance before the survey.</font></div></div></foreignObject><text x="123" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1review/get"><rect x="11" y="596" width="250" height="28" fill="#60a917" stroke="none"/><g transform="translate(23.5,603.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="224" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 224px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">GET /subscriber/[subscriber_id]/review</div></div></foreignObject><text x="112" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">GET /subscriber/[subscriber_id]/review</text></switch></g></a><rect x="230" y="750" width="240" height="50" fill="#ffffff" stroke="#000000"/><g transform="translate(249.5,783.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="200" height="12" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 202px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Client list and filters survey questions.</font></div></div></foreignObject><text x="100" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1surveys/get"><rect x="229" y="750" width="240" height="28" fill="#60a917" stroke="none"/><g transform="translate(233.5,757.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="230" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 232px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">GET /subscriber/[subscriber_id]/surveys</div></div></foreignObject><text x="115" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">GET /subscriber/[subscriber_id]/surveys</text></switch></g></a><rect x="228.5" y="832" width="240" height="50" fill="#ffffff" stroke="#000000"/><g transform="translate(257.5,865.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="182" height="12" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 182px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Client posts subscriber's answers.</font></div></div></foreignObject><text x="91" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1surveys/post"><rect x="228.5" y="832" width="241" height="28" fill="#3399ff" stroke="none"/><g transform="translate(233.5,839.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="231" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 233px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">POST /subscriber/subscriber_id/surveys</font></div></div></foreignObject><text x="116" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">&lt;font style="font-size: 13px"&gt;POST /subscriber/subscriber_id/surveys&lt;/font&gt;</text></switch></g></a><rect x="200" y="994" width="300" height="66" fill="#ffffff" stroke="#000000"/><g transform="translate(201.5,1029.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="296" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 296px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Client posts subscriber's list of eligible benefits. Reclaim outputs the optimal benefit bundle(s). </font></div></div></foreignObject><text x="148" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1recommendation/post"><rect x="200" y="994" width="300" height="28" fill="#3399ff" stroke="none"/><g transform="translate(207.5,1001.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="284" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 284px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">POST /subscriber/subscriber_id/recommendation</font></div></div></foreignObject><text x="142" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">&lt;font style="font-size: 13px"&gt;POST /subscriber/subscriber_id/recommendation&lt;/font&gt;</text></switch></g></a></g></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="630px" height="1061px" viewBox="-0.5 -0.5 630 1061" style="background-color: rgb(255, 255, 255);"><defs/><g><rect x="0" y="0" width="180" height="50" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(1.5,4.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="176" height="40" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 176px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber (employee) ready to enroll in next year's benefits on Client platform.</font></div></div></foreignObject><text x="88" y="26" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><rect x="217.5" y="107.5" width="158" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(222.5,106.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="148" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 150px; white-space: nowrap; overflow-wrap: normal; font-weight: bold; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'status': 'success'</font></div></div></foreignObject><text x="74" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New" font-weight="bold">[Not supported by viewer]</text></switch></g><path d="M 298 100 L 298 70" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="385.5" y="94.5" width="150" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(394.5,93.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="132" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 134px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px"><b>'status': 'error'</b></font></div></div></foreignObject><text x="66" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 460.5 115 L 460.5 133.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 138.88 L 457 131.88 L 460.5 133.63 L 464 131.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 297 128 L 297 143 Q 297 153 297.07 163 L 297.95 283.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 297.99 288.88 L 294.44 281.91 L 297.95 283.63 L 301.44 281.86 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="101" y="292" width="510" height="50" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(102.5,303.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="506" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 506px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">The output will indicate whether the subscriber and their members have claims data available and whether they have authorized their use, or not.</font></div></div></foreignObject><text x="253" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">&lt;font color="#333333" style="font-size: 12px"&gt;The output will indicate whether the subscriber and their members have claims data available and whether they have authorized their use, or not.&lt;/font&gt;</text></switch></g><path d="M 90 452 L 90 583.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 90 588.88 L 86.5 581.88 L 90 583.63 L 93.5 581.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 90 L 460.5 70" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="378" y="238" width="165" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(385.5,237.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="149" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 149px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'status': 'success'</font></div></div></foreignObject><text x="75" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 460.5 260 L 460.5 283.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 288.88 L 457 281.88 L 460.5 283.63 L 464 281.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 233 L 460.5 213" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="388.5" y="372" width="223" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(394.5,371.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="211" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 211px; white-space: nowrap; overflow-wrap: normal; font-weight: bold; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'claims.available': 'false'</font></div></div></foreignObject><text x="106" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New" font-weight="bold">&lt;font style="font-size: 13px"&gt;'claims.available': 'false'&lt;/font&gt;</text></switch></g><path d="M 499 391 L 499.49 683.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 499.5 688.88 L 495.99 681.89 L 499.49 683.63 L 502.99 681.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="69.5" y="372" width="223" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(79.5,371.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="203" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 203px; white-space: nowrap; overflow-wrap: normal; font-weight: bold; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'claims.available': 'true'</font></div></div></foreignObject><text x="102" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New" font-weight="bold">&lt;font style="font-size: 13px"&gt;'claims.available': 'true'&lt;/font&gt;</text></switch></g><path d="M 180.5 368 L 180.5 346" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="2" y="432" width="175" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(10.5,431.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="157" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 157px; white-space: nowrap; overflow-wrap: normal; font-weight: bold; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized': 'true'</font></div></div></foreignObject><text x="79" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New" font-weight="bold">[Not supported by viewer]</text></switch></g><path d="M 89 428 L 89 390" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="182.5" y="412.5" width="180" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(190.5,411.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="164" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 164px; white-space: nowrap; overflow-wrap: normal; font-weight: bold; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized': 'false'</font></div></div></foreignObject><text x="82" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New" font-weight="bold">[Not supported by viewer]</text></switch></g><path d="M 272 410 L 272 391" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 272 430.5 L 272 443.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 272 448.88 L 268.5 441.88 L 272 443.63 L 275.5 441.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="96" y="546" width="168" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(101.5,545.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="156" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 158px; white-space: nowrap; overflow-wrap: normal; font-weight: bold; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized': 'true'</font></div></div></foreignObject><text x="78" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New" font-weight="bold">[Not supported by viewer]</text></switch></g><path d="M 179.5 543 L 179.5 524" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 180 566 L 180 582.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 180 587.38 L 176.5 580.38 L 180 582.13 L 183.5 580.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="282.5" y="546" width="178" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(289.5,545.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="164" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 164px; white-space: nowrap; overflow-wrap: normal; font-weight: bold; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized': 'false'</font></div></div></foreignObject><text x="82" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New" font-weight="bold">[Not supported by viewer]</text></switch></g><path d="M 371 540 L 371 525.5" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 372 566.5 L 372 681.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 372 686.88 L 368.5 679.88 L 372 681.63 L 375.5 679.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 136 663.5 L 136 681.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 136 686.88 L 132.5 679.88 L 136 681.63 L 139.5 679.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 186 25 L 249.63 24.55" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 254.88 24.51 L 247.91 28.06 L 249.63 24.55 L 247.86 21.06 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 499 347 L 499 367" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="70" y="693" width="540" height="25" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(76.5,699.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="526" height="12" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 526px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber now starts the survey. Client can filter survey questions based on flag 'ignore_if_claims'.</font></div></div></foreignObject><text x="263" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">&lt;font color="#333333" style="font-size: 12px"&gt;Subscriber now starts the survey. Client can filter survey questions based on flag 'ignore_if_claims'.&lt;/font&gt;</text></switch></g><path d="M 350 722 L 350 740.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 350 745.38 L 346.5 738.38 L 350 740.13 L 353.5 738.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 351.5 804 L 351.5 822.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 351.5 827.38 L 348 820.38 L 351.5 822.13 L 355 820.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="69" y="912" width="560" height="50" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(70.5,923.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="556" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 556px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber now is ready to get their optimal bundle recommendations. Client may auto-enroll subscriber iteratively into basic plans before posting subscriber's eligible plans to Reclaim. </font></div></div></foreignObject><text x="278" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><path d="M 350 887 L 350 900.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 350 905.88 L 346.5 898.88 L 350 900.63 L 353.5 898.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 352.5 966 L 352.5 984.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 352.5 989.38 L 349 982.38 L 352.5 984.13 L 356 982.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="261" y="0" width="240" height="65" fill="#ffffff" stroke="#000000" pointer-events="none"/><g transform="translate(262.5,34.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="236" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 236px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Check if Reclaim has subscriber info from an earlier eligibility file ingest.</font></div></div></foreignObject><text x="118" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1api~1subscriber~1[subscriber_id]/get"><rect x="260.5" y="0" width="240" height="28" fill="#6bbc5b" stroke="none"/><g transform="translate(289.5,7.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="182" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 184px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">GET /subscriber/[subscriber_id]</div></div></foreignObject><text x="91" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">GET /subscriber/[subscriber_id]</text></switch></g></a><rect x="340.5" y="145" width="240" height="65" fill="#ffffff" stroke="#000000"/><g transform="translate(342.5,179.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="236" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 236px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber is not in Reclaim system. Add subscriber and their member information.</font></div></div></foreignObject><text x="118" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscribers/post"><rect x="340.5" y="145" width="240" height="28" fill="#238fb2" stroke="none"/><g transform="translate(409.5,152.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="102" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 104px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">POST /subscriber</div></div></foreignObject><text x="51" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">POST /subscriber</text></switch></g></a><rect x="147.5" y="454.5" width="250" height="65" fill="#ffffff" stroke="#000000"/><g transform="translate(149.5,489.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="246" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 246px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber authorize claims through Client. Client posts subscriber response.</font></div></div></foreignObject><text x="123" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1authorize/post"><rect x="147.5" y="454.5" width="250" height="28" fill="#238fb2" stroke="none"/><g transform="translate(152.5,461.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="240" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 242px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">POST /subscriber/subscriber_id/authorize</font></div></div></foreignObject><text x="120" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">&lt;font style="font-size: 13px"&gt;POST /subscriber/subscriber_id/authorize&lt;/font&gt;</text></switch></g></a><rect x="10.5" y="595.5" width="250" height="65" fill="#ffffff" stroke="#000000"/><g transform="translate(12.5,630.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="246" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 246px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber reviews current year claims and plan performance before the survey.</font></div></div></foreignObject><text x="123" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1review/get"><rect x="11" y="596" width="250" height="28" fill="#6bbc5b" stroke="none"/><g transform="translate(23.5,603.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="224" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 224px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">GET /subscriber/[subscriber_id]/review</div></div></foreignObject><text x="112" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">GET /subscriber/[subscriber_id]/review</text></switch></g></a><rect x="230" y="750" width="240" height="50" fill="#ffffff" stroke="#000000"/><g transform="translate(249.5,783.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="200" height="12" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 202px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Client list and filters survey questions.</font></div></div></foreignObject><text x="100" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1surveys/get"><rect x="229" y="750" width="240" height="28" fill="#6bbc5b" stroke="none"/><g transform="translate(233.5,757.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="230" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 232px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">GET /subscriber/[subscriber_id]/surveys</div></div></foreignObject><text x="115" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">GET /subscriber/[subscriber_id]/surveys</text></switch></g></a><rect x="228.5" y="832" width="240" height="50" fill="#ffffff" stroke="#000000"/><g transform="translate(257.5,865.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="182" height="12" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 182px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Client posts subscriber's answers.</font></div></div></foreignObject><text x="91" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1surveys/post"><rect x="228.5" y="832" width="241" height="28" fill="#238fb2" stroke="none"/><g transform="translate(233.5,839.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="231" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 233px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">POST /subscriber/subscriber_id/surveys</font></div></div></foreignObject><text x="116" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">&lt;font style="font-size: 13px"&gt;POST /subscriber/subscriber_id/surveys&lt;/font&gt;</text></switch></g></a><rect x="200" y="994" width="300" height="66" fill="#ffffff" stroke="#000000"/><g transform="translate(201.5,1029.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="296" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 296px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Client posts subscriber's list of eligible benefits. Reclaim outputs the optimal benefit bundle(s). </font></div></div></foreignObject><text x="148" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1recommendation/post"><rect x="200" y="994" width="300" height="28" fill="#238fb2" stroke="none"/><g transform="translate(207.5,1001.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="284" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 284px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">POST /subscriber/subscriber_id/recommendation</font></div></div></foreignObject><text x="142" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">&lt;font style="font-size: 13px"&gt;POST /subscriber/subscriber_id/recommendation&lt;/font&gt;</text></switch></g></a></g></svg>
 
     Note that the Reclaim API includes a wider array of methods and resources that you can access, well beyond those presented in the flowchart above. The rest of the documentation attempts to delve into the details of both the group-specific and the subscriber-specific endpoints.
     
@@ -925,8 +925,77 @@ paths:
         source: |
             # obtaining information about a specific subscriber
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}  
-            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001', headers=headers).json()
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001', headers=headers).json()  
+    post:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Update A Subscriber"
+      description: "This endpoint allows the client to update a subscriber's info to the Reclaim system. To update a subscriber's specific info, the POST may include only the items needed to be updated."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "SubscriberDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateSubscriberDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SubscriberDetailOutput"   
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # updating a subscriber
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"name":{"first":"Royally"}}' https://sandbox.reclaim.health/api/subscriber/91322222
+      - lang: "Python"
+        source: |
+            # updating a subscriber
+            payload = {"name":{"first":"Royally"}}
             
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
+        
+  /api/subscriber:            
+    post:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Add A Subscriber"
+      description: "This endpoint allows the client to add or update a subscriber's info to the Reclaim system. To update a subscriber's specific info, the POST may include only the items needed to be updated."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "SubscriberDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/SubscriberDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SubscriberDetailOutput"   
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # adding a subscriber
+            curl -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}' https://sandbox.reclaim.health/api/subscriber
+            
+      - lang: "Python"
+        source: |
+            # adding a subscriber
+            payload = {"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}
+            
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
+             
   /api/subscriber/[subscriber_id]/members:
     get:
       tags:
@@ -951,95 +1020,145 @@ paths:
         source: |
             # obtaining information about a specific subscriber
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}  
-            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001/members', headers=headers).json()            
-  /subscriber:            
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001/members', headers=headers).json()   
     post:
       tags:
       - "Subscriber-Specific Endpoints"
-      summary: "Add/Update Subscriber"
-      description: "This endpoint allows the client to add or update a subscriber's info to the Reclaim system. To update a subscriber's specific info, the POST may include only the items needed to be updated."
+      summary: "Add Members"
+      description: "This endpoint allows the client to add the info of the members associated with the subscriber to the Reclaim system. To update a member's specific info, the POST may include only the items needed to be updated."
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
       - in: "body"
-        name: "SubscriberDetailInput"
+        name: "MemberDetailInput"
         required: true
         schema:
-          $ref: "#/definitions/SubscriberDetailInput"
+          $ref: "#/definitions/MembersDetailInput"
       responses:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/SubscriberDetailOutput"   
+            $ref: "#/definitions/MembersDetailOutput"   
       x-code-samples:
       - lang: "cURL"
         source: |                              
-            # adding a subscriber
-            curl -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}' https://sandbox.reclaim.health/api/subscriber
+            # adding members
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"members":[{"id":30000,"name":{"first":"Ace","middle":"T","last":"Zumbi"},"dob":"2018-08-12","gender":"M","ssn":"1554","relationship":"child"},{"id":40000,"name":{"first":"Zoo","middle":"S","last":"Assebet"},"dob":"2019-09-02","gender":"F","ssn":"2351","relationship":"child"}]}' https://sandbox.reclaim.health/api/subscriber/205001/members
             
-            # updating a subscriber
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"name":{"first":"Royally"}}' https://sandbox.reclaim.health/api/subscriber/91322222
       - lang: "Python"
         source: |
-            # adding a subscriber
-            payload = {"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}
+            # adding members
+            payload = {"members":[{"id":30000,"name":{"first":"Ace","middle":"T","last":"Zumbi"},"dob":"2018-08-12","gender":"M","ssn":"1554","relationship":"child"},{"id":40000,"name":{"first":"Zoo","middle":"S","last":"Assebet"},"dob":"2019-09-02","gender":"F","ssn":"2351","relationship":"child"}]}
             
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
-            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
-            
-            # updating a subscriber
-            payload = {"name":{"first":"Royally"}}
-            
-            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
-            
-            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
-  /subscriber'[subscriber_id]/members:            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber/205001/members', data=payload, headers=headers).json()                                     
+
+  /api/subscriber/[subscriber_id]/member:            
     post:
       tags:
       - "Subscriber-Specific Endpoints"
-      summary: "Add/Update Subscriber"
-      description: "This endpoint allows the client to add or update a subscriber's info to the Reclaim system. To update a subscriber's specific info, the POST may include only the items needed to be updated."
+      summary: "Add A Member"
+      description: "This endpoint allows the client to add or update members' info to the Reclaim system. To update a member's specific info, the POST may include only the items needed to be updated."
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
       - in: "body"
-        name: "SubscriberDetailInput"
+        name: "MemberDetailInput"
         required: true
         schema:
-          $ref: "#/definitions/SubscriberDetailInput"
+          $ref: "#/definitions/MemberDetailInput"
       responses:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/SubscriberDetailOutput"   
+            $ref: "#/definitions/MemberDetailOutput"   
       x-code-samples:
       - lang: "cURL"
         source: |                              
-            # adding a subscriber
-            curl -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}' https://sandbox.reclaim.health/api/subscriber
+            # adding a member
+            curl -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"id":91322228,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Aida","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1990-01-22","gender":"F","ssn":"4321", "relationship": "child"}' https://sandbox.reclaim.health/api/subscriber/91322222/members
             
-            # updating a subscriber
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"name":{"first":"Royally"}}' https://sandbox.reclaim.health/api/subscriber/91322222
+            # updating a member
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"address":{"zip_code":"97114"}}' https://sandbox.reclaim.health/api/subscriber/91322222/member/91322228
       - lang: "Python"
         source: |
             # adding a subscriber
-            payload = {"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}
+            payload = {"id":91322228,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Aida","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1990-01-22","gender":"F","ssn":"4321", "relationship": "child"}
             
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
-            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber/91322222/members', data=payload, headers=headers).json()   
             
             # updating a subscriber
-            payload = {"name":{"first":"Royally"}}
+            payload = {"address":{"zip_code":"97114"}}
             
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
-            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber/91322222/member/91322228', data=payload, headers=headers).json()   
+            
+  /api/subscriber/[subscriber_id]/member/[member_id]:  
+    get:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "List A Member's Info"
+      description: "This endpoints is designed to obtain information about a specific dependent member of a subscriber."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/MemberDetailOutput" 
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # obtaining information about a specific subscriber
+            curl -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/subscriber/1200001/member/1200002
+      - lang: "Python"
+        source: |
+            # obtaining information about a specific subscriber
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}  
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001/member/1200002', headers=headers).json()   
+    post:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Update A Member's Info"
+      description: "This endpoint allows the client to update a specific member's info. The POST may include only the items needed to be updated."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "UpdateMemberDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateMemberDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/MemberDetailOutput"   
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # updating a member
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"address":{"zip_code":"97114"}}' https://sandbox.reclaim.health/api/subscriber/91322222/member/91322228
+      - lang: "Python"
+        source: |
+           # updating a subscriber
+            payload = {"address":{"zip_code":"97114"}}
+            
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber/91322222/member/91322228', data=payload, headers=headers).json()              
   /subscriber/[subscriber_id]/authorize:
     get:
       tags:
@@ -1055,6 +1174,18 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/AuthorizationDetailOutput"
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # retrieving a subscriber's authorization
+            curl -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4"  https://sandbox.reclaim.health/api/subscriber/1200001/authorize
+      - lang: "Python"
+        source: |
+           # retrieving a subscriber's authorization
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001/authorize', headers=headers).json()          
+             
     post:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1075,6 +1206,21 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/AuthorizationDetailOutput"
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # updating a member
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"authorized":true}' https://sandbox.reclaim.health/api/subscriber/1200001/authorize
+            
+            
+      - lang: "Python"
+        source: |
+           # updating a subscriber
+            payload = {"authorized":true}
+            
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber/1200001/authorize', data=payload, headers=headers).json()              
   /subscriber/[subscriber_id]/review:
     get:
       tags:
@@ -1883,7 +2029,90 @@ definitions:
           created: "2019-03-20 19:35:48"
           updated: "2019-03-21 14:57:04"
           
-          
+#Members Detail Iutput
+  MembersDetailInput:
+    type: "object"
+    properties: 
+      members: 
+        type: "array"
+        description: "Array of members to add/update associated with the subscriber"
+        items:
+          id:   
+                type: "integer"
+                description: "Subscriber ID as known to Client"
+          group_id:   
+                type: "string"
+                description: "Employer group unique Reclaim identifier" 
+          division:   
+                type: "string"
+                description: "Employer group's division ID"        
+          name:
+                        type: "object"
+                        description: "Member's name object"
+                        properties:
+                          first:
+                            type: "string"
+                            description: "Member's first name"
+                          middle:
+                            type: "string"
+                            description: "Member's middle name"   
+                          last:
+                            type: "string"
+                            description: "Member's last name" 
+          dob: 
+                        type: "date"
+                        description: "Member's date of birth formatted as yyyy-month-date"
+          gender:
+                        type: "string"
+                        description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+          ssn:
+                        type: "string"
+                        description: "Member's last four digits of their social security number"
+          address:
+                        type: "object"
+                        description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                        properties:
+                          street_1:
+                            type: "string"
+                            description: "First line of street address, if available"
+                          street_2:
+                            type: "string"
+                            description: "Second line of street address, if available"    
+                          city:
+                            type: "string"
+                            description: "Member's city name"  
+                          zip_code:
+                            type: "string"
+                            description: "Member's zip code (required)"
+                          state:
+                            type: "string"
+                            description: "Member's state name" 
+          relationship:
+                type: "string"
+                description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
+          removed:
+                type: boolean
+                description: "true if the associated member is not to be considered for next year's benefits on the subscriber's plan, false otherwise"
+    example:
+      members:
+        - id: 91322229
+          group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
+          division: "corporate"
+          name:
+            first: "Grace"
+            middle: "M"
+            last: "Doe"
+          dob: "1995-08-02"
+          gender: "F"
+          ssn: "8345"
+          address:
+                street_1: "2200 Fenway Road"
+                street_2: ""
+                city: "Boston"
+                zip: "02215"
+                state: "MA"
+          relationship: "child"        
+            
 #Members Detail Output
   MembersDetailOutput:
     type: "object"
@@ -1976,11 +2205,216 @@ definitions:
                 description: "Timestamp (in UTC) indicating the time the subscriber was last updated"      
     example:
       status: "success"
-      details: []
+      details: 
+        - "Member '30000' for subscriber '205001' already exists with the same data and is not removed"
+        - "Member '40000' for subscriber '205001' already exists with the same data and is not removed"
       entity:
-          count: 2
           members:
-            - id: 1200001
+            - id: 30000
+              group_id: "f8ceee2b-de05-4125-b68c-5019680fab95"
+              division: "full-time"
+              name: 
+                first: "Ace"
+                middle: "T"
+                last: "Zumbi"
+              dob: "2018-08-12"
+              gender: "M"
+              ssn: "1554"
+              address: 
+                street_1: "100 Fenway Drive"
+                street_2: null
+                city: "Boston"
+                state: "MA"
+                zip_code: "02215"
+              relationship: "child"
+              removed: false
+              created: 2019-04-03 15:39:15"
+              updated: "2019-04-03 15:39:15"
+            - id: 40000
+              group_id: "f8ceee2b-de05-4125-b68c-5019680fab95"
+              division: "full-time"
+              name: 
+                first: "Zoo"
+                middle: "S"
+                last: "Assebet"
+              dob: "2019-09-02"
+              gender: "U"
+              ssn: "2351"
+              address: 
+                street_1: "100 Fenway Drive"
+                street_2: ""
+                city: "Boston"
+                state: "MA"
+                zip_code: "02215"
+              relationship: "child"
+              removed: false
+              created: "2019-04-02 18:06:36"
+              updated: "2019-04-03 01:13:32"
+              
+#Members Detail Iutput
+  MemberDetailInput:
+    type: "object"
+    properties: 
+          id:   
+                type: "integer"
+                description: "Member ID as known to Client"
+          group_id:   
+                type: "string"
+                description: "Employer group unique Reclaim identifier" 
+          division:   
+                type: "string"
+                description: "Employer group's division ID"        
+          name:
+                        type: "object"
+                        description: "Member's name object"
+                        properties:
+                          first:
+                            type: "string"
+                            description: "Member's first name"
+                          middle:
+                            type: "string"
+                            description: "Member's middle name"   
+                          last:
+                            type: "string"
+                            description: "Member's last name" 
+          dob: 
+                        type: "date"
+                        description: "Member's date of birth formatted as yyyy-month-date"
+          gender:
+                        type: "string"
+                        description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+          ssn:
+                        type: "string"
+                        description: "Member's last four digits of their social security number"
+          address:
+                        type: "object"
+                        description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                        properties:
+                          street_1:
+                            type: "string"
+                            description: "First line of street address, if available"
+                          street_2:
+                            type: "string"
+                            description: "Second line of street address, if available"    
+                          city:
+                            type: "string"
+                            description: "Member's city name"  
+                          zip_code:
+                            type: "string"
+                            description: "Member's zip code (required)"
+                          state:
+                            type: "string"
+                            description: "Member's state name" 
+          relationship:
+                type: "string"
+                description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
+          removed:
+                type: boolean
+                description: "true if the associated member is not to be considered for next year's benefits on the subscriber's plan, false otherwise"
+    example:
+      id: 91322229
+      group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
+      division: "corporate"
+      name:
+        first: "Grace"
+        middle: "M"
+        last: "Doe"
+      dob: "1995-08-02"
+      gender: "F"
+      ssn: "8345"
+      address:
+            street_1: "2200 Fenway Road"
+            street_2: ""
+            city: "Boston"
+            zip: "02215"
+            state: "MA"
+      relationship: "child"        
+            
+#Member Detail Output
+  MemberDetailOutput:
+    type: "object"
+    properties: 
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+              id:
+                type: "integer"
+                description: "Member's ID, as known to the client"
+              group_id:
+                type: "string"
+                description: "Reclaim's group unique identifier to which the subscriber belongs"
+              division:
+                type: "string"
+                description: "Employer group division to which the subscriber belongs"
+              name:
+                type: "object"
+                description: "Member's name object"
+                properties:
+                  first:
+                    type: "string"
+                    description: "Member's first name"
+                  middle:
+                    type: "string"
+                    description: "Member's middle name"   
+                  last:
+                    type: "string"
+                    description: "Member's last name" 
+              dob: 
+                    type: "date"
+                    description: "Member's date of birth formatted as yyyy-month-date"
+              gender:
+                    type: "string"
+                    description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+              ssn:
+                    type: "string"
+                    description: "Member's last four digits of their social security number"
+              address:
+                    type: "object"
+                    description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                    properties:
+                              street_1:
+                                type: "string"
+                                description: "First line of street address, if available"
+                              street_2:
+                                type: "string"
+                                description: "Second line of street address, if available"    
+                              city:
+                                type: "string"
+                                description: "Member's city name"  
+                              zip_code:
+                                type: "string"
+                                description: "Member's zip code (required for subscriber)"
+                              state:
+                                type: "string"
+                                description: "Member's state name"  
+              relationship:
+                type: "string"
+                description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
+              removed:
+                type: boolean
+                description: "true if the associated member is not to be considered for next year's benefits on the subscriber's plan, false otherwise"
+              created:
+                type: "timestamp"
+                description: "Timestamp (in UTC) indicating the time the subscriber was created"
+              updated:
+                type: "timestamp"
+                description: "Timestamp (in UTC) indicating the time the subscriber was last updated"      
+    example:
+              id: 1200001
               group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
               division: "part-timer"
               name: 
@@ -2000,44 +2434,60 @@ definitions:
               removed: false
               created: "2019-03-20 19:35:48"
               updated: "2019-03-21 14:57:04"
-            - id: 1200002
-              group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
-              division: "part-timer"
-              name: 
-                first: "Jenna"
-                middle: "F"
-                last: "Bronx"
-              dob: "1989-08-02"
-              gender: "U"
-              ssn: "0285"
-              address: 
-                street_1: "2200 Fenway Road"
-                street_2: ""
-                city: "Boston"
-                state: "MA"
-                zip_code: "02215"
-              relationship: "child"
-              removed: false
-              created: "2019-04-02 18:06:36"
-              updated: "2019-04-03 01:13:32"
+ 
+# Update Member Details            
+  UpdateMemberDetailInput:              
+    example:
+      dob: "1966-08-02"
+      address:
+            street_1: "2200 Cornelius Road"
+            
 #Authorization Detail Output
   AuthorizationDetailOutput:
     type: "object"
     properties: 
-      authorized:   
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          claims:
             type: "object"
+            description: "Object specifying claims availability and subscriber authorization status, if applicable"
             properties:
-              flag: 
+              available:
                 type: "boolean"
-                description: "True if the subscriber has authorized Reclaim to use their claims to personalize their decision support, False otherwise"
-              updated: 
-                type: "timestamp"
-                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"
+                description: "true if the subscriber has their claims mapped in the Reclaim system"
+              authorized:
+                type: "object"
+                properties:
+                  flag: 
+                    type: "boolean"
+                    description: "true if the subscriber has already authorized Reclaim for the use of their claims, false otherwise"
+                  date: 
+                    type: "timestamp"
+                    description: "Timestamp (in UTC) of the latest update on the subscriber claims authorization"
     example: 
-      authorized: 
-        flag: true
-        updated: "2019-05-10 12:59:29"
-    title: "claim_authorization" 
+      status: "success"
+      details: []
+      entity:
+          claims:
+            available: true
+            authorized:
+              flag: true
+              date: "2019-04-01 10:13:48"       
 #Current Plan Performance Review Detail Output
   ReviewDetailOutput:
     type: "object"
