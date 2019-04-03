@@ -4,14 +4,40 @@ info:
   description: |
     # Introduction
     
-    The Reclaim Partner API provides secure access to our hosted subscriber and group information and is available only to trusted partners under legal contract. Authorization is required for all endpoints (See Security and Authorization for the process of acquiring and access token). The api follows conventional REST guidelines. Two primary sets of resources are available, group and subscriber. Group endpoints are primarily for creating new employer groups and uploading eligibility data in csv format. Subscriber endpoints provide enrollment recommendation-related resources for individual subscribers.
+    The Reclaim Client API provides secure access to our hosted subscriber and group information and is available only to trusted partners under legal contract. Authorization is required for all endpoints (See Security and Authorization for the process of acquiring and access token). The api follows conventional REST guidelines. Two primary sets of resources are available, group and subscriber. Group endpoints are primarily for creating new employer groups and uploading eligibility data in csv format. Subscriber endpoints provide enrollment recommendation-related resources for individual subscribers.
+    
+    # Getting Started
+    
+    The Reclaim Client API is a REST API that is designed to access the following RESTful resources:
+    
+      - **group** or **groups** which provide access to employer group(s) data. Group related APIs can be accessed offline (i.e., before open enrollment), to set up an employer group, upload the features of the benefits they provide to their employees (subscribers), and to gain analytics insights that are related to their employee population.  
+    
+      - **subscriber** which provide access to a specific subscriber (employee) data. Subscriber related APIs can be accessed at open enrollment and are designed for real-time access as the subscriber is making decisions regarding their benefits.
+      
+    To better understand the flow of how the API endpoints can be used, we consider separately the scenarios of 1) **pre-enrollment setup**, where the Client can set up the employer groups, upload their corresponding eligibility files and the list of benefits and plan features they offer, and 2) **open enrollment**, where the Client can now access or set up a subscriber, allow them to authorize the use of their claims data, if available, and guide them through the enrollment survey and optimized bebenfit packages.
+    
+    ## Pre-Enrollment Setup
+    TBD
+    
+    ## Open Enrollment
+    Now fast-forward to the time a specific subscriber is ready to start enrolling in their benefits on the Client's platform.
+    
+    Our assumption is that by the time the Client is ready to enroll a subscriber in their benefits, Reclaim has already ingested the benefit features available to the subscriber's group ahead of time. Note that, Reclaim does not know which of these benefits is the subscriber specifically eligible for. 
+    
+    Furthermore, while the Client may have shared an eligibility file ahead of open enrollment, the subscriber in question may have joined their employer group recently and therefore may not exist in the Reclaim system. Under this scenario, the Client can add that subscriber's information, along with that of their dependents (members). 
+    
+    Below is a summary flowchart indicating the minimum steps required for the open enrollment API flow. Click on the POST and GET methods below to delve into the details of the schemas of the expected request payload and the expected outputs, along with sample examples.
+    
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="630px" height="1061px" viewBox="-0.5 -0.5 630 1061" style="background-color: rgb(255, 255, 255);"><defs/><g><rect x="0" y="0" width="180" height="50" fill="#ffffff" stroke="#000000" pointer-events="none"/><g transform="translate(1.5,4.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="176" height="40" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 176px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber (employee) ready to enroll in next year's benefits on Client platform.</font></div></div></foreignObject><text x="88" y="26" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><rect x="217.5" y="107.5" width="158" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(222.5,106.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="148" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 150px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'status': 'success'</font></div></div></foreignObject><text x="74" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 298 100 L 298 70" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="385.5" y="94.5" width="150" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(390.5,93.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="140" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 142px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'status' = 'error'</font></div></div></foreignObject><text x="70" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 460.5 115 L 460.5 133.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 138.88 L 457 131.88 L 460.5 133.63 L 464 131.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 297 128 L 297 143 Q 297 153 297.07 163 L 297.95 283.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 297.99 288.88 L 294.44 281.91 L 297.95 283.63 L 301.44 281.86 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="101" y="292" width="510" height="50" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(102.5,303.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="506" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 506px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">The output will indicate whether the subscriber and their members have claims data available and whether they have authorized their use, or not.</font></div></div></foreignObject><text x="253" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">&lt;font color="#333333" style="font-size: 12px"&gt;The output will indicate whether the subscriber and their members have claims data available and whether they have authorized their use, or not.&lt;/font&gt;</text></switch></g><path d="M 90 452 L 90 583.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 90 588.88 L 86.5 581.88 L 90 583.63 L 93.5 581.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 90 L 460.5 70" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="378" y="238" width="165" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(381.5,237.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="157" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 157px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'status' = 'success'</font></div></div></foreignObject><text x="79" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 460.5 260 L 460.5 283.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 288.88 L 457 281.88 L 460.5 283.63 L 464 281.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 460.5 233 L 460.5 213" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="388.5" y="372" width="223" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(390.5,371.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="219" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 219px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'claims.available' = 'false'</font></div></div></foreignObject><text x="110" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">&lt;font style="font-size: 13px"&gt;'claims.available' = 'false'&lt;/font&gt;</text></switch></g><path d="M 499 391 L 499.49 683.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 499.5 688.88 L 495.99 681.89 L 499.49 683.63 L 502.99 681.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="69.5" y="372" width="223" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(75.5,371.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="211" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 211px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'claims.available' = 'true'</font></div></div></foreignObject><text x="106" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">&lt;font style="font-size: 13px"&gt;'claims.available' = 'true'&lt;/font&gt;</text></switch></g><path d="M 180.5 368 L 180.5 346" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="2" y="432" width="175" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(7.5,431.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="163" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 165px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized' = 'true'</font></div></div></foreignObject><text x="82" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 89 428 L 89 390" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="182.5" y="412.5" width="180" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(186.5,411.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="172" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 172px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized' = 'false'</font></div></div></foreignObject><text x="86" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 272 410 L 272 391" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 272 430.5 L 272 443.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 272 448.88 L 268.5 441.88 L 272 443.63 L 275.5 441.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="96" y="546" width="168" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(97.5,545.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="164" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 164px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized' = 'true'</font></div></div></foreignObject><text x="82" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 179.5 543 L 179.5 524" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 180 566 L 180 582.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 180 587.38 L 176.5 580.38 L 180 582.13 L 183.5 580.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="282.5" y="546" width="178" height="15" fill="#f5f5f5" stroke="#b3b3b3" pointer-events="none"/><g transform="translate(285.5,545.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="172" height="16" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 15px; font-family: &quot;Courier New&quot;; color: rgb(255, 51, 51); line-height: 1.2; vertical-align: top; width: 172px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">'authorized' = 'false'</font></div></div></foreignObject><text x="86" y="16" fill="#FF3333" text-anchor="middle" font-size="15px" font-family="Courier New">[Not supported by viewer]</text></switch></g><path d="M 371 540 L 371 525.5" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 372 566.5 L 372 681.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 372 686.88 L 368.5 679.88 L 372 681.63 L 375.5 679.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 136 663.5 L 136 681.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 136 686.88 L 132.5 679.88 L 136 681.63 L 139.5 679.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 186 25 L 249.63 24.55" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 254.88 24.51 L 247.91 28.06 L 249.63 24.55 L 247.86 21.06 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 499 347 L 499 367" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="70" y="693" width="540" height="25" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(76.5,699.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="526" height="12" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 526px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber now starts the survey. Client can filter survey questions based on flag 'ignore_if_claims'.</font></div></div></foreignObject><text x="263" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">&lt;font color="#333333" style="font-size: 12px"&gt;Subscriber now starts the survey. Client can filter survey questions based on flag 'ignore_if_claims'.&lt;/font&gt;</text></switch></g><path d="M 350 722 L 350 740.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 350 745.38 L 346.5 738.38 L 350 740.13 L 353.5 738.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 351.5 804 L 351.5 822.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 351.5 827.38 L 348 820.38 L 351.5 822.13 L 355 820.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="69" y="912" width="560" height="50" fill="#fff2cc" stroke="#d6b656" pointer-events="none"/><g transform="translate(70.5,923.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="556" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 556px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber now is ready to get their optimal bundle recommendations. Client may auto-enroll subscriber iteratively into basic plans before posting subscriber's eligible plans to Reclaim. </font></div></div></foreignObject><text x="278" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><path d="M 350 887 L 350 900.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 350 905.88 L 346.5 898.88 L 350 900.63 L 353.5 898.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 352.5 966 L 352.5 984.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 352.5 989.38 L 349 982.38 L 352.5 984.13 L 356 982.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="261" y="0" width="240" height="65" fill="#ffffff" stroke="#000000" pointer-events="none"/><g transform="translate(262.5,34.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="236" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 236px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Check if Reclaim has subscriber info from an earlier eligibility file ingest.</font></div></div></foreignObject><text x="118" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1api~1subscriber~1[subscriber_id]/get"><rect x="260.5" y="0" width="240" height="28" fill="#60a917" stroke="none"/><g transform="translate(289.5,7.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="182" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 184px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">GET /subscriber/[subscriber_id]</div></div></foreignObject><text x="91" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">GET /subscriber/[subscriber_id]</text></switch></g></a><rect x="340.5" y="145" width="240" height="65" fill="#ffffff" stroke="#000000"/><g transform="translate(342.5,179.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="236" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 236px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber is not in Reclaim system. Add subscriber and their member information.</font></div></div></foreignObject><text x="118" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscribers/post"><rect x="340.5" y="145" width="240" height="28" fill="#3399ff" stroke="none"/><g transform="translate(409.5,152.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="102" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 104px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">POST /subscriber</div></div></foreignObject><text x="51" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">POST /subscriber</text></switch></g></a><rect x="147.5" y="454.5" width="250" height="65" fill="#ffffff" stroke="#000000"/><g transform="translate(149.5,489.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="246" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 246px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber authorize claims through Client. Client posts subscriber response.</font></div></div></foreignObject><text x="123" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1authorize/post"><rect x="147.5" y="454.5" width="250" height="28" fill="#3399ff" stroke="none"/><g transform="translate(152.5,461.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="240" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 242px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">POST /subscriber/subscriber_id/authorize</font></div></div></foreignObject><text x="120" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">&lt;font style="font-size: 13px"&gt;POST /subscriber/subscriber_id/authorize&lt;/font&gt;</text></switch></g></a><rect x="10.5" y="595.5" width="250" height="65" fill="#ffffff" stroke="#000000"/><g transform="translate(12.5,630.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="246" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 246px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Subscriber reviews current year claims and plan performance before the survey.</font></div></div></foreignObject><text x="123" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1review/get"><rect x="11" y="596" width="250" height="28" fill="#60a917" stroke="none"/><g transform="translate(23.5,603.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="224" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 224px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">GET /subscriber/[subscriber_id]/review</div></div></foreignObject><text x="112" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">GET /subscriber/[subscriber_id]/review</text></switch></g></a><rect x="230" y="750" width="240" height="50" fill="#ffffff" stroke="#000000"/><g transform="translate(249.5,783.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="200" height="12" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 202px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Client list and filters survey questions.</font></div></div></foreignObject><text x="100" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1surveys/get"><rect x="229" y="750" width="240" height="28" fill="#60a917" stroke="none"/><g transform="translate(233.5,757.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="230" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 232px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">GET /subscriber/[subscriber_id]/surveys</div></div></foreignObject><text x="115" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">GET /subscriber/[subscriber_id]/surveys</text></switch></g></a><rect x="228.5" y="832" width="240" height="50" fill="#ffffff" stroke="#000000"/><g transform="translate(257.5,865.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="182" height="12" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 182px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Client posts subscriber's answers.</font></div></div></foreignObject><text x="91" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1surveys/post"><rect x="228.5" y="832" width="241" height="28" fill="#3399ff" stroke="none"/><g transform="translate(233.5,839.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="231" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 233px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">POST /subscriber/subscriber_id/surveys</font></div></div></foreignObject><text x="116" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">&lt;font style="font-size: 13px"&gt;POST /subscriber/subscriber_id/surveys&lt;/font&gt;</text></switch></g></a><rect x="200" y="994" width="300" height="66" fill="#ffffff" stroke="#000000"/><g transform="translate(201.5,1029.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="296" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 296px; white-space: normal; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font color="#333333" style="font-size: 12px">Client posts subscriber's list of eligible benefits. Reclaim outputs the optimal benefit bundle(s). </font></div></div></foreignObject><text x="148" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><a xlink:href="#tag/Subscriber-Specific-Endpoints/paths/~1subscriber~1[subscriber_id]~1recommendation/post"><rect x="200" y="994" width="300" height="28" fill="#3399ff" stroke="none"/><g transform="translate(207.5,1001.5)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="284" height="13" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 13px; font-family: Helvetica; color: rgb(255, 255, 255); line-height: 1.2; vertical-align: top; width: 284px; white-space: nowrap; overflow-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;"><font style="font-size: 13px">POST /subscriber/subscriber_id/recommendation</font></div></div></foreignObject><text x="142" y="13" fill="#ffffff" text-anchor="middle" font-size="13px" font-family="Helvetica">&lt;font style="font-size: 13px"&gt;POST /subscriber/subscriber_id/recommendation&lt;/font&gt;</text></switch></g></a></g></svg>
 
-
-  version: "v0.1"
+    Note that the Reclaim API includes a wider array of methods and resources that you can access, well beyond those presented in the flowchart above. The rest of the documentation attempts to delve into the details of both the group-specific and the subscriber-specific endpoints.
+    
+   
+  version: "v0.2"
   title: "RECLAIM Backend APIs"
-host: "platform.reclaim.health"
+host: "sandbox.reclaim.health"
 x-logo:
-  url: 'https://rebilly.github.io/ReDoc/petstore-logo.png'
+   url: 'https://rebilly.github.io/ReDoc/petstore-logo.png'
 
 
 #![foo](https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png 'title')
@@ -34,9 +60,7 @@ x-logo:
 #      - API Key
 #      - OAuth2
 #
-#    OAuth2 - an open protocol to allow secure authorization in a simple
-#    and standard method from web, mobile and desktop applications.
-#    <!-- ReDoc-Inject: <security-definitions> -->
+    
 
 tags:
 - name: "Security and Authorization"
@@ -58,7 +82,7 @@ paths:
       - "Security and Authorization"
       summary: "Authorization via OAuth2"
       description: |   
-       Access to our APIs is controlled via OAuth2 using the client credentials grant. This is a secure authorization workflow that allows you to obtain a **short-lived (1 hour)** access token that must be transmitted with your API request.
+       All API methods requires authentication via an oauth2 token.  This endpoint returns a token for valid client identifiers and secrets provided in the authentication header of the request.  Tokens will expire after 3600 seconds (1 hour) unless refreshed or revoked.
     
        The auth flow follows the following steps: 
          - A client encodes its `client key` and `secret key` into a specially encoded set of credentials. 
@@ -66,6 +90,16 @@ paths:
          - When accessing the REST API, the client uses the bearer token to authenticate.
 
        In the cURL tab to the right you can see an example of obtaining an access token via the command line. Likewise, the Python tab contains an example of authorization from scratch using the popular requests library. 
+       
+       **Note:** For testing purposes, we provide a token that does not expire. You can use this token for sandbox development only.
+       ```ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4```
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/AuthOutput"   
       x-code-samples:
       - lang: "cURL"
         source: |                             
@@ -73,30 +107,42 @@ paths:
             CLIENT_ID=<YOUR_CLIENT_ID>
             CLIENT_SECRET=<YOUR_CLIENT_SECRET>
 
-            # remove control characters if necessary (may occur with base64 on some OS platforms)
-            CREDENTIALS=$(echo "$CLIENT_ID":"$CLIENT_SECRET" | base64 | tr -d "[:cntrl:]")
-
             # request an access token
-            curl -i -X POST -H "Authorization: Basic $CREDENTIALS" -d "grant_type=client_credentials" https://platform.reclaim.health/oauth2/token; echo ""
+            curl -X POST -u $CLIENT_ID:$CLIENT_SECRET -d "grant_type=client_credentials" https://sandbox.reclaim.health/oauth2/token
 
-            # the response from https://platform.reclaim.health/oauth2/token
-            HTTP/1.1 200 OK
-            Content-Type: application/json;charset=UTF-8
+            # the response from https://sandbox.reclaim.health/oauth2/token
             {
-                "access_token": "s8KYRJGTO0rWMy0zz1CCSCwsSesDyDlbNdZoRqVR",
-                "token_type": "bearer",
-                "expires_in": 3600
-            }       
+              "access_token": "XXXXXXXXXXXXXX",
+              "expires_in": 3600,
+              "token_type": "Bearer"
+            }
+   
       - lang: "Python"
         source: |
-            from base64 import urlsafe_b64encode
-            import requests
+            # define your client id and secret
+            client_id     = <YOUR_CLIENT_ID>
+            client_secret = <YOUR_CLIENT_SECRET>
 
-            client_id = 'your_client_id'
-            client_secret = 'your_client_secret'
-            bearer_token = requests.post('https://platform.reclaim.health/oauth2/token',
-                             headers={'Authorization': 'Basic ' + urlsafe_b64encode(client_id + ':' + client_secret)}, data={'grant_type': 'client_credentials'}).json()['bearer_token']                           
+            # request an access token
+            r = requests.post (url    = "https://sandbox.reclaim.health/oauth2/token',
+                               params = {"grant_type": "client_credentials"},
+                               auth   = (client_id, client_secret))
+            access_token = r.json () ['access_token']                                              
   /api/groups:
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "List Available Groups"
+      description: "This endpoints allows the client to list all the available group IDs in the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GroupListDetailOutput" 
     post:
       tags:
       - "Group-Specific Endpoints"
@@ -116,55 +162,8 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/AddGroupDetailOutput"
-    get:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "List Available Groups"
-      description: "This endpoints allows the client to list all the available group IDs in the Reclaim system."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/GroupListDetailOutput"  
-  /api/group/[group_id]:
-    delete:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Delete Existing Group"
-      description: "This endpoints allows the client to delete an existing employer group in the Reclaim system. This is especially helpful at the beginning of the integration process."
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/DeleteGroupDetailOutput"   
-    put:
-      tags:
-      - "Group-Specific Endpoints"
-      summary: "Update Existing Group"
-      description: "This endpoint allows the client to update the information of an existing employer group in the Reclaim system."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "UpdateGroupDetailInput"
-        required: true
-        schema:
-          $ref: "#/definitions/UpdateGroupDetailInput"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/UpdateGroupDetailOutput"          
-  /api/group/[group_id]/files:
+            $ref: "#/definitions/AddGroupDetailOutput" 
+  /api/groups/file:
     post:
       tags:
       - "Group-Specific Endpoints"
@@ -178,7 +177,7 @@ paths:
         
         `hospital` referring to a group's supplemental hospital indemnity offerings and their attributes.
         
-        <b> Discuss with client types of voluntary benefits to include in recommendations. </b>
+        <b> Discuss with Client types of voluntary benefits to include in recommendations. </b>
         
         <details>
         <summary id="text" onClick="function()"><font color="blue"><u> Click for Reclaim's preferred schema details for each of the file types</u></font></summary>
@@ -543,17 +542,15 @@ paths:
             -H 'authorization: [bearer_token]' \
             -H 'type: eligibility' \
             -F 'file=@group_id_eligibility.csv' \
-            -F 'name=group_id_eligibility' \
-            https://platform.reclaim.health/api/group/[group_id]/eligibility_files
+            https://sandbox.reclaim.health/api/groups/file
       - lang: "Python"
         source: |
             import requests
 
             files = {'file': open('/path/group_id_eligibility.csv', 'rb')}
-            payload = {'name': 'group_id_eligibility'}
             headers = {'Authorization': 'bearer_token', 'Type': 'eligibility'}
             
-            response = requests.put('https://platform.reclaim.health/api/group/[group_id]/files', files=files, data=payload, headers=headers).json()
+            response = requests.put('https://sandbox.reclaim.health/api/groups/file', files=files, data=payload, headers=headers).json()
       responses:
         200:
           description: "Success"
@@ -572,7 +569,40 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/StatusCheckDetailOutput"   
+            $ref: "#/definitions/StatusCheckDetailOutput"  
+  /api/group/[group_id]:
+#    delete:
+#      tags:
+#      - "Group-Specific Endpoints"
+#      summary: "Delete Existing Group"
+#      description: "This endpoints allows the client to delete an existing employer group in the Reclaim system. This is especially helpful at the beginning of the integration process."
+#      produces:
+#      - "application/json"
+#      responses:
+#        200:
+#          description: "Success"
+#          schema:
+#            $ref: "#/definitions/DeleteGroupDetailOutput"   
+    post:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Update Existing Group"
+      description: "This endpoint allows the client to update the information of an existing employer group in the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "UpdateGroupDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateGroupDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/UpdateGroupDetailOutput"           
   /group/[group_id]/file/[file_id]:
     get:
       tags:
@@ -871,7 +901,7 @@ paths:
 #          description: "Success"
 #          schema:
 #            $ref: "#/definitions/BenefitUploadDetailOutput"            
-  /subscriber/[subscriber_id]:
+  /api/subscriber/[subscriber_id]:
     get:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -886,12 +916,48 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/SubscriberDetailOutput"
-  /subscribers:            
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # obtaining information about a specific subscriber
+            curl -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/subscriber/1200001
+      - lang: "Python"
+        source: |
+            # obtaining information about a specific subscriber
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}  
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001', headers=headers).json()
+            
+  /api/subscriber/[subscriber_id]/members:
+    get:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "List Members Details"
+      description: "This endpoints is designed to obtain information about all the dependent members, including the subscriber, that are eligible for the subscriber's benefits. Note that the members can be added or removed from consideration for the benefit recommendations, if instructed by the subscriber through the Client."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/MembersDetailOutput" 
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # obtaining information about a specific subscriber
+            curl -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/subscriber/1200001/members
+      - lang: "Python"
+        source: |
+            # obtaining information about a specific subscriber
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}  
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001/members', headers=headers).json()            
+  /subscriber:            
     post:
       tags:
       - "Subscriber-Specific Endpoints"
-      summary: "Add Subscriber"
-      description: "This endpoint is designed to post a subscriber's information, should their information not have been communicated through the eligibility file upload."
+      summary: "Add/Update Subscriber"
+      description: "This endpoint allows the client to add or update a subscriber's info to the Reclaim system. To update a subscriber's specific info, the POST may include only the items needed to be updated."
       consumes:
       - "application/json"
       produces:
@@ -906,7 +972,74 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/SubscriberDetailOutput"        
+            $ref: "#/definitions/SubscriberDetailOutput"   
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # adding a subscriber
+            curl -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}' https://sandbox.reclaim.health/api/subscriber
+            
+            # updating a subscriber
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"name":{"first":"Royally"}}' https://sandbox.reclaim.health/api/subscriber/91322222
+      - lang: "Python"
+        source: |
+            # adding a subscriber
+            payload = {"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}
+            
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
+            
+            # updating a subscriber
+            payload = {"name":{"first":"Royally"}}
+            
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
+   /subscriber'[subscriber_id]/members:            
+    post:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Add/Update Subscriber"
+      description: "This endpoint allows the client to add or update a subscriber's info to the Reclaim system. To update a subscriber's specific info, the POST may include only the items needed to be updated."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "SubscriberDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/SubscriberDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SubscriberDetailOutput"   
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # adding a subscriber
+            curl -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}' https://sandbox.reclaim.health/api/subscriber
+            
+            # updating a subscriber
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"name":{"first":"Royally"}}' https://sandbox.reclaim.health/api/subscriber/91322222
+      - lang: "Python"
+        source: |
+            # adding a subscriber
+            payload = {"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}
+            
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
+            
+            # updating a subscriber
+            payload = {"name":{"first":"Royally"}}
+            
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()            
   /subscriber/[subscriber_id]/authorize:
     get:
       tags:
@@ -957,12 +1090,12 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/ReviewDetailOutput"
-  /subscriber/[subscriber_id]/survey:
+  /subscriber/[subscriber_id]/surveys:
     get:
       tags:
       - "Subscriber-Specific Endpoints"
-      summary: "Enrollment Survey"
-      description: "This endpoint is designed to retrieve the subscriber's most updated responses to the survey questionnaires that have been saved in the Reclaim system. Note that this endpoint can be accessible even if the subscriber has no claims in the Reclaim system or has not authorized the use of their claims data."
+      summary: "Enrollment Surveys"
+      description: "This endpoint is designed to retrieve the questions to display to the subscriber or to retrieve the subscriber's most updated responses to the survey questionnaires that have been saved in the Reclaim system. Note that this endpoint can be accessible even if the subscriber has no claims in the Reclaim system or has not authorized the use of their claims data."
       consumes:
       - "application/json"
       produces:
@@ -975,7 +1108,7 @@ paths:
     post:
       tags:
       - "Subscriber-Specific Endpoints"
-      summary: "Enrollment Survey"
+      summary: "Update Survey Answers"
       description: "This endpoint is designed to post the subscriber's responses to the survey questionnaires and share them with the Reclaim system. If the Reclaim system receives the subscriber's answers, it will feed them into its enrollment recommendation algorithm. Note that this endpoint can be accessible even if the subscriber has no claims in the Reclaim system or has not authorized the use of their claims data."
       consumes:
       - "application/json"
@@ -1028,6 +1161,56 @@ paths:
           schema:
             $ref: "#/definitions/RecommendationDetailOutput"    
 definitions:
+# Auth Ouput
+  AuthOutput:
+    type: "object"
+    properties:
+      access_token:
+        type: "string"
+        description: "Access token to access Reclaim API"
+      expires_in:
+        type: "integer"
+        description: "Number of seconds the access token is set to expire" 
+      token_type:
+        type: "string"
+        description: "Token type ('Bearer')"     
+    example:
+      access_token: "ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4"
+      expires_in: 3600
+      token_type: "Bearer"
+# Claim Authorization Detail Input
+  AuthorizationDetailInput:
+    type: "object"
+    properties:
+      authorized:
+        type: "boolean"
+        description: "True is the subscriber authorizes Reclaim to utilize their claims data for the decision support during open enrollment, False otherwise"
+    example:
+      authorized: true
+# Enrollment Survey Detail Input
+  SurveyDetailInput:
+    type: "object"
+    properties:
+      surveys:
+        type: "array"
+        description: "Array containing the subscriber's survey question IDs and answers to the different types of questionnaires the client has selected to ask on their platform, if applicable. Note that the health related questions may only needed if the subscriber has no claims in the Reclaim system or whether they have elected to not use their claims"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "string"
+              description: "Slug describing the survey question. The first term defines the umbrella under which the question is served, e.g. **health**, **financial**, and **personality**. The remainder is a short description of the survey question"
+            value:
+              type: "string, integer, array"
+              description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`" 
+    example:
+      surveys:
+        - id: "86937568-97d9-4c1e-9d41-fdf6a465a050"
+          value: "I'm willing to pay more in premiums each month so that when I go to the pharmacy or doctor, I pay very little."
+        - id: "9cb89ac4-77b6-488f-825c-8fc18107697a"
+          value: 
+            - "pregnancy"
+            - "income_loss" 
 # Add Group Detail Input
   AddGroupDetailInput:
     type: "object"
@@ -1046,84 +1229,76 @@ definitions:
               description: "Detailed name for the employer group"
     example:
       groups:
-        - id: "acmecorp"
-          name: "ACME Corporation"
-        - id: "abc"
-          name: "ABC, Inc."
-# Claim Authorization Detail Input
-  AuthorizationDetailInput:
-    type: "object"
-    properties:
-      authorized:
-        type: "boolean"
-        description: "True is the subscriber authorizes Reclaim to utilize their claims data for the decision support during open enrollment, False otherwise"
-    example:
-      authorized: true
-# Enrollment Survey Detail Input
-  SurveyDetailInput:
-    type: "object"
-    properties:
-      survey:
-        type: "array"
-        description: "Array containing the subscriber's questions and answers to the different types of questionnaires the client has selected to ask on their platform, if applicable. Note that the health related questions may only needed if the subscriber has no claims in the Reclaim system or whether they have elected to not use their claims"
-        items:
-          type: "object"
-          properties:
-            id:
-              type: "string"
-              description: "Slug describing the survey question. The first term defines the umbrella under which the question is served, e.g. **health**, **financial**, and **personality**. The remainder is a short description of the survey question"
-            value:
-              type: "string, integer, array"
-              description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`" 
-            ignore:
-              type: "bool"
-              description: "Indicator whether the question can be ignored for the purposes of the recommendation. This is for instance applicable if the client chooses not to ask health questions to subscribers that have claims data in the Reclaim system and have authorized Reclaim to utilize their claims data"
-    example:
-      survey:
-        - id: "health_doctor_visits"
-          value: 8
-          ignore: false
-        - id: "health_prescriptions"
-          ignore: true
-        - id: "health_expected_events"
-          value: 
-            - "pregnancy"
-            - "income_loss" 
-          ignore: false 
+        - name: "acmecorp"
+          description: "ACME Corporation"
+        - name: "abc"
+          description: "ABC, Inc."
 # Add Group Detail Output
   AddGroupDetailOutput:
     type: "object"
     properties:
-      groups:
-        type: "array"
-        description: "Array of employer groups just added in the Reclaim system by the client"
-        items:
-          type: "object"
-          properties:
-            id: 
-              type: "string"
-              description: "Short identifier for the employer group"
-            name: 
-              type: "string"
-              description: "Detailed name for the employer group"
-            updated:
-              type: "timestamp"
-              description: "Timestamp (in UTC) recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC" 
-            detail: 
-              type: "array"
-              description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"  
-              items:
-                type: "string"
-    example:
-      groups:
-        - id: "acmecorp"
-          name: "ACME Corporation"
-          updated: "2019-04-10 14:59:23"
-        - id: "abc"
-          name: "ABC, Inc."  
-          updated: "2019-04-04 14:59:23"
-          detail: 
-            - "Client attempted to add a group that already existed"
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array of strings"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count:   
+                type: "integer"
+                description: "Number of employer groups available in the Reclaim system"
+          groups:   
+                type: "array"
+                description: "Array containing all the employer groups added by the Client" 
+                items:
+                  type: "object"
+                  properties:
+                    id:   
+                      type: "string"
+                      description: "Employer group Reclaim ID. This ID should be used to request or add information for a specific group"  
+                    name:
+                      type: "string"
+                      description: "Short name for the employer group"
+                    description:
+                      type: "string"
+                      description: "Long description for the employer group"  
+                    status: 
+                      type: "string"
+                      description: "Status is ```linked``` if the employer group has claims data for their subscribers and members in the Reclaim system, otherwise, the status would be ```not linked```"
+                    created:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the time that the employer group entry was created in the Reclaim system. Note all the timestamps are UTC" 
+                    updated:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the latest update to the employer group entry in the Reclaim system"  
+    example: 
+      status: "success"
+      detail: []
+      entity:
+          count: 2
+          groups:
+            - id: "acc711d2-7bd2-4110-9b2a-72b34f217b97"
+              name: "acmecorp"
+              description: "ACME Corporation"
+              status: "not linked"
+              created: "2019-04-10 14:59:23"
+              updated: "2019-04-10 14:59:23"
+            - id: "fe834068-3357-4b36-8304-781f713f71c0"
+              name: "abc"
+              description: "ABC, Inc."
+              status: "not linked"
+              created: "2019-04-04 14:59:23"
+              updated: "2019-04-04 14:59:23"
 # Update Group Detail Input
   UpdateGroupDetailInput:
     type: "object"
@@ -1189,46 +1364,73 @@ definitions:
   GroupListDetailOutput:
     type: "object"
     properties: 
-      count:   
-            type: "integer"
-            description: "Number of employer groups available in the Reclaim system"
-      groups:   
-            type: "array"
-            description: "Array containing all the employer groups available in the Reclaim system" 
-            items:
-              type: object
-              properties:
-                id:   
-                  type: "string"
-                  description: "Short identifier for the employer group"  
-                name:
-                  type: "string"
-                  description: "Detailed name for the employer group"
-                updated:
-                  type: "timestamp"
-                  description: "Timestamp (in UTC) recording the latest update to the employer group entry in the Reclaim system. Note all the timestamps are UTC"  
-                detail: 
-                  type: "array"
-                  description: "Array of messages (string), if applicable. These would include any list of error detailed descriptions"
-                  items:
-                    type: "string"
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array of strings"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count:   
+                type: "integer"
+                description: "Number of employer groups available in the Reclaim system"
+          groups:   
+                type: "array"
+                description: "Array containing all the employer groups available in the Reclaim system" 
+                items:
+                  type: "object"
+                  properties:
+                    id:   
+                      type: "string"
+                      description: "Employer group Reclaim ID. This ID should be used to request or add information for a specific group"  
+                    name:
+                      type: "string"
+                      description: "Short name for the employer group"
+                    description:
+                      type: "string"
+                      description: "Long description for the employer group"  
+                    status: 
+                      type: "string"
+                      description: "Status is ```linked``` if the employer group has claims data for their subscribers and members in the Reclaim system, otherwise, the status would be ```not linked```"
+                    created:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the time that the employer group entry was created in the Reclaim system. Note all the timestamps are UTC" 
+                    updated:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the latest update to the employer group entry in the Reclaim system"  
     example: 
-          count: 4
+      status: "success"
+      detail: []
+      entity:
+          count: 3
           groups:
-            - id: "acmecorp"
-              name: "ACME Corporation"
+            - id: "acc711d2-7bd2-4110-9b2a-72b34f217b96"
+              name: "acmecorp"
+              description: "ACME Corporation"
+              status: "linked"
+              created: "2019-04-10 14:59:23"
               updated: "2019-04-10 14:59:23"
-            - id: "abc"
-              name: "ABC, Inc."
+            - id: "fe834068-3357-4b36-8304-781f713f71c0"
+              name: "abc"
+              description: "ABC, Inc."
+              status: "not_linked"
+              created: "2019-04-04 14:59:23"
               updated: "2019-04-04 14:59:23"
-              detail: 
-                - "Client attempted to add a group that already existed"
-            - id: "def"
-              name: "DEF LLC."
-              updated: "2019-04-10 14:59:23"
-            - id: "xyz"
-              name: "XYZ, Inc."
-              updated: "2019-04-04 14:59:23"   
+            - id: "0a126c1b-7f6f-463e-8a41-4856279f8a1a"
+              name: "def"
+              description: "DEF LLC."
+              created: "2019-04-04 14:59:23"
+              updated: "2019-04-10 14:59:23"   
 # Eligibility Upload Detail Output  
   UploadDetailOutput:
     type: "object"
@@ -1472,141 +1674,352 @@ definitions:
   SubscriberDetailInput:
     type: "object"
     properties: 
-      subscriber:   
+      id:   
             type: "integer"
-            description: "Subscriber ID"
-      group:   
+            description: "Subscriber ID as known to Client"
+      group_id:   
             type: "string"
-            description: "Employer group ID" 
+            description: "Employer group unique Reclaim identifier" 
       division:   
             type: "string"
-            description: "Employer group's division ID"  
-      members: 
-            type: "array"
-            description: "Array of all the current dependents on the subscriber's plan."
-            items:
-              type: "object"
-              properties:
-                id:
-                  type: "integer"
-                  description: "Plan member ID"
-                is_subscriber:
-                  type: "boolean"
-                  description: "True if the member is the plan subscriber, false otherwise"
-                name:
-                  type: "string"
-                  description: "Member's first name"  
-                relation:
-                  type: "string"
-                  description: |
-                    Slug describing the relation of the member to the subscriber. This takes three possible values
-                      
-                    `subscriber` referring to the member being the plan subscriber, 
-                      
-                    `spouse` referring to the member being the subscriber's spouse, 
-                      
-                    `child` referring to the member being the subscriber's child.         
+            description: "Employer group's division ID"        
+      name:
+                    type: "object"
+                    description: "Member's name object"
+                    properties:
+                      first:
+                        type: "string"
+                        description: "Member's first name"
+                      middle:
+                        type: "string"
+                        description: "Member's middle name"   
+                      last:
+                        type: "string"
+                        description: "Member's last name" 
+      dob: 
+                    type: "date"
+                    description: "Member's date of birth formatted as yyyy-month-date"
+      gender:
+                    type: "string"
+                    description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+      ssn:
+                    type: "string"
+                    description: "Member's last four digits of their social security number"
+      address:
+                    type: "object"
+                    description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                    properties:
+                      street_1:
+                        type: "string"
+                        description: "First line of street address, if available"
+                      street_2:
+                        type: "string"
+                        description: "Second line of street address, if available"    
+                      city:
+                        type: "string"
+                        description: "Member's city name"  
+                      zip_code:
+                        type: "string"
+                        description: "Member's zip code (required)"
+                      state:
+                        type: "string"
+                        description: "Member's state name"                   
     example:
-      subscriber: 57122389
-      group: "acmecorp"
+      id: 91322222
+      group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
       division: "corporate"
-      members:
-        - id: 57122389
-          is_subscriber: true
-          name: "Susan"
-          relation: "subscriber"
-        - id: 57122390
-          is_subscriber: false
-          name: "Cora"
-          relation: "Spouse"   
-          
+      name:
+        first: "Susan"
+        middle: "M"
+        last: "Doe"
+      dob: "1966-08-02"
+      gender: "F"
+      ssn: "8345"
+      address:
+            street_1: "2200 Fenway Road"
+            street_2: ""
+            city: "Boston"
+            zip: "02215"
+            state: "MA"
+            
+# Update Subscriber Details            
+  UpdateSubscriberDetailInput:              
+    example:
+      dob: "1966-08-02"
+      address:
+            street_1: "2200 Cornelius Road"           
 #Subscriber Detail Output
   SubscriberDetailOutput:
     type: "object"
     properties: 
-      subscriber:   
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          id:
             type: "integer"
-            description: "Subscriber ID"
-      group:   
+            description: "Member's ID, as known to the client"
+          group_id:
             type: "string"
-            description: "Employer group ID" 
-      division:   
+            description: "Reclaim's group unique identifier to which the subscriber belongs"
+          division:
             type: "string"
-            description: "Employer group's division ID"    
-      claims_available: 
+            description: "Employer group division to which the subscriber belongs"
+          name:
             type: "object"
+            description: "Member's name object"
+            properties:
+              first:
+                type: "string"
+                description: "Member's first name"
+              middle:
+                type: "string"
+                description: "Member's middle name"   
+              last:
+                type: "string"
+                description: "Member's last name" 
+          dob: 
+                type: "date"
+                description: "Member's date of birth formatted as yyyy-month-date"
+          gender:
+                type: "string"
+                description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+          ssn:
+                type: "string"
+                description: "Member's last four digits of their social security number"
+          address:
+                type: "object"
+                description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                properties:
+                          street_1:
+                            type: "string"
+                            description: "First line of street address, if available"
+                          street_2:
+                            type: "string"
+                            description: "Second line of street address, if available"    
+                          city:
+                            type: "string"
+                            description: "Member's city name"  
+                          zip_code:
+                            type: "string"
+                            description: "Member's zip code (required for subscriber)"
+                          state:
+                            type: "string"
+                            description: "Member's state name"   
+          claims:
+            type: "object"
+            description: "Object specifying claims availability and subscriber authorization status, if applicable"
+            properties:
+              available:
+                type: "boolean"
+                description: "true if the subscriber has their claims mapped in the Reclaim system"
+              authorized:
+                type: "object"
+                properties:
+                  flag: 
+                    type: "boolean"
+                    description: "true if the subscriber has already authorized Reclaim for the use of their claims, false otherwise"
+                  date: 
+                    type: "timestamp"
+                    description: "Timestamp (in UTC) of the latest update on the subscriber claims authorization"
+          survey:
+            type: "object"
+            description: "Object specifying if the subscriber has taken the enrollment survey"
             properties:
               flag: 
                 type: "boolean"
-                description: "True if Reclaim has mapped the medical and pharmacy claims of this subscriber and their dependants, False otherwise"
-              updated: 
-                type: "timestamp"
-                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"
-      authorized:   
-            type: "object"
-            properties:
-              flag: 
-                type: "boolean"
-                description: "True if the subscriber has authorized Reclaim to use their claims to personalize their decision support, False otherwise"
-              updated: 
-                type: "timestamp"
-                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"
-      survey:   
-            type: "object"
-            properties:
-              flag: 
-                type: "boolean"
-                description: "True if the subscriber has taken the subscriber enrollment survey, False otherwise"
-              updated: 
-                type: "timestamp"
-                description: "Timestamp (in UTC) recording the time the flag was updated to the current value, if applicable"   
-      members: 
-            type: "array"
-            description: "Array of all the current dependents on the subscriber's plan."
-            items:
-              type: "object"
-              properties:
-                id:
-                  type: "integer"
-                  description: "Plan member ID"
-                is_subscriber:
-                  type: "boolean"
-                  description: "True if the member is the plan subscriber, false otherwise"
-                name:
-                  type: "string"
-                  description: "Member's first name"  
-                relation:
-                  type: "string"
-                  description: |
-                    Slug describing the relation of the member to the subscriber. This takes three possible values
-                      
-                    `subscriber` referring to the member being the plan subscriber, 
-                      
-                    `spouse` referring to the member being the subscriber's spouse, 
-                      
-                    `child` referring to the member being the subscriber's child.             
+                description: "true if the subscriber has already authorized Reclaim for the use of their claims, false otherwise"
+              date: 
+                    type: "timestamp"
+                    description: "Timestamp (in UTC) of the latest update on the subscriber claims authorization"
+
+          created:
+            type: "timestamp"
+            description: "Timestamp (in UTC) indicating the time the subscriber was created"
+          updated:
+            type: "timestamp"
+            description: "Timestamp (in UTC) indicating the time the subscriber was last updated"      
     example:
-      subscriber: 57122389
-      group: "acmecorp"
-      division: "corporate"
-      claims_available: 
-        flag: true
-        updated: "2019-05-10 12:59:29"
-      authorized: 
-        flag: true
-        updated: "2019-05-10 12:59:29"
-      survey: 
-        flag: false
-      members:
-        - id: 57122389
-          is_subscriber: true
-          name: "Susan"
-          relation: "subscriber"
-        - id: 57122390
-          is_subscriber: false
-          name: "Cora"
-          relation: "Spouse"      
-    title: "subscriber_detail"  
+      status: "success"
+      details: []
+      entity:
+          id: 1200001
+          group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
+          division: "part-timer"
+          name: 
+            first: "Zimzalabin"
+            middle: "M"
+            last: "Bronx"
+          dob: "1966-08-02"
+          gender: "M"
+          ssn: "8215"
+          address: 
+            street_1: "2200 Fenway Road"
+            street_2: ""
+            city: "Boston"
+            state: "MA"
+            zip_code: "02215"
+          claims:
+            available: true
+            authorized:
+              flag: true
+              date: "2019-04-01 10:13:48"       
+          survey:
+            flag: true
+            date: "2019-03-27 16:36:08"
+          created: "2019-03-20 19:35:48"
+          updated: "2019-03-21 14:57:04"
+          
+          
+#Members Detail Output
+  MembersDetailOutput:
+    type: "object"
+    properties: 
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count: 
+            type: "integer"
+            description: "Number of members, including the subscriber, eligible for the subscriber's plan"
+          members:
+            type: "array"
+            description: "Members array"
+            items:
+              id:
+                type: "integer"
+                description: "Member's ID, as known to the client"
+              group_id:
+                type: "string"
+                description: "Reclaim's group unique identifier to which the subscriber belongs"
+              division:
+                type: "string"
+                description: "Employer group division to which the subscriber belongs"
+              name:
+                type: "object"
+                description: "Member's name object"
+                properties:
+                  first:
+                    type: "string"
+                    description: "Member's first name"
+                  middle:
+                    type: "string"
+                    description: "Member's middle name"   
+                  last:
+                    type: "string"
+                    description: "Member's last name" 
+              dob: 
+                    type: "date"
+                    description: "Member's date of birth formatted as yyyy-month-date"
+              gender:
+                    type: "string"
+                    description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+              ssn:
+                    type: "string"
+                    description: "Member's last four digits of their social security number"
+              address:
+                    type: "object"
+                    description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                    properties:
+                              street_1:
+                                type: "string"
+                                description: "First line of street address, if available"
+                              street_2:
+                                type: "string"
+                                description: "Second line of street address, if available"    
+                              city:
+                                type: "string"
+                                description: "Member's city name"  
+                              zip_code:
+                                type: "string"
+                                description: "Member's zip code (required for subscriber)"
+                              state:
+                                type: "string"
+                                description: "Member's state name"  
+              relationship:
+                type: "string"
+                description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
+              removed:
+                type: boolean
+                description: "true if the associated member is not to be considered for next year's benefits on the subscriber's plan, false otherwise"
+              created:
+                type: "timestamp"
+                description: "Timestamp (in UTC) indicating the time the subscriber was created"
+              updated:
+                type: "timestamp"
+                description: "Timestamp (in UTC) indicating the time the subscriber was last updated"      
+    example:
+      status: "success"
+      details: []
+      entity:
+          count: 2
+          members:
+            - id: 1200001
+              group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
+              division: "part-timer"
+              name: 
+                first: "Zimzalabin"
+                middle: "M"
+                last: "Bronx"
+              dob: "1966-08-02"
+              gender: "M"
+              ssn: "8215"
+              address: 
+                street_1: "2200 Fenway Road"
+                street_2: ""
+                city: "Boston"
+                state: "MA"
+                zip_code: "02215"
+              relationship: "subscriber"
+              removed: false
+              created: "2019-03-20 19:35:48"
+              updated: "2019-03-21 14:57:04"
+            - id: 1200002
+              group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
+              division: "part-timer"
+              name: 
+                first: "Jenna"
+                middle: "F"
+                last: "Bronx"
+              dob: "1989-08-02"
+              gender: "U"
+              ssn: "0285"
+              address: 
+                street_1: "2200 Fenway Road"
+                street_2: ""
+                city: "Boston"
+                state: "MA"
+                zip_code: "02215"
+              relationship: "child"
+              removed: false
+              created: "2019-04-02 18:06:36"
+              updated: "2019-04-03 01:13:32"
 #Authorization Detail Output
   AuthorizationDetailOutput:
     type: "object"
@@ -1819,86 +2232,117 @@ definitions:
   SurveyDetailOutput:
     type: "object"
     properties:
-      updated: 
-        type: "timestamp"
-        description: "Timestamp (in UTC) of latest updated responses saved into the Reclaim system, if applicable"
-      survey:
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
         type: "array"
-        description: "Array containing the subscriber's questions and answers to the different types of questionnaires the client has selected to ask on their platform, if applicable. Note that the health related questions may only needed if the subscriber has no claims in the Reclaim system or whether they have elected to not use their claims"
-        items:
-          type: "object"
-          properties:
-            name:
-              type: "string"
-              description: "Slug describing the survey question. The first term defines the umbrella under which the question is served, e.g. **health**, **financial**, and **personality**. The remainder is a short description of the survey question"
-            description:
-              type: "string"
-              description: "Survey question verbiage, if necessary to include"  
-            type:
-              type: "string"
-              description: |
-                Slugs describing the type of the question. This can take the following values:
-                
-                `bool` if the answer to the question is True or False
-                
-                `int` if the answer to the question is an integer
-                
-                `select` if the answer involves selecting a single option from the available choices
-                
-                `multi` if the answer involves selecting at least one option from the available choices
-            min:
-              type: "integer"
-              description: "Minimum integer value to suggest to the subscriber, if applicable and if the expected answer to the question is of type `int`"
-            max:
-              type: "integer"
-              description: "Maximum integer value to suggest to the subscriber, if applicable and if the expected answer to the question is of type `int`"
-            options:
-              type: "array"
-              description: "Array of options to suggest to the subscriber, if the expected answer is of type `select` or `multi`"  
-              items:
-                type: "object"
-                properties:
-                  name: 
-                    type: "string"
-                    description: "User-friendly description of the option"
-                  value:
-                    description: "Slug or number identifying the option"
-            value:
-              type: "string, integer, array"
-              description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`"  
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count: 
+            type: "int"
+            description: "Number of questions available to client"
+          surveys:
+            type: "array"
+            description: "Array containing the subscriber's questions and answers to the different types of questionnaires the client has selected to ask on their platform, if applicable. Note that the health related questions may only needed if the subscriber has no claims in the Reclaim system or whether they have elected to not use their claims"
+            items:
+              type: "object"
+              properties:
+                id: 
+                  type: "string"
+                  description: "Survey question ID"
+                category: 
+                  type: "string"
+                  description: "Survey question category ('health', 'financial', 'personality')"
+                name:
+                  type: "string"
+                  description: "Slug describing the survey question. The first term defines the umbrella under which the question is served, e.g. **health**, **financial**, and **personality**. The remainder is a short description of the survey question"
+                description:
+                  type: "string"
+                  description: "Survey question verbiage, if necessary to include"  
+                type:
+                  type: "string"
+                  description: |
+                    Short descriptor describing the type of the question. This can take the following values:
+
+                    `bool` if the answer to the question is True or False
+
+                    `int` if the answer to the question is an integer
+
+                    `select` if the answer involves selecting a single option from the available choices
+
+                    `multi` if the answer involves selecting at least one option from the available choices
+                options:
+                  type: "array"
+                  description: "Array of string options to suggest to the subscriber, if the expected answer is of type `select` or `multi`"  
+                value:
+                  type: "string, integer, array"
+                  description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`"  
+                ignore_if_claims:
+                  type: "boolean"
+                  description: "True is the survey question is to be ignored for subscribers who have claims and have authorized the use of their claims for the bundle recommendation"
+                created:
+                  type: "timestamp"
+                  description: "Timestamp (in UTC) of when the survey ID was created"
+                updated:
+                  type: "timestamp"
+                  description: "Timestamp (in UTC) of when the survey ID or answer was last updated"  
+                  
     example:
-      updated: "2019-02-05 14:59:23"
-      survey:
-        - name: "health_doctor_visits"
-          description: "How many doctor visits do you and your dependents expect to need in the upcoming plan year?"
-          type: "int"
-          value: 8
-        - name: "health_prescriptions"
-          description: "How many prescriptions do you have in your drug cabinet?"
-          type: "select"
-          options: 
-            - name: "Less than 3 prescriptions"
-              value: "low"
-            - name: "Between 4 and 7 prescriptions"
-              value: "medium"
-            - name: "More than 8 prescriptions"
-              value: "high"
-          value: "low"
-        - name: "health_expected_events"
-          description: "Do you expect any especially significant events during the upcoming plan year? Select all that may apply."
-          type: "multi"
-          options:
-            - name: "Pregnancy / having a baby"
-              value: "pregnancy"
-            - name: "Elective surgery (e.g. knee replacement)" 
-              value: "surgery"
-            - name: "Retirement (you or your spouse)"
-              value: "retirement"
-            - name: "Loss of income (staying home with kids, etc.)"
-              value: "income_loss"
-          value: 
-            - "pregnancy"
-            - "income_loss"
+      status: "success"
+      details: []
+      entity:
+          count: 3
+          surveys:
+            - id: "cf692b71-caa8-4b2d-8a6c-efda480904a1"
+              category: "health"
+              name: "doctor_visits"
+              description: "About how many times did you see your doctor last year? This can be anything from a basic checkup to visits with a specialist."
+              type: "select"
+              options: 
+                - "None"
+                - "1 to 3"
+                - "4 to 5"
+                - "6 or more"
+              value: "1 to 3"
+              ignore_if_claims: true
+              created: "2019-03-27 18:11:29"
+              updated: "2019-03-27 18:11:29"
+            - id: "28a809d6-3d3c-492e-90c5-eef860156a40"
+              category: "health"
+              name: "major_event"
+              description: "Do you expect to have any major medical expenses next year, such as a planned surgery?"
+              type: "select"
+              options: 
+                - "No"
+                - "Maybe"
+                - "Yes"
+              value: "Yes"
+              ignore_if_claims: false
+              created: "2019-03-20 19:35:40"
+              updated: "2019-03-20 19:35:40"
+            - id: "86937568-97d9-4c1e-9d41-fdf6a465a050"
+              category: "financial"
+              name: "premium_oop_tradeoff"
+              description: "When it comes to your monthly health insurance payments (which are called your 'premiums'), which best describes your preference?"
+              type: "select"
+              options: 
+                - "I'm willing to pay more in premiums each month so that when I go to the pharmacy or doctor, I pay very little."
+                - "I would rather pay as little as possible in premiums each month and then pay more for the services if and when I need them."
+              value: null
+              ignore_if_claims: false
+              created: "2019-03-20 19:35:40"
+              updated: "2019-03-20 19:35:40"
 #Recommendation Detail Iutput
   RecommendationDetailInput:
     type: "object"
