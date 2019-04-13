@@ -920,12 +920,12 @@ paths:
       - lang: "cURL"
         source: |                              
             # obtaining information about a specific subscriber
-            curl -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/subscriber/1200001
+            curl -i -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/subscriber/200001
       - lang: "Python"
         source: |
             # obtaining information about a specific subscriber
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}  
-            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001', headers=headers).json()  
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/200001', headers=headers).json()  
     post:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -937,7 +937,7 @@ paths:
       - "application/json"
       parameters:
       - in: "body"
-        name: "SubscriberDetailInput"
+        name: "UpdateSubscriberDetailInput"
         required: true
         schema:
           $ref: "#/definitions/UpdateSubscriberDetailInput"
@@ -945,20 +945,20 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/SubscriberDetailOutput"   
+            $ref: "#/definitions/UpdateSubscriberDetailOutput"   
       x-code-samples:
       - lang: "cURL"
         source: |                              
             # updating a subscriber
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"name":{"first":"Royally"}}' https://sandbox.reclaim.health/api/subscriber/91322222
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"dob":"1966-08-02", "address":{"street_1":"2200 Cornelius Road"}}' https://sandbox.reclaim.health/api/subscriber/200001
       - lang: "Python"
         source: |
             # updating a subscriber
-            payload = {"name":{"first":"Royally"}}
+            payload = {"dob":"1966-08-02", "address":{"street_1":"2200 Cornelius Road"}}
             
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
-            response = requests.put('https://sandbox.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber/200001', data=payload, headers=headers).json()   
         
   /api/subscriber:            
     post:
@@ -985,12 +985,12 @@ paths:
       - lang: "cURL"
         source: |                              
             # adding a subscriber
-            curl -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}' https://sandbox.reclaim.health/api/subscriber
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" -d '{"id":300001,"group_id":"5a17a442-82b6-4e7a-9e24-5576b755cfb6","division":"part-time","name":{"first":"Jayson","middle":"W","last":"Yee"},"address":{"street_1":"PO Box 1235","street_2":"100 Talabow Street","city":"Houston","state":"TX","zip_code":"77001"},"dob":"1977-01-22","gender":"M","ssn":"0125","members":[{"id":300010,"name":{"first":"Julia","middle":"X","last":"Yee"},"gender":"F","dob":"1955-01-22","ssn":"4235","relationship":"spouse"},{"id":300015,"name":{"first":"Zeus","middle":"X","last":"Yee"},"dob":"2018-10-02","gender":"M","ssn":"1112","relationship":"child"}]}' https://sandbox.reclaim.health/api/subscriber
             
       - lang: "Python"
         source: |
             # adding a subscriber
-            payload = {"id":91322222,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Roy","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1945-01-22","gender":"M","ssn":"1155"}
+            payload = {"id":300001,"group_id":"5a17a442-82b6-4e7a-9e24-5576b755cfb6","division":"part-time","name":{"first":"Jayson","middle":"W","last":"Yee"},"address":{"street_1":"PO Box 1235","street_2":"100 Talabow Street","city":"Houston","state":"TX","zip_code":"77001"},"dob":"1977-01-22","gender":"M","ssn":"0125","members":[{"id":300010,"name":{"first":"Julia","middle":"X","last":"Yee"},"gender":"F","dob":"1955-01-22","ssn":"4235","relationship":"spouse"},{"id":300015,"name":{"first":"Zeus","middle":"X","last":"Yee"},"dob":"2018-10-02","gender":"M","ssn":"1112","relationship":"child"}]}
             
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
@@ -1015,12 +1015,12 @@ paths:
       - lang: "cURL"
         source: |                              
             # obtaining information about a specific subscriber
-            curl -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/subscriber/1200001/members
+            curl -i -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" https://sandbox.reclaim.health/api/subscriber/300001/members
       - lang: "Python"
         source: |
             # obtaining information about a specific subscriber
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}  
-            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001/members', headers=headers).json()   
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/300001/members', headers=headers).json()   
     post:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1035,97 +1035,28 @@ paths:
         name: "MemberDetailInput"
         required: true
         schema:
-          $ref: "#/definitions/MembersDetailInput"
+          $ref: "#/definitions/AddMembersDetailInput"
       responses:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/MembersDetailOutput"   
+            $ref: "#/definitions/AddMembersDetailOutput"   
       x-code-samples:
       - lang: "cURL"
         source: |                              
             # adding members
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"members":[{"id":30000,"name":{"first":"Ace","middle":"T","last":"Zumbi"},"dob":"2018-08-12","gender":"M","ssn":"1554","relationship":"child"},{"id":40000,"name":{"first":"Zoo","middle":"S","last":"Assebet"},"dob":"2019-09-02","gender":"F","ssn":"2351","relationship":"child"}]}' https://sandbox.reclaim.health/api/subscriber/205001/members
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json -d '{"members":[{"id":300610,"name":{"first":"Acer","middle":"X","last":"Yee"},"gender":"F","dob":"2013-01-25","ssn":"9178","relationship":"child"},{"id":300615,"name":{"first":"Ben","middle":"X","last":"Yee"},"dob":"2011-02-02","gender":"M","ssn":"7015","relationship":"child"}]}' https://sandbox.reclaim.health/api/subscriber/300001/members
             
       - lang: "Python"
         source: |
             # adding members
-            payload = {"members":[{"id":30000,"name":{"first":"Ace","middle":"T","last":"Zumbi"},"dob":"2018-08-12","gender":"M","ssn":"1554","relationship":"child"},{"id":40000,"name":{"first":"Zoo","middle":"S","last":"Assebet"},"dob":"2019-09-02","gender":"F","ssn":"2351","relationship":"child"}]}
+            payload = {"members":[{"id":300610,"name":{"first":"Acer","middle":"X","last":"Yee"},"gender":"F","dob":"2013-01-25","ssn":"9178","relationship":"child"},{"id":300615,"name":{"first":"Ben","middle":"X","last":"Yee"},"dob":"2011-02-02","gender":"M","ssn":"7015","relationship":"child"}]}
             
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
             response = requests.put('https://sandbox.reclaim.health/api/subscriber/205001/members', data=payload, headers=headers).json()                                     
-
-  /api/subscriber/[subscriber_id]/member:            
-    post:
-      tags:
-      - "Subscriber-Specific Endpoints"
-      summary: "Add A Member"
-      description: "This endpoint allows the client to add or update members' info to the Reclaim system. To update a member's specific info, the POST may include only the items needed to be updated."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "MemberDetailInput"
-        required: true
-        schema:
-          $ref: "#/definitions/MemberDetailInput"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/MemberDetailOutput"   
-      x-code-samples:
-      - lang: "cURL"
-        source: |                              
-            # adding a member
-            curl -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"id":91322228,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Aida","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1990-01-22","gender":"F","ssn":"4321", "relationship": "child"}' https://sandbox.reclaim.health/api/subscriber/91322222/members
-            
-            # updating a member
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"address":{"zip_code":"97114"}}' https://sandbox.reclaim.health/api/subscriber/91322222/member/91322228
-      - lang: "Python"
-        source: |
-            # adding a subscriber
-            payload = {"id":91322228,"group_id":"f8ceee2b-de05-4125-b68c-5019680fab95","division":"Corporate","name":{"first":"Aida","middle":"G","last":"Biv"},"address":{"street_1":"100 Alpine Street","city":"Cornelius","state":"OR","zip_code":"97113"},"dob":"1990-01-22","gender":"F","ssn":"4321", "relationship": "child"}
-            
-            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
-            
-            response = requests.put('https://sandbox.reclaim.health/api/subscriber/91322222/members', data=payload, headers=headers).json()   
-            
-            # updating a subscriber
-            payload = {"address":{"zip_code":"97114"}}
-            
-            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
-            
-            response = requests.put('https://sandbox.reclaim.health/api/subscriber/91322222/member/91322228', data=payload, headers=headers).json()   
             
   /api/subscriber/[subscriber_id]/member/[member_id]:  
-    get:
-      tags:
-      - "Subscriber-Specific Endpoints"
-      summary: "List A Member's Info"
-      description: "This endpoints is designed to obtain information about a specific dependent member of a subscriber."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/MemberDetailOutput" 
-      x-code-samples:
-      - lang: "cURL"
-        source: |                              
-            # obtaining information about a specific subscriber
-            curl -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/subscriber/1200001/member/1200002
-      - lang: "Python"
-        source: |
-            # obtaining information about a specific subscriber
-            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}  
-            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001/member/1200002', headers=headers).json()   
     post:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1145,20 +1076,21 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/MemberDetailOutput"   
+            $ref: "#/definitions/UpdateMemberDetailOutput"   
       x-code-samples:
       - lang: "cURL"
         source: |                              
             # updating a member
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"address":{"zip_code":"97114"}}' https://sandbox.reclaim.health/api/subscriber/91322222/member/91322228
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json -d '{"name":{"first":"Georgio"}, "removed":true}' https://sandbox.reclaim.health/api/subscriber/300001/member/300510
       - lang: "Python"
         source: |
-           # updating a subscriber
-            payload = {"address":{"zip_code":"97114"}}
+           # updating a member
+            payload = {"name":{"first":"Georgio"}, "removed":true}
             
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
-            response = requests.put('https://sandbox.reclaim.health/api/subscriber/91322222/member/91322228', data=payload, headers=headers).json()              
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber/300001/member/300510', data=payload, headers=headers).json()  
+            
   /subscriber/[subscriber_id]/authorize:
     get:
       tags:
@@ -1178,13 +1110,13 @@ paths:
       - lang: "cURL"
         source: |                              
             # retrieving a subscriber's authorization
-            curl -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4"  https://sandbox.reclaim.health/api/subscriber/1200001/authorize
+            curl -i -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" https://sandbox.reclaim.health/api/subscriber/200001/authorize
       - lang: "Python"
         source: |
            # retrieving a subscriber's authorization
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
-            response = requests.get('https://sandbox.reclaim.health/api/subscriber/1200001/authorize', headers=headers).json()          
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/200001/authorize', headers=headers).json()          
              
     post:
       tags:
@@ -1209,18 +1141,17 @@ paths:
       x-code-samples:
       - lang: "cURL"
         source: |                              
-            # updating a member
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" --data '{"authorized":true}' https://sandbox.reclaim.health/api/subscriber/1200001/authorize
-            
-            
+            # updating a subscriber's claim authorization
+            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json" -d '{"authorized": true}' https://sandbox.reclaim.health/api/subscriber/200001/authorize
+ 
       - lang: "Python"
         source: |
-           # updating a subscriber
-            payload = {"authorized":true}
+           # updating a subscriber's claim authorization
+            payload = {"authorized": true}
             
             headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
             
-            response = requests.put('https://sandbox.reclaim.health/api/subscriber/1200001/authorize', data=payload, headers=headers).json()              
+            response = requests.put('https://sandbox.reclaim.health/api/subscriber/200001/authorize', data=payload, headers=headers).json()              
   /subscriber/[subscriber_id]/review:
     get:
       tags:
@@ -1251,6 +1182,18 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/SurveyDetailOutput"
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # retrieving the surveys for a subscriber
+            curl -i -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/subscriber/300001/surveys
+ 
+      - lang: "Python"
+        source: |
+           # retrieving the surveys for a subscriber
+            headers = {'Authorization': 'ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4'}
+            
+            response = requests.get('https://sandbox.reclaim.health/api/subscriber/300001/surveys', headers=headers).json()         
     post:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1547,7 +1490,7 @@ definitions:
                       description: "Long description for the employer group"  
                     status: 
                       type: "string"
-                      description: "Status is ```linked``` if the employer group has claims data for their subscribers and members in the Reclaim system, otherwise, the status would be ```not linked```"
+                      description: "Status is ```linked``` if the employer group has been correctly associated to a Reclaim employer group with claims data for their subscribers and members in the Reclaim system, otherwise, the status would be ```not linked```"
                     created:
                       type: "timestamp"
                       description: "Timestamp (in UTC) recording the time that the employer group entry was created in the Reclaim system. Note all the timestamps are UTC" 
@@ -1558,25 +1501,20 @@ definitions:
       status: "success"
       detail: []
       entity:
-          count: 3
+          count: 2
           groups:
-            - id: "acc711d2-7bd2-4110-9b2a-72b34f217b96"
-              name: "acmecorp"
+            - id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+              name: "ACME"
               description: "ACME Corporation"
               status: "linked"
-              created: "2019-04-10 14:59:23"
-              updated: "2019-04-10 14:59:23"
-            - id: "fe834068-3357-4b36-8304-781f713f71c0"
-              name: "abc"
-              description: "ABC, Inc."
-              status: "not_linked"
-              created: "2019-04-04 14:59:23"
-              updated: "2019-04-04 14:59:23"
-            - id: "0a126c1b-7f6f-463e-8a41-4856279f8a1a"
-              name: "def"
-              description: "DEF LLC."
-              created: "2019-04-04 14:59:23"
-              updated: "2019-04-10 14:59:23"   
+              created: "2019-04-08 17:50:13"
+              updated: "2019-04-08 17:50:13"
+            - id: "a820c749-b46b-418b-b73a-2d15d1129d46"
+              name: "IBM"
+              description: "International Business Machines"
+              status: "not linked"
+              created: "2019-04-09 01:29:21"
+              updated: "2019-04-09 01:30:03"
 # Eligibility Upload Detail Output  
   UploadDetailOutput:
     type: "object"
@@ -1869,24 +1807,95 @@ definitions:
                         description: "Member's zip code (required)"
                       state:
                         type: "string"
-                        description: "Member's state name"                   
+                        description: "Member's state name"   
+      members: 
+        type: "array"
+        description: "Array of members to add/update associated with the subscriber"
+        items:
+          id:   
+                type: "integer"
+                description: "Subscriber ID as known to Client"    
+          name:
+                        type: "object"
+                        description: "Member's name object"
+                        properties:
+                          first:
+                            type: "string"
+                            description: "Member's first name"
+                          middle:
+                            type: "string"
+                            description: "Member's middle name"   
+                          last:
+                            type: "string"
+                            description: "Member's last name" 
+          dob: 
+                        type: "date"
+                        description: "Member's date of birth formatted as yyyy-month-date"
+          gender:
+                        type: "string"
+                        description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+          ssn:
+                        type: "string"
+                        description: "Member's last four digits of their social security number"
+          address:
+                        type: "object"
+                        description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                        properties:
+                          street_1:
+                            type: "string"
+                            description: "First line of street address, if available"
+                          street_2:
+                            type: "string"
+                            description: "Second line of street address, if available"    
+                          city:
+                            type: "string"
+                            description: "Member's city name"  
+                          zip_code:
+                            type: "string"
+                            description: "Member's zip code (required)"
+                          state:
+                            type: "string"
+                            description: "Member's state name" 
+          relationship:
+                type: "string"
+                description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
+                  
     example:
-      id: 91322222
-      group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
-      division: "corporate"
+      id: 300001
+      group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+      division: "part-time"
       name:
-        first: "Susan"
-        middle: "M"
-        last: "Doe"
-      dob: "1966-08-02"
-      gender: "F"
-      ssn: "8345"
+        first: "Jayson"
+        middle: "W"
+        last: "Yee"
+      dob: "1977-01-22"
+      gender: "M"
+      ssn: "0125"
       address:
-            street_1: "2200 Fenway Road"
-            street_2: ""
-            city: "Boston"
-            zip: "02215"
-            state: "MA"
+            street_1: "PO Box 1235"
+            street_2: "100 Talabow Street"
+            city: "Houston"
+            zip_code: "77001"
+            state: "TX"
+      members:
+        - id: 300010
+          name:
+            first: "Julia"
+            middle: "X"
+            last: "Yee"
+          dob: "1955-01-22"  
+          gender: "F"
+          ssn: "4235"
+          relationship: "spouse"
+        - id: 300015
+          name:
+            first: "Zeus"
+            middle: "X"
+            last: "Yee"
+          dob: "2018-10-02"
+          gender: "M"
+          ssn: "1112"
+          relationship: "child"
             
 # Update Subscriber Details            
   UpdateSubscriberDetailInput:              
@@ -2002,18 +2011,18 @@ definitions:
       status: "success"
       details: []
       entity:
-          id: 1200001
-          group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
-          division: "part-timer"
+          id: 200001
+          group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+          division: "corporate"
           name: 
-            first: "Zimzalabin"
-            middle: "M"
-            last: "Bronx"
-          dob: "1966-08-02"
+            first: "Brian"
+            middle: "W"
+            last: "Marky"
+          dob: "1966-02-02"
           gender: "M"
-          ssn: "8215"
+          ssn: "1325"
           address: 
-            street_1: "2200 Fenway Road"
+            street_1: "100 Fenway Drive"
             street_2: ""
             city: "Boston"
             state: "MA"
@@ -2022,15 +2031,150 @@ definitions:
             available: true
             authorized:
               flag: true
-              date: "2019-04-01 10:13:48"       
+              date: "2019-04-09 00:32:24"       
           survey:
             flag: true
-            date: "2019-03-27 16:36:08"
-          created: "2019-03-20 19:35:48"
-          updated: "2019-03-21 14:57:04"
+            date: "2019-04-08 17:56:34"
+          created: "2019-04-08 17:56:34"
+          updated: "2019-04-09 00:32:24"
           
+#Update Subscriber Detail Output
+  UpdateSubscriberDetailOutput:
+    type: "object"
+    properties: 
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          id:
+            type: "integer"
+            description: "Member's ID, as known to the client"
+          group_id:
+            type: "string"
+            description: "Reclaim's group unique identifier to which the subscriber belongs"
+          division:
+            type: "string"
+            description: "Employer group division to which the subscriber belongs"
+          name:
+            type: "object"
+            description: "Member's name object"
+            properties:
+              first:
+                type: "string"
+                description: "Member's first name"
+              middle:
+                type: "string"
+                description: "Member's middle name"   
+              last:
+                type: "string"
+                description: "Member's last name" 
+          dob: 
+                type: "date"
+                description: "Member's date of birth formatted as yyyy-month-date"
+          gender:
+                type: "string"
+                description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+          ssn:
+                type: "string"
+                description: "Member's last four digits of their social security number"
+          address:
+                type: "object"
+                description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                properties:
+                          street_1:
+                            type: "string"
+                            description: "First line of street address, if available"
+                          street_2:
+                            type: "string"
+                            description: "Second line of street address, if available"    
+                          city:
+                            type: "string"
+                            description: "Member's city name"  
+                          zip_code:
+                            type: "string"
+                            description: "Member's zip code (required for subscriber)"
+                          state:
+                            type: "string"
+                            description: "Member's state name"   
+          claims:
+            type: "object"
+            description: "Object specifying claims availability and subscriber authorization status, if applicable"
+            properties:
+              available:
+                type: "boolean"
+                description: "true if the subscriber has their claims mapped in the Reclaim system"
+              authorized:
+                type: "object"
+                properties:
+                  flag: 
+                    type: "boolean"
+                    description: "true if the subscriber has already authorized Reclaim for the use of their claims, false otherwise"
+                  date: 
+                    type: "timestamp"
+                    description: "Timestamp (in UTC) of the latest update on the subscriber claims authorization"
+          survey:
+            type: "object"
+            description: "Object specifying if the subscriber has taken the enrollment survey"
+            properties:
+              flag: 
+                type: "boolean"
+                description: "true if the subscriber has already authorized Reclaim for the use of their claims, false otherwise"
+              date: 
+                    type: "timestamp"
+                    description: "Timestamp (in UTC) of the latest update on the subscriber claims authorization"
+
+          created:
+            type: "timestamp"
+            description: "Timestamp (in UTC) indicating the time the subscriber was created"
+          updated:
+            type: "timestamp"
+            description: "Timestamp (in UTC) indicating the time the subscriber was last updated"      
+    example:
+      status: "success"
+      details: 
+        - "Updated subscriber '200001' successfully"
+      entity:
+          id: 200001
+          group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+          division: "corporate"
+          name: 
+            first: "Brian"
+            middle: "W"
+            last: "Marky"
+          dob: "1966-08-02"
+          gender: "M"
+          ssn: "1325"
+          address: 
+            street_1: "2200 Cornelius Road"
+            street_2: ""
+            city: "Boston"
+            state: "MA"
+            zip_code: "02215"
+          claims:
+            available: true
+            authorized:
+              flag: true
+              date: "2019-04-09 00:32:24"       
+          survey:
+            flag: true
+            date: "2019-04-08 17:56:34"
+          created: "2019-04-08 17:56:34"
+          updated: "2019-04-12 19:10:09"          
 #Members Detail Iutput
-  MembersDetailInput:
+  AddMembersDetailInput:
     type: "object"
     properties: 
       members: 
@@ -2039,13 +2183,7 @@ definitions:
         items:
           id:   
                 type: "integer"
-                description: "Subscriber ID as known to Client"
-          group_id:   
-                type: "string"
-                description: "Employer group unique Reclaim identifier" 
-          division:   
-                type: "string"
-                description: "Employer group's division ID"        
+                description: "Subscriber ID as known to Client"    
           name:
                         type: "object"
                         description: "Member's name object"
@@ -2069,9 +2207,9 @@ definitions:
                         type: "string"
                         description: "Member's last four digits of their social security number"
           address:
-                        type: "object"
-                        description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
-                        properties:
+                type: "object"
+                description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                properties:
                           street_1:
                             type: "string"
                             description: "First line of street address, if available"
@@ -2083,36 +2221,34 @@ definitions:
                             description: "Member's city name"  
                           zip_code:
                             type: "string"
-                            description: "Member's zip code (required)"
+                            description: "Member's zip code (required for subscriber)"
                           state:
                             type: "string"
-                            description: "Member's state name" 
+                            description: "Member's state name"                   
           relationship:
                 type: "string"
-                description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
-          removed:
-                type: boolean
-                description: "true if the associated member is not to be considered for next year's benefits on the subscriber's plan, false otherwise"
+                description: "Member's relationship to the subscriber ('spouse', 'child')"
     example:
       members:
-        - id: 91322229
-          group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
-          division: "corporate"
+        - id: 300610
           name:
-            first: "Grace"
-            middle: "M"
-            last: "Doe"
-          dob: "1995-08-02"
+            first: "Acer"
+            middle: "X"
+            last: "Yee"
+          dob: "2013-01-25"
           gender: "F"
-          ssn: "8345"
-          address:
-                street_1: "2200 Fenway Road"
-                street_2: ""
-                city: "Boston"
-                zip: "02215"
-                state: "MA"
-          relationship: "child"        
-            
+          ssn: "9178"
+          relationship: "child"     
+        - id: 300615
+          name:
+            first: "Ben"
+            middle: "X"
+            last: "Yee"
+          dob: "2011-02-02"
+          gender: "M"
+          ssn: "7015"
+          relationship: "child"           
+          
 #Members Detail Output
   MembersDetailOutput:
     type: "object"
@@ -2205,52 +2341,248 @@ definitions:
                 description: "Timestamp (in UTC) indicating the time the subscriber was last updated"      
     example:
       status: "success"
+      details: []
+      entity:
+          count: 5
+          members:
+            - id: 300010
+              group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+              division: "part-time"
+              name: 
+                first: "Julia"
+                middle: "X"
+                last: "Yee"
+              dob: "1955-01-22"
+              gender: "F"
+              ssn: "4235"
+              address: 
+                street_1: "PO Box 1235"
+                street_2: "100 Talabow Street"
+                city: "Houston"
+                state: "TX"
+                zip_code: "77001"
+              relationship: "spouse"
+              removed: false
+              created: "2019-04-08 17:56:08"
+              updated: "2019-04-08 17:56:08"
+            - id: 300015
+              group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+              division: "part-time"
+              name: 
+                first: "Zeus"
+                middle: "X"
+                last: "Yee"
+              dob: "2018-10-02"
+              gender: "M"
+              ssn: "1112"
+              address: 
+                street_1: "PO Box 1235"
+                street_2: "100 Talabow Street"
+                city: "Houston"
+                state: "TX"
+                zip_code: "77001"
+              relationship: "child"
+              removed: false
+              created: "2019-04-08 17:56:08"
+              updated: "2019-04-08 17:56:08"
+            - id: 300510
+              group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+              division: "part-time"
+              name: 
+                first: "Gorgio"
+                middle: "X"
+                last: "Yee"
+              dob: "2016-01-22"
+              gender: "F"
+              ssn: "2223"
+              address: 
+                street_1: "PO Box 1235"
+                street_2: "100 Talabow Street"
+                city: "Houston"
+                state: "TX"
+                zip_code: "77001"
+              relationship: "child"
+              removed: false
+              created: "2019-04-09 01:38:31"
+              updated: "2019-04-09 01:42:18" 
+            - id: 300515
+              group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+              division: "part-time"
+              name: 
+                first: "Beta"
+                middle: "X"
+                last: "Yee"
+              dob: "2016-01-02"
+              gender: "M"
+              ssn: "7112"
+              address: 
+                street_1: "PO Box 1235"
+                street_2: "100 Talabow Street"
+                city: "Houston"
+                state: "TX"
+                zip_code: "77001"
+              relationship: "child"
+              removed: false
+              created: "2019-04-09 01:38:31"
+              updated: "2019-04-09 01:38:31"  
+            - id: 300001
+              group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+              division: "part-time"
+              name: 
+                first: "Jayson"
+                middle: "X"
+                last: "Yee"
+              dob: "1977-01-22"
+              gender: "M"
+              ssn: "0125"
+              address: 
+                street_1: "PO Box 1235"
+                street_2: "100 Talabow Street"
+                city: "Houston"
+                state: "TX"
+                zip_code: "77001"
+              relationship: "subscriber"
+              removed: false
+              created: "2019-04-08 17:56:08"
+              updated: "2019-04-10 00:46:46"    
+
+#Members Detail Output
+  AddMembersDetailOutput:
+    type: "object"
+    properties: 
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count: 
+            type: "integer"
+            description: "Number of members, including the subscriber, eligible for the subscriber's plan"
+          members:
+            type: "array"
+            description: "Members array"
+            items:
+              id:
+                type: "integer"
+                description: "Member's ID, as known to the client"
+              group_id:
+                type: "string"
+                description: "Reclaim's group unique identifier to which the subscriber belongs"
+              division:
+                type: "string"
+                description: "Employer group division to which the subscriber belongs"
+              name:
+                type: "object"
+                description: "Member's name object"
+                properties:
+                  first:
+                    type: "string"
+                    description: "Member's first name"
+                  middle:
+                    type: "string"
+                    description: "Member's middle name"   
+                  last:
+                    type: "string"
+                    description: "Member's last name" 
+              dob: 
+                    type: "date"
+                    description: "Member's date of birth formatted as yyyy-month-date"
+              gender:
+                    type: "string"
+                    description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+              ssn:
+                    type: "string"
+                    description: "Member's last four digits of their social security number"
+              address:
+                    type: "object"
+                    description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                    properties:
+                              street_1:
+                                type: "string"
+                                description: "First line of street address, if available"
+                              street_2:
+                                type: "string"
+                                description: "Second line of street address, if available"    
+                              city:
+                                type: "string"
+                                description: "Member's city name"  
+                              zip_code:
+                                type: "string"
+                                description: "Member's zip code (required for subscriber)"
+                              state:
+                                type: "string"
+                                description: "Member's state name"  
+              relationship:
+                type: "string"
+                description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
+              removed:
+                type: boolean
+                description: "true if the associated member is not to be considered for next year's benefits on the subscriber's plan, false otherwise"
+              created:
+                type: "timestamp"
+                description: "Timestamp (in UTC) indicating the time the subscriber was created"
+              updated:
+                type: "timestamp"
+                description: "Timestamp (in UTC) indicating the time the subscriber was last updated"      
+    example:
+      status: "success"
       details: 
-        - "Member '30000' for subscriber '205001' already exists with the same data and is not removed"
-        - "Member '40000' for subscriber '205001' already exists with the same data and is not removed"
+        - "Successfully added member '300610'"
+        - "Successfully added member '300615'"
       entity:
           members:
-            - id: 30000
-              group_id: "f8ceee2b-de05-4125-b68c-5019680fab95"
-              division: "full-time"
+            - id: 300610
+              group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+              division: "part-time"
               name: 
-                first: "Ace"
-                middle: "T"
-                last: "Zumbi"
-              dob: "2018-08-12"
+                first: "Acer"
+                middle: "X"
+                last: "Yee"
+              dob: "2013-01-25"
+              gender: "F"
+              ssn: "9178"
+              address: 
+                street_1: "PO Box 1235"
+                street_2: "100 Talabow Street"
+                city: "Houston"
+                state: "TX"
+                zip_code: "77001"
+              relationship: "child"
+              removed: false
+              created: "2019-04-12 19:37:59"
+              updated: "2019-04-12 19:37:59"
+            - id: 300615
+              group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+              division: "part-time"
+              name: 
+                first: "Ben"
+                middle: "X"
+                last: "Yee"
+              dob: "2011-02-02"
               gender: "M"
-              ssn: "1554"
+              ssn: "7015"
               address: 
-                street_1: "100 Fenway Drive"
-                street_2: null
-                city: "Boston"
-                state: "MA"
-                zip_code: "02215"
+                street_1: "PO Box 1235"
+                street_2: "100 Talabow Street"
+                city: "Houston"
+                state: "TX"
+                zip_code: "77001"
               relationship: "child"
               removed: false
-              created: 2019-04-03 15:39:15"
-              updated: "2019-04-03 15:39:15"
-            - id: 40000
-              group_id: "f8ceee2b-de05-4125-b68c-5019680fab95"
-              division: "full-time"
-              name: 
-                first: "Zoo"
-                middle: "S"
-                last: "Assebet"
-              dob: "2019-09-02"
-              gender: "U"
-              ssn: "2351"
-              address: 
-                street_1: "100 Fenway Drive"
-                street_2: ""
-                city: "Boston"
-                state: "MA"
-                zip_code: "02215"
-              relationship: "child"
-              removed: false
-              created: "2019-04-02 18:06:36"
-              updated: "2019-04-03 01:13:32"
-              
+              created: "2019-04-12 19:37:59"
+              updated: "2019-04-12 19:37:59"
 #Members Detail Iutput
   MemberDetailInput:
     type: "object"
@@ -2326,12 +2658,70 @@ definitions:
             street_1: "2200 Fenway Road"
             street_2: ""
             city: "Boston"
-            zip: "02215"
+            zip_code: "02215"
             state: "MA"
       relationship: "child"        
             
-#Member Detail Output
-  MemberDetailOutput:
+ 
+# Update Member Details            
+  UpdateMemberDetailInput:  
+    type: "object"
+    description: "Object including only the pieces that Client needs to update for member's info"
+    properties:       
+          name:
+                        type: "object"
+                        description: "Member's name object"
+                        properties:
+                          first:
+                            type: "string"
+                            description: "Member's first name"
+                          middle:
+                            type: "string"
+                            description: "Member's middle name"   
+                          last:
+                            type: "string"
+                            description: "Member's last name" 
+          dob: 
+                        type: "date"
+                        description: "Member's date of birth formatted as yyyy-month-date"
+          gender:
+                        type: "string"
+                        description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+          ssn:
+                        type: "string"
+                        description: "Member's last four digits of their social security number"
+          address:
+                        type: "object"
+                        description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                        properties:
+                          street_1:
+                            type: "string"
+                            description: "First line of street address, if available"
+                          street_2:
+                            type: "string"
+                            description: "Second line of street address, if available"    
+                          city:
+                            type: "string"
+                            description: "Member's city name"  
+                          zip_code:
+                            type: "string"
+                            description: "Member's zip code (required)"
+                          state:
+                            type: "string"
+                            description: "Member's state name" 
+          relationship:
+                type: "string"
+                description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
+          removed:
+                type: boolean
+                description: "true if the associated member is not to be considered for next year's benefits on the subscriber's plan, false otherwise"
+    example:
+      name:
+        first: "Georgio"
+      removed: true
+
+# Update Member Detail Output
+  UpdateMemberDetailOutput:
     type: "object"
     properties: 
       status: 
@@ -2414,34 +2804,32 @@ definitions:
                 type: "timestamp"
                 description: "Timestamp (in UTC) indicating the time the subscriber was last updated"      
     example:
-              id: 1200001
-              group_id: "a406653b-16a3-429f-a6d7-6f43a189b80c"
-              division: "part-timer"
+      status: "success"
+      details:
+        - "Updated member '300510' of subscriber '300001' successfully"
+      entity:    
+              id: 300510
+              group_id: "5a17a442-82b6-4e7a-9e24-5576b755cfb6"
+              division: "part-time"
               name: 
-                first: "Zimzalabin"
-                middle: "M"
-                last: "Bronx"
-              dob: "1966-08-02"
-              gender: "M"
-              ssn: "8215"
+                first: "Georgio"
+                middle: "X"
+                last: "Yee"
+              dob: "2016-01-22"
+              gender: "F"
+              ssn: "2223"
               address: 
-                street_1: "2200 Fenway Road"
-                street_2: ""
-                city: "Boston"
-                state: "MA"
-                zip_code: "02215"
-              relationship: "subscriber"
-              removed: false
-              created: "2019-03-20 19:35:48"
-              updated: "2019-03-21 14:57:04"
- 
-# Update Member Details            
-  UpdateMemberDetailInput:              
-    example:
-      dob: "1966-08-02"
-      address:
-            street_1: "2200 Cornelius Road"
-            
+                street_1: "PO Box 1235"
+                street_2: "100 Talabow Street"
+                city: "Houston"
+                state: "TX"
+                zip_code: "77001"
+              relationship: "child"
+              removed: true
+              created: "2019-04-09 01:38:31"
+              updated: "2019-04-12 20:04:02"
+              
+              
 #Authorization Detail Output
   AuthorizationDetailOutput:
     type: "object"
@@ -2487,7 +2875,7 @@ definitions:
             available: true
             authorized:
               flag: true
-              date: "2019-04-01 10:13:48"       
+              date: "2019-04-12 20:31:00"       
 #Current Plan Performance Review Detail Output
   ReviewDetailOutput:
     type: "object"
@@ -2716,7 +3104,7 @@ definitions:
                   description: "Survey question category ('health', 'financial', 'personality')"
                 name:
                   type: "string"
-                  description: "Slug describing the survey question. The first term defines the umbrella under which the question is served, e.g. **health**, **financial**, and **personality**. The remainder is a short description of the survey question"
+                  description: "Short description of the survey question. The first term defines the umbrella under which the question is served, e.g. **health**, **financial**, and **personality**. The remainder is a short description of the survey question"
                 description:
                   type: "string"
                   description: "Survey question verbiage, if necessary to include"  
@@ -2735,53 +3123,62 @@ definitions:
                 options:
                   type: "array"
                   description: "Array of string options to suggest to the subscriber, if the expected answer is of type `select` or `multi`"  
-                value:
-                  type: "string, integer, array"
-                  description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`"  
+                answer:
+                  type: "object"
+                  properties:
+                    value:
+                        type: "string, integer, array"
+                        description: "String, integer or an array of subscriber's answer, depending on the question type. Note that an array is only applicable for questions of type `multi`"  
+                    date:
+                        type: "date"
+                        description: "Timestamp (in UTC) of when the latest answer to the survey question"
                 ignore_if_claims:
                   type: "boolean"
-                  description: "True is the survey question is to be ignored for subscribers who have claims and have authorized the use of their claims for the bundle recommendation"
+                  description: "True if the survey question is to be ignored for subscribers who have claims and have authorized the use of their claims for the bundle recommendation"
                 created:
                   type: "timestamp"
                   description: "Timestamp (in UTC) of when the survey ID was created"
                 updated:
                   type: "timestamp"
-                  description: "Timestamp (in UTC) of when the survey ID or answer was last updated"  
+                  description: "Timestamp (in UTC) of when the survey question was updated"  
                   
     example:
       status: "success"
       details: []
       entity:
-          count: 3
+          count: 5
           surveys:
-            - id: "cf692b71-caa8-4b2d-8a6c-efda480904a1"
-              category: "health"
-              name: "doctor_visits"
-              description: "About how many times did you see your doctor last year? This can be anything from a basic checkup to visits with a specialist."
-              type: "select"
-              options: 
-                - "None"
-                - "1 to 3"
-                - "4 to 5"
-                - "6 or more"
-              value: "1 to 3"
-              ignore_if_claims: true
-              created: "2019-03-27 18:11:29"
-              updated: "2019-03-27 18:11:29"
-            - id: "28a809d6-3d3c-492e-90c5-eef860156a40"
+            - id: "814be0ff-419e-4c83-801b-5430e7b7d850"
               category: "health"
               name: "major_event"
               description: "Do you expect to have any major medical expenses next year, such as a planned surgery?"
               type: "select"
               options: 
                 - "No"
-                - "Maybe"
                 - "Yes"
-              value: "Yes"
+                - "Maybe"
+              answer: 
+                value: null
+                date: null
               ignore_if_claims: false
-              created: "2019-03-20 19:35:40"
-              updated: "2019-03-20 19:35:40"
-            - id: "86937568-97d9-4c1e-9d41-fdf6a465a050"
+              created: "2019-04-12 22:12:51"
+              updated: "2019-04-12 22:12:51"
+            - id: "fab6c936-9b44-4cb6-a8b2-f6b1dba8cad9"
+              category: "financial"
+              name: "health_savings"
+              description: "Do you have money set aside specifically to cover health care costs?"
+              type: "select"
+              options: 
+                - "Yes"
+                - "No, but I'd like to start"
+                - "No, and I'm not willing to start saving at this time"
+              answer: 
+                value: null
+                date: null
+              ignore_if_claims: false
+              created: "2019-04-12 22:12:51"
+              updated: "2019-04-12 22:12:51"
+            - id: "2525ca12-e5d4-4ade-a0b7-72db331bc3f5"
               category: "financial"
               name: "premium_oop_tradeoff"
               description: "When it comes to your monthly health insurance payments (which are called your 'premiums'), which best describes your preference?"
@@ -2789,10 +3186,42 @@ definitions:
               options: 
                 - "I'm willing to pay more in premiums each month so that when I go to the pharmacy or doctor, I pay very little."
                 - "I would rather pay as little as possible in premiums each month and then pay more for the services if and when I need them."
-              value: null
+              answer:
+                value: null
+                date: null
               ignore_if_claims: false
-              created: "2019-03-20 19:35:40"
-              updated: "2019-03-20 19:35:40"
+              created: "2019-04-12 22:12:52"
+              updated: "2019-04-12 22:12:52"
+            - id: "4d568072-e51c-488f-a624-49b941106f12"
+              category: "financial"
+              name: "medical_bills"
+              description: "Imagine that you receive a medical bill in the mail, due at the end of this month. What is the most you could comfortably pay?"
+              type: "select"
+              options: 
+                - "0 - $999"
+                - "$1000 - $2999"
+                - "$3000 or more"
+              answer:
+                value: null
+                date: null
+              ignore_if_claims: false
+              created: "2019-04-12 22:12:52"
+              updated: "2019-04-12 22:12:52"      
+            - id: "46371d51-7fb7-4782-af80-ca9695fae92e"
+              category: "personality"
+              name: "shopping"
+              description: "Are you the kind of person that does a ton of research and comparison shopping, to make sure you're getting the best deal?"
+              type: "select"
+              options: 
+                - "Yes, that sounds like me"
+                - "Maybe - it depends upon what it is"
+                - "No, not really"
+              answer:
+                value: null
+                date: null
+              ignore_if_claims: false
+              created: "2019-04-12 22:12:52"
+              updated: "2019-04-12 22:12:52"               
 #Recommendation Detail Iutput
   RecommendationDetailInput:
     type: "object"
