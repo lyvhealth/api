@@ -1264,7 +1264,7 @@ paths:
       - lang: "cURL"
         source: |                              
             # updating all/subset of the survey answers
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json -d '{"surveys":[{"id":"46371d51-7fb7-4782-af80-ca9695fae92e","value":"Yes, that sounds like me."},{"id":"f6b2f775-9183-44ee-a93f-ab4cb55249bf","value":"Not really."}]}' https://sandbox.reclaim.health/api/subscriber/300001/surveys
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json -d '{"surveys":[{"id":"46371d51-7fb7-4782-af80-ca9695fae92e","value":"Yes, that sounds like me."},{"id":"f6b2f775-9183-44ee-a93f-ab4cb55249bf","value":"Not really."}]}' https://sandbox.reclaim.health/api/subscriber/300001/surveys
  
       - lang: "Python"
         source: |
@@ -1325,7 +1325,7 @@ paths:
       - lang: "cURL"
         source: |                              
             # updating a specific survey answer
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json -d '{"value":"Yes"}' https://sandbox.reclaim.health/api/subscriber/300001/survey/814be0ff-419e-4c83-801b-5430e7b7d850
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json -d '{"value":"Yes"}' https://sandbox.reclaim.health/api/subscriber/300001/survey/814be0ff-419e-4c83-801b-5430e7b7d850
  
       - lang: "Python"
         source: |
@@ -1397,7 +1397,7 @@ paths:
       - lang: "cURL"
         source: |                              
             # updating a recommendation based on futher benefit information
-            curl -i -X POST -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" -H "Content-Type: application/json -d '{"eligible_benefits":[{"id":"1154caf4-ee45-44b5-8d9b-2e2beb7c55bd","included":[{"id":"61affbd3-6b53-4838-a3bb-8220b369b72e","type":"hra"}]}]}' https://sandbox.reclaim.health/api/subscriber/300001/recommendation/eeb86d51-980d-49d8-bf16-74e9b738a556
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json -d '{"eligible_benefits":[{"id":"1154caf4-ee45-44b5-8d9b-2e2beb7c55bd","included":[{"id":"61affbd3-6b53-4838-a3bb-8220b369b72e","type":"hra"}]}]}' https://sandbox.reclaim.health/api/subscriber/300001/recommendation/eeb86d51-980d-49d8-bf16-74e9b738a556
  
       - lang: "Python"
         source: |
@@ -1425,7 +1425,7 @@ paths:
       - lang: "cURL"
         source: |                              
             # retrieving a specific benefit recommendation
-            curl -i -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/subscriber/300001/recommendation/eeb86d51-980d-49d8-bf16-74e9b738a556
+            curl -i -X GET -H "Authorization: Bearer [token]" https://sandbox.reclaim.health/api/subscriber/300001/recommendation/eeb86d51-980d-49d8-bf16-74e9b738a556
  
       - lang: "Python"
         source: |
@@ -1451,7 +1451,7 @@ paths:
       - lang: "cURL"
         source: |                              
             # retrieving all recent benefit recommendations
-            curl -i -X GET -H "Authorization: Bearer ZWN1ADwzLc5dMPDI9e48LgtzxWEtM4Dub0UmScmho4" https://sandbox.reclaim.health/api/ubscriber/300001/recommendations
+            curl -i -X GET -H "Authorization: Bearer [token]" https://sandbox.reclaim.health/api/ubscriber/300001/recommendations
  
       - lang: "Python"
         source: |
