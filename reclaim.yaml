@@ -204,7 +204,13 @@ paths:
         
         `basic` referring to a group's basic plans offerings and their attributes.
         
+        `savings` referring to a group's HSA/FSA/HRA offerings and their attributes.
+        
         `hospital` referring to a group's supplemental hospital indemnity offerings and their attributes.
+        
+        `accident` referring to a group's supplemental accident policy offerings and their attributes.
+        
+        `critical_illness` referring to a group's supplemental accident policy offerings and their attributes.
         
         <b> Discuss with Client types of voluntary benefits to include in recommendations. </b>
         
@@ -224,7 +230,7 @@ paths:
             <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2019</td>
           </tr>
           <tr>
-            <td> group</td><td> Employer group code</td><td> string</td><td> acmecorp</td>
+            <td> group</td><td> Employer group code</td><td> string</td><td> acme</td>
           </tr>
           <tr>
             <td> division</td><td> Employer division code</td><td> string</td><td> corporate</td>
@@ -239,10 +245,22 @@ paths:
             <td> subscriber_dob</td><td> Plan subscriber's date of birth</td><td> date</td><td> 1980-03-24</td>
           </tr>
           <tr>
-            <td> subscriber_gender</td><td> Plan subscriber's gender</td><td> string</td><td> female</td>
+            <td> subscriber_gender</td><td> Plan subscriber's gender</td><td> string</td><td> m/f</td>
           </tr>
           <tr>
-            <td> subscriber_address</td><td> Plan subscriber street address</td><td> string</td><td> 123 Street #1</td>
+            <td> subscriber_first_name</td><td> Plan subscriber's first name</td><td> string</td><td> Rose </td>
+          </tr>
+          <tr>
+            <td> subscriber_middle_name</td><td> Plan subscriber's middle name</td><td> string</td><td> T </td>
+          </tr>
+          <tr>
+            <td> subscriber_last_name</td><td> Plan subscriber's last name</td><td> string</td><td> Petal </td>
+          </tr>
+          <tr>
+            <td> subscriber_address_1</td><td> Plan subscriber street address (first line)</td><td> string</td><td> 123 Street</td>
+          </tr>
+          <tr>
+            <td> subscriber_address_2</td><td> Plan subscriber street address (second line)</td><td> string</td><td>#1</td>
           </tr>
           <tr>
             <td> subscriber_city</td><td> Plan subscriber city address</td><td> string</td><td> Cambridge</td>
@@ -269,7 +287,19 @@ paths:
             <td> member_gender</td><td> Plan member's gender</td><td> string</td><td> female</td>
           </tr>
           <tr>
-            <td> member_address</td><td> Plan member street address</td><td> string</td><td> 123 Street #1</td>
+            <td> member_first_name</td><td> Plan member's first name</td><td> string</td><td> Jane </td>
+          </tr>
+          <tr>
+            <td> member_middle_name</td><td> Plan member's middle name</td><td> string</td><td> T </td>
+          </tr>
+          <tr>
+            <td> member_last_name</td><td> Plan member's last name</td><td> string</td><td> Petal </td>
+          </tr>
+          <tr>
+            <td> member_address_1</td><td> Plan member street address (first line)</td><td> string</td><td> 123 Street</td>
+          </tr>
+          <tr>
+            <td> subscriber_address_2</td><td> Plan subscriber street address (second line)</td><td> string</td><td>#1</td>
           </tr>
           <tr>
             <td> member_city</td><td> Plan member city address</td><td> string</td><td> Cambridge</td>
@@ -280,7 +310,7 @@ paths:
           <tr>
             <td> member_zip</td><td> Plan member zip code</td><td> integer</td><td> 02139</td>
           </tr>
-            <td> member_relation</td><td> Plan member zip code</td><td> integer</td><td> child</td>
+            <td> member_relation</td><td> Plan member zip code</td><td> integer</td><td> child/spouse</td>
           </tr>
           <tr>
             <td> member_status</td><td> Plan member status</td><td> string</td><td> active</td>
@@ -292,16 +322,17 @@ paths:
             <td> benefit_start</td><td> Coverage start date (if enrolled)</td><td> date</td><td> 2019-01-01</td
           </tr>
           <tr>
-            <td> benefit_end</td><td> Coverage end date (if known)</td><td> date</td><td></td>
+            <td> benefit_end</td><td> Coverage end date (if known)</td><td> date</td><td>2019-12-31</td>
           </tr>
           <tr>
             <td> benefit_type</td><td> Benefit plan type (if enrolled)</td><td> string</td><td> basic</td>
           </tr>
           <tr>
-            <td> eligible_benefits</td><td> List of all eligible benefit IDs</td><td> string</td><td> hdhp_13958;ppo_14827 </td>
+            <td> eligible_benefits</td><td> List of all eligible benefit IDs</td><td> string</td><td> 0220D|A4970|SP1035 </td>
           </tr>
         </table>
-        <button type="button" style="background-color:#4CAF50;color:white;width:300px;height:40px;font-size:14px;" onclick="exportTableToCSV('eligibility_reclaim_schema.csv')">EXPORT ELIGIBILITY SCHEMA TO CSV</button>
+        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;"> <a href="docs/eligibility.csv" download="eligibility.csv" style="color:white;font-size:14px;"> EXPORT SCHEMA TO CSV </a>  </button>  
+        
         </p>
         
         <p>
@@ -315,28 +346,34 @@ paths:
             <th>example</th>
           </tr>
           <tr>
-            <td> benefit_id</td><td> Benefit plan ID </td><td> string </td><td> hdhp_13958</td>
+            <td> id </td><td> Benefit plan ID </td><td> string </td><td> A1025 </td>
           </tr>
           <tr>
-            <td> benefit_type</td><td> Benefit plan type </td><td> string </td><td> basic </td>
+            <td> parent_id </td><td> Benefit parent ID </td><td> string </td><td> A1025 </td>
           </tr>
           <tr>
-            <td> benefit_name</td><td> Benefit plan user-friendly name </td><td> string </td><td> HDHP Choice Base Plus </td>
+            <td> name </td><td> Benefit plan user-friendly name </td><td> string </td><td> HDHP Choice Base Plus </td>
+          </tr>
+          <tr>
+            <td> description </td><td> Benefit plan description </td><td> string </td><td> HDHP Choice Base Plus </td>
+          </tr>
+          <tr>
+            <td> type </td><td> Benefit plan type </td><td> string </td><td> basic </td>
+          </tr>
+           <tr> 
+            <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2019</td>
           </tr>
           <tr> 
-            <td> group</td><td> Employer group code </td><td> string </td><td> acmecorp </td>
+            <td> group</td><td> Employer group short descriptor </td><td> string </td><td> acme </td>
           </tr>
           <tr> 
             <td> division</td><td> Employer group division code </td><td> string </td><td> corporate </td>
           </tr>
-          <tr> 
-            <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2019</td>
-          </tr>
           <tr>    
-            <td> start_date </td><td> Plan start date</td><td> date</td><td> 2019-01-01</td>
+            <td> start_date </td><td> Plan start date</td><td> date</td><td> 1/1/20 </td>
           </tr>
           <tr>
-            <td> end_date </td><td> Plan end date</td><td> date</td><td> 2019-12-31</td>
+            <td> end_date </td><td> Plan end date</td><td> date</td><td> 12/31/20 </td>
           </tr>
           <tr>    
             <td> ee_premium </td><td> Monthly premium for subscriber only</td><td> float</td><td> 356.7</td>
@@ -351,38 +388,14 @@ paths:
             <td> ef_premium </td><td> Monthly premium for subscriber and family (spouse and children)</td><td> float</td><td> 656.7</td>
           </tr>
           <tr>
-            <td> hra_included </td><td> Indicator whether benefit is associated with HRA</td><td> bool</td><td> true</td>
+            <td> carrier </td><td> Carrier name </td><td> string </td><td> United Healthcare</td>
           </tr>
           <tr>
-            <td> ee_hra_contribution </td><td> Group HRA contribution to subscriber only; if applicable</td><td> float</td><td> 500</td>
+            <td> network </td><td> Plan network </td><td> string </td><td> Nexus</td>
           </tr>
           <tr>
-            <td> ef_hra_contribution </td><td> Group HRA contribution to subscriber and dependents; if applicable</td><td> float</td><td> 1000</td>
+            <td> claim_type </td><td> Type of medical/pharmacy claims under the plan </td><td> string </td><td> MED|RX </td>
           </tr>
-          <tr>
-            <td> hsa_included </td><td> Indicator whether benefit is associated with HSA</td><td> bool</td><td> true</td>
-          </tr>
-          <tr>
-            <td> ee_hsa_contribution </td><td> Group HSA contribution to subscriber only; if applicable</td><td> float</td><td> 500</td>
-          </tr>
-          <tr>
-            <td> ef_hsa_contribution </td><td> Group HSA contribution to subscriber and dependents; if applicable</td><td> float</td><td> 1000</td>
-          </tr>
-          <tr>
-            <td> hsa_bank </td><td> HSA bank name; if applicable</td><td> string</td><td> HSA Bank</td>
-          </tr> 
-          <tr>
-            <td> fsa_included </td><td> Indicator whether benefit is associated with FSA</td><td> bool</td><td> true</td>
-          </tr>
-          <tr>
-            <td> ee_fsa_contribution </td><td> Group FSA contribution to subscriber only; if applicable</td><td> float</td><td> 500</td>
-          </tr>
-          <tr>
-            <td> ef_fsa_contribution </td><td> Group FSA contribution to subscriber and dependents; if applicable</td><td> float</td><td> 1000</td>
-          </tr>
-          <tr>
-            <td> fsa_bank </td><td> FSA bank name; if applicable</td><td> string</td><td> Wageworks</td>
-          </tr> 
           <tr>
             <td> in_network_ee_deductible </td><td> In network deductible for subscriber only plan; if applicable</td><td> integer </td><td> 1500</td>
           </tr>
@@ -414,7 +427,70 @@ paths:
             <td> out_network_coinsurance </td><td> Out-of network coinsurance; if applicable</td><td> integer </td><td> 30</td>
           </tr>
         </table>
-        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;" onclick="exportTableToCSV2('benefits_reclaim_schema.csv')">EXPORT SCHEMA TO CSV</button>   
+        
+        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;"> <a href="docs/basic.csv" download="basic_plans.csv" style="color:white;font-size:14px;"> EXPORT SCHEMA TO CSV </a>  </button>  
+        
+        </p>
+        
+        <p>
+        <br/>
+        <b> Health savings plan file schema </b>
+        <table id="table2" style="width:100%">
+          <tr>
+            <th>column</th>
+            <th>description</th> 
+            <th>type</th>
+            <th>example</th>
+          </tr>
+          <tr>
+            <td> id </td><td> Benefit plan ID </td><td> string </td><td> 11225 </td>
+          </tr>
+          <tr>
+            <td> parent_id </td><td> Benefit parent ID </td><td> string </td><td> B1122 </td>
+          </tr>
+          <tr>
+            <td> name </td><td> Benefit plan user-friendly name </td><td> string </td><td> HSA </td>
+          </tr>
+          <tr>
+            <td> description </td><td> Benefit plan description </td><td> string </td><td> Fidelity HSA </td>
+          </tr>
+          <tr>
+            <td> type </td><td> Savings plan type (hsa, fsa, hra) </td><td> string </td><td> hsa </td>
+          </tr>
+           <tr> 
+            <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2020</td>
+          </tr>
+          <tr> 
+            <td> group</td><td> Employer group short descriptor </td><td> string </td><td> acme </td>
+          </tr>
+          <tr> 
+            <td> division</td><td> Employer group division code </td><td> string </td><td> corporate </td>
+          </tr>
+          <tr>    
+            <td> start_date </td><td> Plan start date</td><td> date</td><td> 1/1/20 </td>
+          </tr>
+          <tr>
+            <td> end_date </td><td> Plan end date</td><td> date</td><td> 12/31/20 </td>
+          </tr>
+          <tr>    
+            <td> ee_group_contribution </td><td> Employer group contribution for single coverage, if applicable </td><td> float</td><td> 1000</td>
+          </tr>
+          <tr>    
+            <td> ef_group_contribution </td><td> Employer group contribution for family coverage, if applicable </td><td> float</td><td> 2000</td>
+          </tr>
+          <tr>    
+            <td> ee_max_contribution </td><td> Maximum total contribution for single coverage </td><td> float</td><td> 3550 </td>
+          </tr>
+          <tr>    
+            <td> ef_max_contribution </td><td> Maximum total contribution for family coverage </td><td> float</td><td> 7100 </td>
+          </tr>
+          <tr>    
+            <td> bank </td><td> Bank administering savings plan </td><td> string</td><td> Fidelity </td>
+          </tr>
+        </table>
+        
+        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;"> <a href="docs/savings.csv" download="health_savings.csv" style="color:white;font-size:14px;"> EXPORT SCHEMA TO CSV </a>  </button>  
+        
         </p>
         
         <p>
@@ -428,16 +504,22 @@ paths:
             <th>example</th>
           </tr>
           <tr>
-            <td> benefit_id</td><td> Benefit plan ID </td><td> string </td><td> aflac_bronze_13958</td>
+            <td> id </td><td> Benefit plan ID </td><td> string </td><td> SP1035 </td>
           </tr>
           <tr>
-            <td> benefit_type</td><td> Benefit plan type </td><td> string </td><td> hospital </td>
+            <td> parent_id </td><td> Benefit parent ID </td><td> string </td><td> SP1035 </td>
           </tr>
           <tr>
-            <td> benefit_name</td><td> Benefit plan user-friendly name </td><td> string </td><td> Aflac Hospital Benefit (Bronze) </td>
+            <td> name</td><td> Benefit plan user-friendly name </td><td> string </td><td> Aflac Hospital </td>
           </tr>
-          <tr> 
-            <td> group</td><td> Employer group code </td><td> string </td><td> acmecorp </td>
+          <tr>
+            <td> description </td><td> Benefit plan user-friendly description </td><td> string </td><td> Aflac Hospital Bronze Benefit </td>
+          </tr>
+          <tr>
+            <td> type </td><td> Benefit plan type </td><td> string </td><td> hospital </td>
+          </tr>
+           <tr> 
+            <td> group</td><td> Employer group code </td><td> string </td><td> acme </td>
           </tr>
           <tr> 
             <td> division</td><td> Employer group division code </td><td> string </td><td> corporate </td>
@@ -464,27 +546,228 @@ paths:
             <td> ef_premium </td><td> Monthly premium for subscriber and family (spouse and children)</td><td> float</td><td> 86.7</td>
           </tr>
           <tr>
-            <td> service </td> <td> Service for which the benefit applies </td><td> string</td><td> intensive_care_unit</td>
+            <td> carrier </td><td> Carrier name </td><td> string </td><td> Aflac </td>
           </tr>
           <tr>
-            <td> limit </td> <td> Maximum limit (days, number of visits, etc.) eligible for benefit</td><td> integer</td><td> 39</td>
+            <td> overall_limit </td><td> Overall limit of reimbursement per service </td><td> integer </td><td> 1</td>
+          </tr>
+           <tr>
+            <td> overall_limit_unit </td><td> Unit of overall limit of reimbursement (e.g., calendar_year) </td><td> string </td><td> calendar_year </td>
           </tr>
           <tr>
-            <td> limit_unit </td> <td> Unit corresponding to maximum limit  </td><td> string</td><td> days/confinement</td>
+            <td> service </td> <td> Service for which the benefit applies (admission, stay, icu) </td><td> string</td><td> admission</td>
           </tr>
           <tr>
-            <td> reimbursement </td> <td> Benefit reimbursement potential for given service</td><td> float</td><td> 50.0</td>
+            <td> reimbursement </td> <td> Reimbursement eligible for associated service </td><td> integer</td><td> 1000 </td>
           </tr>
           <tr>
-            <td> reimbursement_unit </td> <td> Unit corresponding to reimbursement</td><td> string</td><td> day</td>
+            <td> limit </td> <td> Maximum limit (days, number of visits, etc.) eligible for benefit</td><td> integer</td><td> 1</td>
+          </tr>
+          <tr>
+            <td> limit_unit </td> <td> Unit corresponding to maximum limit (e.g., calendar_year, days) </td><td> string</td><td> calendar_year</td>
+          </tr>
+          <tr>
+            <td> preexisting_conditions_limitation </td> <td> Flag whether preexiting conditions apply for the plan</td><td> boolean </td><td> TRUE</td>
+          </tr>
+          <tr>
+            <td> months_pre_coverage </td> <td> If applicable, number of months pre-coverage for preexisting conditions </td><td> integer </td><td> 12</td>
+          </tr>
+          <tr>
+            <td> months_post_coverage </td> <td> If applicable, number of months post-coverage for preexisting conditions</td><td> integer </td><td> 12</td>
           </tr>
         </table>
-        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;" onclick="exportTableToCSV2('benefits_reclaim_schema.csv')">EXPORT SCHEMA TO CSV</button>
+        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;"> <a href="docs/hospital.csv" download="hospital_indemnity.csv" style="color:white;font-size:14px;"> EXPORT SCHEMA TO CSV </a>  </button>  
         </p>
+        
+        <p>
+        <br/>
+        <b> Supplemental accident insurance file schema </b>
+        <table id="table2" style="width:100%">
+          <tr>
+            <th>column</th>
+            <th>description</th> 
+            <th>type</th>
+            <th>example</th>
+          </tr>
+          <tr>
+            <td> id </td><td> Benefit plan ID </td><td> string </td><td> SP1037 </td>
+          </tr>
+          <tr>
+            <td> parent_id </td><td> Benefit parent ID </td><td> string </td><td> SP1037 </td>
+          </tr>
+          <tr>
+            <td> name</td><td> Benefit plan user-friendly name </td><td> string </td><td> Unum Accident </td>
+          </tr>
+          <tr>
+            <td> description </td><td> Benefit plan user-friendly description </td><td> string </td><td> Unum Accident Coverage </td>
+          </tr>
+          <tr>
+            <td> type </td><td> Benefit plan type </td><td> string </td><td> accident </td>
+          </tr>
+           <tr> 
+            <td> group</td><td> Employer group code </td><td> string </td><td> acme </td>
+          </tr>
+          <tr> 
+            <td> division</td><td> Employer group division code </td><td> string </td><td> corporate </td>
+          </tr>
+          <tr> 
+            <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2019</td>
+          </tr>
+          <tr>    
+            <td> start_date </td><td> Plan start date</td><td> date</td><td> 2019-01-01</td>
+          </tr>
+          <tr>
+            <td> end_date </td><td> Plan end date</td><td> date</td><td> 2019-12-31</td>
+          </tr>
+          <tr>    
+            <td> ee_premium </td><td> Monthly premium for subscriber only</td><td> float</td><td> 50.7</td>
+          </tr>
+          <tr>
+            <td> ec_premium </td><td> Monthly premium for subscriber and children dependents</td><td> float</td><td> 66.7</td>
+          </tr>
+          <tr>
+            <td> es_premium </td><td> Monthly premium for subscriber and spouse</td><td> float</td><td> 76.7</td>
+          </tr>
+          <tr>
+            <td> ef_premium </td><td> Monthly premium for subscriber and family (spouse and children)</td><td> float</td><td> 86.7</td>
+          </tr>
+          <tr>
+            <td> carrier </td><td> Carrier name </td><td> string </td><td> Unum </td>
+          </tr>
+          <tr>
+            <td> overall_limit </td><td> Overall limit of reimbursement per service, if applicable </td><td> integer </td><td> 1</td>
+          </tr>
+           <tr>
+            <td> overall_limit_unit </td><td> Unit of overall limit of reimbursement, if applicable (e.g., calendar_year, accident) </td><td> string </td><td> calendar_year </td>
+          </tr>
+          <tr>
+            <td> service </td> <td> Service for which the benefit applies (see attached example) </td><td> string</td><td> open fracture reduction</td>
+          </tr>
+          <tr>
+            <td> reimbursement </td> <td> Reimbursement eligible for associated service </td><td> integer</td><td> 10000 </td>
+          </tr>
+          <tr>
+            <td> limit </td> <td> Maximum limit (days, number of visits, etc.) eligible for benefit</td><td> integer</td><td> 1</td>
+          </tr>
+          <tr>
+            <td> limit_unit </td> <td> Unit corresponding to maximum limit (e.g., calendar_year, days) </td><td> string</td><td> calendar_year</td>
+          </tr>
+          <tr>
+            <td> preexisting_conditions_limitation </td> <td> Flag whether preexiting conditions apply for the plan</td><td> boolean </td><td> TRUE</td>
+          </tr>
+          <tr>
+            <td> months_pre_coverage </td> <td> If applicable, number of months pre-coverage for preexisting conditions </td><td> integer </td><td> 12</td>
+          </tr>
+          <tr>
+            <td> months_post_coverage </td> <td> If applicable, number of months post-coverage for preexisting conditions</td><td> integer </td><td> 12</td>
+          </tr>
+        </table>
+        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;"> <a href="docs/accident.csv" download="accident_coverage.csv" style="color:white;font-size:14px;"> EXPORT SCHEMA TO CSV </a>  </button>  
+        </p>
+        
+        <p>
+        <br/>
+        <b> Supplemental critical illness file schema </b>
+        <table id="table2" style="width:100%">
+          <tr>
+            <th>column</th>
+            <th>description</th> 
+            <th>type</th>
+            <th>example</th>
+          </tr>
+          <tr>
+            <td> id </td><td> Benefit plan ID </td><td> string </td><td> CI1035 </td>
+          </tr>
+          <tr>
+            <td> parent_id </td><td> Benefit parent ID </td><td> string </td><td> CI1035 </td>
+          </tr>
+          <tr>
+            <td> name</td><td> Benefit plan user-friendly name </td><td> string </td><td> Aflac Bronze </td>
+          </tr>
+          <tr>
+            <td> description </td><td> Benefit plan user-friendly description </td><td> string </td><td> Alflac Critical Illness Benefit (Bronze) </td>
+          </tr>
+          <tr>
+            <td> type </td><td> Benefit plan type </td><td> string </td><td> critical_illness </td>
+          </tr>
+           <tr> 
+            <td> group</td><td> Employer group code </td><td> string </td><td> acme </td>
+          </tr>
+          <tr> 
+            <td> division</td><td> Employer group division code </td><td> string </td><td> corporate </td>
+          </tr>
+          <tr> 
+            <td> plan_year</td><td> Plan start date's year</td><td> integer</td><td> 2019</td>
+          </tr>
+          <tr>    
+            <td> start_date </td><td> Plan start date</td><td> date</td><td> 2019-01-01</td>
+          </tr>
+          <tr>
+            <td> end_date </td><td> Plan end date</td><td> date</td><td> 2019-12-31</td>
+          </tr>
+          <tr>
+            <td> reimbursement </td> <td> Eligible reimbursement limit </td><td> integer</td><td> 10000 </td>
+          </tr>
+          <tr>
+            <td> covered </td> <td> Plan member relation for the coverage (subscriber, spouse) </td><td> string</td><td> subscriber </td>
+          </tr>
+          <tr>
+            <td> tobacco </td> <td> Boolean for tobacco</td><td> boolean </td><td> FALSE </td>
+          </tr>
+          <tr>
+            <td> premium_18_24 </td> <td> Monthly premium for covered person for age group 18 to 24 </td><td> boolean </td><td> 3.6 </td>
+          </tr>
+          <tr>
+            <td> premium_25_29 </td> <td> Monthly premium for covered person for age group 25 to 29 </td><td> boolean </td><td> 3.6 </td>
+          </tr>
+          <tr>
+            <td> premium_30_34 </td> <td> Monthly premium for covered person for age group 30 to 34 </td><td> boolean </td><td> 5.15 </td>
+          </tr>
+          <tr>
+            <td> premium_35_39 </td> <td> Monthly premium for covered person for age group 35 to 39 </td><td> boolean </td><td> 5.15 </td>
+          </tr>
+           <tr>
+            <td> premium_40_44 </td> <td> Monthly premium for covered person for age group 40 to 44 </td><td> boolean </td><td> 8.65 </td>
+          </tr>
+          <tr>
+            <td> premium_45_49 </td> <td> Monthly premium for covered person for age group 45 to 49 </td><td> boolean </td><td> 8.65 </td>
+          </tr>
+          <tr>
+            <td> premium_50_54 </td> <td> Monthly premium for covered person for age group 50 to 54 </td><td> boolean </td><td> 14.22 </td>
+          </tr>
+          <tr>
+            <td> premium_55_59 </td> <td> Monthly premium for covered person for age group 55 to 59 </td><td> boolean </td><td> 14.22 </td>
+          </tr>
+          <tr>
+            <td> premium_60_64 </td> <td> Monthly premium for covered person for age group 60 to 64 </td><td> boolean </td><td> 21.75 </td>
+          </tr>
+          <tr>
+            <td> premium_65_69 </td> <td> Monthly premium for covered person for age group 65 to 69 </td><td> boolean </td><td> 21.75 </td>
+          </tr>
+          <tr>
+            <td> carrier </td><td> Carrier name </td><td> string </td><td> Aflac </td>
+          </tr>
+          <tr>
+            <td> conditions </td><td> List of critical illness conditions eligible under the insurance coverage </td><td> string </td><td> heart attack|blindness|kidney failure </td>
+          </tr>
+          <tr>
+            <td> preexisting_conditions_limitation </td> <td> Flag whether preexiting conditions apply for the plan</td><td> boolean </td><td> TRUE</td>
+          </tr>
+          <tr>
+            <td> months_pre_coverage </td> <td> If applicable, number of months pre-coverage for preexisting conditions </td><td> integer </td><td> 12</td>
+          </tr>
+          <tr>
+            <td> months_post_coverage </td> <td> If applicable, number of months post-coverage for preexisting conditions</td><td> integer </td><td> 12</td>
+          </tr>
+          <tr>
+            <td> days_waiting_period </td> <td> If applicable, number of days waiting period before insurance is applicable </td><td> integer </td><td> 30</td>
+          </tr>
+        </table>
+        <button type="button" style="background-color:#4CAF50;color:white;width:250px;height:40px;font-size:14px;"> <a href="docs/critical_illness.csv" download="critical_illness.csv" style="color:white;font-size:14px;"> EXPORT SCHEMA TO CSV </a>  </button>  
+        </p>
+        
         </details>
         
-        
-         
 #        | **Column**          | **Description**                   | **Type**  | **Example**        |
 #        |---------------------|-----------------------------------|-----------|--------------------|
 #        | plan_year           | Plan start date's year            | integer   | 2019               |
