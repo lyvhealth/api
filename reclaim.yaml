@@ -308,9 +308,9 @@ paths:
             <td> member_state</td><td> Plan member state address</td><td> string</td><td> MA</td>
           </tr>
           <tr>
-            <td> member_zip</td><td> Plan member zip code</td><td> integer</td><td> 02139</td>
+            <td> member_zip</td><td> Plan member zip code</td><td> string </td><td> 02139</td>
           </tr>
-            <td> member_relation</td><td> Plan member zip code</td><td> integer</td><td> child/spouse</td>
+            <td> member_relation</td><td> Member's relation to subscriber </td><td> string </td><td> child/spouse</td>
           </tr>
           <tr>
             <td> member_status</td><td> Plan member status</td><td> string</td><td> active</td>
