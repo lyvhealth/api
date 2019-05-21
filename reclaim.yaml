@@ -391,7 +391,7 @@ paths:
             <td> carrier </td><td> Carrier name </td><td> string </td><td> United Healthcare</td>
           </tr>
           <tr>
-            <td> network </td><td> Plan network </td><td> string </td><td> Nexus</td>
+            <td> network </td><td> Plan network </td><td> string </td><td> nexus</td>
           </tr>
           <tr>
             <td> claim_type </td><td> Type of medical/pharmacy claims under the plan </td><td> string </td><td> MED|RX </td>
@@ -915,7 +915,7 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/UpdateGroupDetailOutput"           
-  /group/[group_id]/file/[file_id]:
+  /api/group/[group_id]/file/[file_id]:
     get:
       tags:
       - "Group-Specific Endpoints"
@@ -1403,7 +1403,7 @@ paths:
             
             response = requests.put('https://sandbox.reclaim.health/api/subscriber/300001/member/300510', data=payload, headers=headers).json()  
             
-  /subscriber/[subscriber_id]/authorize:
+  /api/subscriber/[subscriber_id]/authorize:
     get:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1464,7 +1464,7 @@ paths:
             headers = {'Authorization': '[token]'}
             
             response = requests.put('https://sandbox.reclaim.health/api/subscriber/200001/authorize', data=payload, headers=headers).json()              
-  /subscriber/[subscriber_id]/review:
+  /api/subscriber/[subscriber_id]/review:
     get:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1496,7 +1496,7 @@ paths:
             
             response = requests.get('https://sandbox.reclaim.health/api/subscriber/300001/review', data=payload, headers=headers).json()             
     
-  /subscriber/[subscriber_id]/surveys:
+  /api/subscriber/[subscriber_id]/surveys:
     get:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1557,7 +1557,7 @@ paths:
             headers = {'Authorization': '[token]'}
             
             response = requests.put('https://sandbox.reclaim.health/api/subscriber/300001/surveys', data=payload, headers=headers).json()                       
-  /subscriber/[subscriber_id]/survey/[survey_id]:
+  /api/subscriber/[subscriber_id]/survey/[survey_id]:
     get:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1619,7 +1619,7 @@ paths:
             
             response = requests.put('https://sandbox.reclaim.health/api/subscriber/300001/survey/814be0ff-419e-4c83-801b-5430e7b7d850', data=payload, headers=headers).json()   
             
-  /subscriber/[subscriber_id]/recommendation:
+  /api/subscriber/[subscriber_id]/recommendation:
     post:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1655,7 +1655,7 @@ paths:
             
             response = requests.put('https://sandbox.reclaim.health/api/subscriber/300001/recommendation', data=payload, headers=headers).json()             
 
-  /subscriber/[subscriber_id]/recommendation/[recommendation_id]:
+  /api/subscriber/[subscriber_id]/recommendation/[recommendation_id]:
     post:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1717,7 +1717,7 @@ paths:
             
             response = requests.get('https://sandbox.reclaim.health/api/subscriber/300001/recommendation/eeb86d51-980d-49d8-bf16-74e9b738a556', headers=headers).json()  
 
-  /subscriber/[subscriber_id]/recommendations:          
+  /api/subscriber/[subscriber_id]/recommendations:          
     get:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1742,6 +1742,27 @@ paths:
             headers = {'Authorization': '[token]'}
             
             response = requests.get('https://sandbox.reclaim.health/api/ubscriber/300001/recommendations', headers=headers).json()  
+  /api/subscriber/[subscriber_id]/member/[member_id]/pcp:
+    post:
+      tags:
+      - "Subscriber-Specific Endpoints"
+      summary: "Select a PCP for Enrollment"
+      description: "This endpoint allows the client to show PCP options for certain networks requiring each member on the subscriber's plan to select a PCP before finalizing the enrollment. The client furnishes the network descriptor (e.g., 'nexus'), along with any specific member zip code. Note that if the client does not include the zip code information, then Reclaim assumes the zip code from the member information."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "PCPDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/PCPDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/PCPDetailOutput"            
 definitions:
 # Auth Ouput
   AuthOutput:
@@ -4980,4 +5001,262 @@ definitions:
           - id: "eeb86d51-980d-49d8-bf16-74e9b738a556"
             created: "2019-04-15 13:48:23"
             updated: "2019-04-15 14:24:49"            
+
+# Input for PCP Enrollment
+  PCPDetailInput:
+    type: "object"
+    properties:
+      network: 
+        type: "string"
+        description: "Short identifier for the carrier network (e.g., 'nexus'). Note that this descriptor should align with one of the basic benefit carrier networks for the group that the subscriber is associated with."
+      zip_code: 
+        type: "string"
+        description: "Zip code to include if the subscriber/member selects a zip code that is different from the one in the Reclaim system. If not furnished, then Reclaim assumes it is the zip code associated with that plan member as per Reclaim's records."
+    example:
+      network: "nexus"
+      zip_code: "02139"   
+# Output for PCP Enrollment
+  PCPDetailOutput:
+    type: "object"
+    properties:
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count: 
+            type: "integer"
+            description: "Number of potential primary care providers accepting new patients in the requested network, with at least one affiliation within 25 miles of the member's address / zip code"
+          providers: 
+            type: "array"
+            description: "Provider array in the member's vicinity"
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "string"
+                  description: "National provider identification (NPI)"
+                tier:
+                  type: "string"
+                  description: "Provider's tier designationation"
+                name:
+                  type: "object"
+                  properties: 
+                    first: 
+                      type: "string"
+                      description: "Provider's first name"
+                    middle: 
+                      type: "string"
+                      description: "Provider's middle name"
+                    last: 
+                      type: "string"
+                      description: "Provider's last name"
+                    suffix: 
+                      type: "string"
+                      description: "Provider's name suffix"  
+                gender: 
+                  type: "string"
+                  description: "Provider's gender, if known"
+                education:
+                  type: "object"
+                  properties:
+                    school: 
+                      type: "string"
+                      description: "Provider's medical school"
+                    residency:   
+                      type: "string"
+                      description: "Provider's residency institution"
+                    internship: 
+                      type: "string"
+                      description: "Provider's internship institution"
+                specialty: 
+                  type: "array"
+                  description: "Provider's list of specialties and board certifications"
+                  items: 
+                    type: "object"
+                    properties:
+                      name: 
+                        type: "string"
+                        description: "Provider's specialty name"
+                      primary: 
+                        type: "boolean"
+                        description: "True if associated with provider's primary specialty"
+                      board_certification: 
+                        type: "string"
+                        description: "Provider's board certification, if available"
+                affiliations:
+                  type: "array"
+                  description: "List of provider affiliations, including medical groups and hospital affiliations"
+                  items:
+                    type: "object"
+                    properties: 
+                        name: 
+                          type: "string"
+                          description: "Provider's affiliation organization name (medical group or hospital)"
+                        type: 
+                          type: "string"
+                          description: "Affiliation type descriptor (i.e., 'group' or 'hospital')"
+                        distance: 
+                          type: "float"
+                          description: "Estimated distance in miles from member's address / zip code"
+                        address:
+                            type: "object"
+                            description: "Provider affiliation's address"
+                            properties:
+                              street_1:
+                                type: "string"
+                                description: "First line of street address, if available"
+                              street_2:
+                                type: "string"
+                                description: "Second line of street address, if available"    
+                              city:
+                                type: "string"
+                                description: "Provider affiliation's city name"  
+                              zip_code:
+                                type: "string"
+                                description: "Provider affiliation's zip code (required)"
+                              state:
+                                type: "string"
+                                description: "Provider affiliation's state name" 
+                        phone: 
+                          type: "string"
+                          description: "Provider affiliation's telephone number"
+                        web:
+                          type: "string"
+                          description: "Provider affiliation's web address, if available"
+                        languages:
+                          type: "array of strings"
+                          description: "Array of spoken languages at the provider's office"
+                        office_hours:
+                          type: "array of strings"
+                          description: "Listing for weekend hours or extended hours, if applicable"
+                        wheelchair_access:
+                          type: "boolean"
+                          description: "True if the provider's office has wheelchair access, if available"
+    example:
+      status: "success"
+      detail: []
+      entity:
+        count: 2
+        providers:
+          - id: "1881616894"
+            tier: "Tier 1"
+            name:
+              first: "Edmund"
+              middle: "A"
+              last: "Kim"
+              suffix: "MD"
+            gender: "M"
+            education: 
+              school: "University of Connecticut"
+            specialty:
+              - name: "Family Practice"
+                primary: true
+                board_certification: "Family Pactice"
+            affiliations:
+              - name: "Prohealth Physicians"
+                type: "group"
+                distance: 9.2
+                address:
+                  street_1: "950 Yale Ave"
+                  city: "Wallingford"
+                  zip_code: "06492"
+                  state: "CT"
+                phone: "2032659600"
+                web: "http://www.prohealthmd.com/"
+                languages:
+                  - "English"
+                  - "Spanish"
+                office_hours:
+                  - "Extended Hours"
+                wheelchair_access: true
+              - name: "Prohealth Physicians"
+                type: "group"
+                distance: 14.7
+                address:
+                  street_1: "21 South Rd"
+                  street_2: "Ste 110"
+                  city: "Farmington"
+                  zip_code: "06032"
+                  state: "CT"
+                phone: "8602844945"
+                web: "http://www.prohealthmd.com/"
+                languages:
+                  - "English" 
+              - name: "Prohealth Physicians"
+                type: "group"
+                distance: 23.2
+                address:
+                  street_1: "225 Hopmeadow St"
+                  city: "Weatogue"
+                  zip_code: "06089"
+                  state: "CT"
+                phone: "8606580465"
+                web: "http://www.prohealthmd.com/"
+                languages:
+                  - "English"
+                  - "Spanish"
+                office_hours:
+                  - "Extended Hours"
+                  - "Weekend Hours"
+                wheelchair_access: true  
+          - id: "1780194324"
+            tier: "Tier 1"
+            name:
+              first: "Pinky"
+              last: "Gaba"
+              suffix: "NP"
+            gender: "F"
+            education: 
+              school: "Yale Medical School"
+              internship: "St Francis Hospital Medical Center"
+            specialty:
+              - name: "Nurse Practitioner"
+                primary: true
+            affiliations:
+              - name: "Healthwise Medical Association"
+                type: "group"
+                distance: 2.2
+                address:
+                  street_1: "375 E Center St"
+                  city: "New Haven"
+                  zip_code: "06702"
+                  state: "CT"
+                phone: "8606460166"
+                web: "http://www.healthwisema.com/"
+                languages:
+                  - "English"
+                  - "Spanish"
+                office_hours:
+                  - "Extended Hours"
+                wheelchair_access: true
+              - name: "Saint Francis Hospital and Medical Center"
+                type: "hospital"
+                distance: 23.7
+                address:
+                  street_1: "114 Woodland St"
+                  city: "Hartford"
+                  zip_code: "06105"
+                  state: "CT"
+                phone: "8777837262"
+                web: "https://www.stfranciscare.org/hartford"
+                languages:
+                  - "English" 
+                  - "Spanish"
+                  - "Arabic"
+              
+
             
+          
