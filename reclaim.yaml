@@ -3442,68 +3442,70 @@ definitions:
             type: "array"
             description: "Members array"
             items:
-              id:
-                type: "integer"
-                description: "Member's ID, as known to the client"
-              group_id:
-                type: "string"
-                description: "Reclaim's group unique identifier to which the subscriber belongs"
-              division:
-                type: "string"
-                description: "Employer group division to which the subscriber belongs"
-              name:
-                type: "object"
-                description: "Member's name object"
-                properties:
-                  first:
+              type: "object"
+              properties:
+                  id:
+                    type: "integer"
+                    description: "Member's ID, as known to the client"
+                  group_id:
                     type: "string"
-                    description: "Member's first name"
-                  middle:
+                    description: "Reclaim's group unique identifier to which the subscriber belongs"
+                  division:
                     type: "string"
-                    description: "Member's middle name"   
-                  last:
-                    type: "string"
-                    description: "Member's last name" 
-              dob: 
-                    type: "date"
-                    description: "Member's date of birth formatted as yyyy-month-date"
-              gender:
-                    type: "string"
-                    description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
-              ssn:
-                    type: "string"
-                    description: "Member's last four digits of their social security number"
-              address:
+                    description: "Employer group division to which the subscriber belongs"
+                  name:
                     type: "object"
-                    description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                    description: "Member's name object"
                     properties:
-                              street_1:
-                                type: "string"
-                                description: "First line of street address, if available"
-                              street_2:
-                                type: "string"
-                                description: "Second line of street address, if available"    
-                              city:
-                                type: "string"
-                                description: "Member's city name"  
-                              zip_code:
-                                type: "string"
-                                description: "Member's zip code (required for subscriber)"
-                              state:
-                                type: "string"
-                                description: "Member's state name"  
-              relationship:
-                type: "string"
-                description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
-              removed:
-                type: boolean
-                description: "true if the associated member is not to be considered for next year's benefits on the subscriber's plan, false otherwise"
-              created:
-                type: "timestamp"
-                description: "Timestamp (in UTC) indicating the time the subscriber was created"
-              updated:
-                type: "timestamp"
-                description: "Timestamp (in UTC) indicating the time the subscriber was last updated"           
+                      first:
+                        type: "string"
+                        description: "Member's first name"
+                      middle:
+                        type: "string"
+                        description: "Member's middle name"   
+                      last:
+                        type: "string"
+                        description: "Member's last name" 
+                  dob: 
+                        type: "date"
+                        description: "Member's date of birth formatted as yyyy-month-date"
+                  gender:
+                        type: "string"
+                        description: "Member's gender ('F' for female, 'M' for male, and 'U' for unknown)"
+                  ssn:
+                        type: "string"
+                        description: "Member's last four digits of their social security number"
+                  address:
+                        type: "object"
+                        description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
+                        properties:
+                                  street_1:
+                                    type: "string"
+                                    description: "First line of street address, if available"
+                                  street_2:
+                                    type: "string"
+                                    description: "Second line of street address, if available"    
+                                  city:
+                                    type: "string"
+                                    description: "Member's city name"  
+                                  zip_code:
+                                    type: "string"
+                                    description: "Member's zip code (required for subscriber)"
+                                  state:
+                                    type: "string"
+                                    description: "Member's state name"  
+                  relationship:
+                    type: "string"
+                    description: "Member's relationship to the subscriber ('subscriber', 'spouse', 'child')"
+                  removed:
+                    type: boolean
+                    description: "true if the associated member is not to be considered for next year's benefits on the subscriber's plan, false otherwise"
+                  created:
+                    type: "timestamp"
+                    description: "Timestamp (in UTC) indicating the time the subscriber was created"
+                  updated:
+                    type: "timestamp"
+                    description: "Timestamp (in UTC) indicating the time the subscriber was last updated"           
           review: 
                 type: "object"
                 description: "Object describing the assessment of the subscriber's current plan performance"
@@ -3693,50 +3695,50 @@ definitions:
             removed: false
             created: "2019-04-12 19:37:59"
             updated: "2019-04-12 19:37:59"    
-      review:
-        plan:
-            name: "HDHP Choice Base Plus"
-            carrier: "United Healthcare"
-            assessment: "well_insured"
-            detail: "Your health costs are well managed under the current plan."
-            spending:
-              premium: 8800
-              oop: 3535
-              chart: 
-                - date: "2018-01-01"
-                  amount: 258.4
-                - date: "2018-02-01"
-                  amount: 258.4
-                - date: "2018-03-01"
-                  amount: 6173.49     
-                - date: "2018-04-01"
-                  amount: 258.40  
-            savings:
-              group: 1000
-              subscriber: 5500
-              chart: 
-                - date: "2018-01-01"
-                  amount: 475.0
-                - date: "2018-02-01"
-                  amount: 1475.0
-                - date: "2018-03-01"
-                  amount: 475.0      
-                - date: "2018-04-01"
-                  amount: 475.0        
-            alternative_savings: 500
-        events:
-          - episode: "Pregnancy"
-            event: "Labor and Childbirth"
-            name: "Susan"
-            start: "2017-03-28"
-            end: "2017-04-02"
-            charge: 6173.4
-          - episode: "Dislocated Shoulder" 
-            event: "Urgent Care"
-            name: "Cora"
-            start: "2017-08-05"
-            end: "2017-08-05"
-            charge: 568.3  
+        review:
+            plan:
+                name: "HDHP Choice Base Plus"
+                carrier: "United Healthcare"
+                assessment: "well_insured"
+                detail: "Your health costs are well managed under the current plan."
+                spending:
+                  premium: 8800
+                  oop: 3535
+                  chart: 
+                    - date: "2018-01-01"
+                      amount: 258.4
+                    - date: "2018-02-01"
+                      amount: 258.4
+                    - date: "2018-03-01"
+                      amount: 6173.49     
+                    - date: "2018-04-01"
+                      amount: 258.40  
+                savings:
+                  group: 1000
+                  subscriber: 5500
+                  chart: 
+                    - date: "2018-01-01"
+                      amount: 475.0
+                    - date: "2018-02-01"
+                      amount: 1475.0
+                    - date: "2018-03-01"
+                      amount: 475.0      
+                    - date: "2018-04-01"
+                      amount: 475.0        
+                alternative_savings: 500
+            events:
+              - episode: "Pregnancy"
+                event: "Labor and Childbirth"
+                name: "Susan"
+                start: "2017-03-28"
+                end: "2017-04-02"
+                charge: 6173.4
+              - episode: "Dislocated Shoulder" 
+                event: "Urgent Care"
+                name: "Cora"
+                start: "2017-08-05"
+                end: "2017-08-05"
+                charge: 568.3  
     title: "year_review"  
     
 # Enrollment Survey Detail Output
