@@ -1409,7 +1409,7 @@ paths:
             
             response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1774/member/1800', data=payload, headers=headers).json()  
             
-  /api/subscriber/[subscriber_id]/authorize:
+  /api/subscriber/[subscriber_id]/opt_in:
     post:
       tags:
       - "Subscriber-Specific Endpoints"
