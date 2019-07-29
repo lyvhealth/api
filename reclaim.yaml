@@ -1714,18 +1714,18 @@ paths:
       - lang: "cURL"
         source: |                              
             # retrieving all recent benefit recommendations
-            curl -i -X GET -H "Authorization: Bearer [token]" https://sandbox.reclaim.health:443/api/ubscriber/1774/recommendations
+            curl -i -X GET -H "Authorization: Bearer [token]" https://sandbox.reclaim.health:443/api/subscriber/1774/recommendations
  
       - lang: "Python"
         source: |
             # retrieving all recent benefit recommendations
             headers = {'Authorization': '[token]'}
             
-            response = requests.get('https://sandbox.reclaim.health:443/api/ubscriber/1774/recommendations', headers=headers).json()  
-  /api/subscriber/[subscriber_id]/member/[member_id]/pcp:
+            response = requests.get('https://sandbox.reclaim.health:443/api/subscriber/1774/recommendations', headers=headers).json()  
+  /api/pcp:
     post:
       tags:
-      - "Subscriber-Specific Endpoints"
+      - "PCP Search Endpoint"
       summary: "Select a PCP for Enrollment"
       description: "This endpoint allows the client to show PCP options for certain networks requiring each member on the subscriber's plan to select a PCP before finalizing the enrollment. The client furnishes the network descriptor (e.g., 'nexus'), along with any specific member zip code. Note that if the client does not include the zip code information, then Reclaim assumes the zip code from the member information."
       consumes:
@@ -1742,7 +1742,32 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/PCPDetailOutput"            
+            $ref: "#/definitions/PCPDetailOutput" 
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # retrieving primary care providers based on network and zip code
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"network" : "NEXUS","zip_code" : "06032"}' https://sandbox.reclaim.health/api/pcp
+            
+            # more inputs can also be accommodated
+            curl -i -X POST -H "Authorization: Bearer QBQKJobHrhAHpkf3p6FVfjAvDKujDlnxhprt0VE9yQ" -H "Content-Type: application/json" -d '{"network":"NEXUS","city":"Farmington","state":"CT","primary_specialty":"Family Medicine","zip_code":"06032"}' https://sandbox.reclaim.health/api/pcp
+ 
+      - lang: "Python"
+        source: |
+            # retrieving primary care providers based on network and zip code
+            payload = {"network" : "NEXUS","zip_code" : "06032"}
+            
+            headers = {'Authorization': '[token]'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/pcp', data=payload, headers=headers).json() 
+            
+            # more inputs can also be accommodated
+            payload ={"network":"NEXUS","city":"Farmington","state":"CT","primary_specialty":"Family Medicine","zip_code":"06032"}
+            
+            headers = {'Authorization': '[token]'}
+            
+            response = requests.put('https://sandbox.reclaim.health/api/pcp', data=payload, headers=headers).json() 
+            
 definitions:
 # Auth Ouput
   AuthOutput:
@@ -4787,13 +4812,22 @@ definitions:
     properties:
       network: 
         type: "string"
-        description: "Short identifier for the carrier network (e.g., 'nexus'). Note that this descriptor should align with one of the basic benefit carrier networks for the group that the subscriber is associated with."
+        description: "Short identifier for the carrier network (e.g., 'NEXUS')."
       zip_code: 
         type: "string"
-        description: "Zip code to include if the subscriber/member selects a zip code that is different from the one in the Reclaim system. If not furnished, then Reclaim assumes it is the zip code associated with that plan member as per Reclaim's records."
+        description: "Zip code as implied to Client from either subscriber selection in the PCP search."
+      city:
+        type: "string"
+        description: "City as implied to Client from either subscriber selection in the PCP search."
+      state:     
+        type: "string"
+        description: "State as implied to Client from either subscriber selection in the PCP search."
+      primary_specialty: 
+        type: "string"
+        description: "Primary specialty if chosen by the subscriber at the time of the PCP search (e.g. 'Family Medicine')."    
     example:
-      network: "nexus"
-      zip_code: "02139"   
+      network: "NEXUS"
+      zip_code: "06032"   
 # Output for PCP Enrollment
   PCPDetailOutput:
     type: "object"
@@ -4817,7 +4851,7 @@ definitions:
         properties:
           count: 
             type: "integer"
-            description: "Number of potential primary care providers accepting new patients in the requested network, with at least one affiliation within 25 miles of the member's address / zip code"
+            description: "Number of potential primary care providers accepting new patients in the requested network"
           providers: 
             type: "array"
             description: "Provider array in the member's vicinity"
@@ -4829,7 +4863,7 @@ definitions:
                   description: "National provider identification (NPI)"
                 tier:
                   type: "string"
-                  description: "Provider's tier designationation"
+                  description: "Provider's tier designation"
                 name:
                   type: "object"
                   properties: 
@@ -4848,19 +4882,13 @@ definitions:
                 gender: 
                   type: "string"
                   description: "Provider's gender, if known"
-                education:
-                  type: "object"
-                  properties:
-                    school: 
+                school: 
                       type: "string"
                       description: "Provider's medical school"
-                    residency:   
-                      type: "string"
-                      description: "Provider's residency institution"
-                    internship: 
-                      type: "string"
-                      description: "Provider's internship institution"
-                specialty: 
+                graduation_year:
+                      type: "integer"
+                      description: "Graduation year, if known"
+                specialties: 
                   type: "array"
                   description: "Provider's list of specialties and board certifications"
                   items: 
@@ -4875,21 +4903,21 @@ definitions:
                       board_certification: 
                         type: "string"
                         description: "Provider's board certification, if available"
-                affiliations:
+                group_affiliations:
                   type: "array"
-                  description: "List of provider affiliations, including medical groups and hospital affiliations"
+                  description: "List of medical group affiliations"
                   items:
                     type: "object"
                     properties: 
+                        id: 
+                          type: "string"
+                          description: "Medical group affiliation ID"
                         name: 
                           type: "string"
-                          description: "Provider's affiliation organization name (medical group or hospital)"
-                        type: 
-                          type: "string"
-                          description: "Affiliation type descriptor (i.e., 'group' or 'hospital')"
+                          description: "Medical group affiliation name"
                         distance: 
                           type: "float"
-                          description: "Estimated distance in miles from member's address / zip code"
+                          description: "Estimated distance in miles from member's address / zip code (Note for now, not yet computed)"
                         address:
                             type: "object"
                             description: "Provider affiliation's address"
@@ -4902,7 +4930,7 @@ definitions:
                                 description: "Second line of street address, if available"    
                               city:
                                 type: "string"
-                                description: "Provider affiliation's city name"  
+                                description: "Provider affiliation's city name" 
                               zip_code:
                                 type: "string"
                                 description: "Provider affiliation's zip code (required)"
@@ -4924,36 +4952,38 @@ definitions:
                         wheelchair_access:
                           type: "boolean"
                           description: "True if the provider's office has wheelchair access, if available"
+                "hospital_affiliations":
+                   type: "array of strings"
+                   description: "List of hospital affiliations"
+                     
     example:
       status: "success"
       detail: []
       entity:
         count: 2
         providers:
-          - id: "1881616894"
+          - id: "1003860891"
             tier: "Tier 1"
             name:
-              first: "Edmund"
-              middle: "A"
-              last: "Kim"
-              suffix: "MD"
+              first: "Timothy"
+              middle: "E"
+              last: "Cooper"
             gender: "M"
-            education: 
-              school: "University of Connecticut"
-            specialty:
-              - name: "Family Practice"
+            medical_school: "Wayne State University School Of Medicine"
+            graduation_year: 1984
+            specialties:
+              - name: "Family Medicine"
                 primary: true
-                board_certification: "Family Pactice"
-            affiliations:
-              - name: "Prohealth Physicians"
-                type: "group"
-                distance: 9.2
+            group_affiliations:
+              - id: "1355246950"
+                name: "Prohealth Physicians Pc"
+                distance: null
                 address:
-                  street_1: "950 Yale Ave"
+                  street_1: "3 Farm Glen Blvd"
                   city: "Wallingford"
-                  zip_code: "06492"
+                  zip_code: "060321981"
                   state: "CT"
-                phone: "2032659600"
+                phone: "8602845200"
                 web: "http://www.prohealthmd.com/"
                 languages:
                   - "English"
@@ -4961,80 +4991,38 @@ definitions:
                 office_hours:
                   - "Extended Hours"
                 wheelchair_access: true
-              - name: "Prohealth Physicians"
-                type: "group"
-                distance: 14.7
-                address:
-                  street_1: "21 South Rd"
-                  street_2: "Ste 110"
-                  city: "Farmington"
-                  zip_code: "06032"
-                  state: "CT"
-                phone: "8602844945"
-                web: "http://www.prohealthmd.com/"
-                languages:
-                  - "English" 
-              - name: "Prohealth Physicians"
-                type: "group"
-                distance: 23.2
-                address:
-                  street_1: "225 Hopmeadow St"
-                  city: "Weatogue"
-                  zip_code: "06089"
-                  state: "CT"
-                phone: "8606580465"
-                web: "http://www.prohealthmd.com/"
-                languages:
-                  - "English"
-                  - "Spanish"
-                office_hours:
-                  - "Extended Hours"
-                  - "Weekend Hours"
-                wheelchair_access: true  
-          - id: "1780194324"
+            hospital_affiliations:
+              - "Day Kimball Hospital"
+          - id: "1174531172"
             tier: "Tier 1"
             name:
-              first: "Pinky"
-              last: "Gaba"
-              suffix: "NP"
-            gender: "F"
-            education: 
-              school: "Yale Medical School"
-              internship: "St Francis Hospital Medical Center"
-            specialty:
-              - name: "Nurse Practitioner"
+              first: "Paul"
+              middle: "A"
+              last: "Guardino"
+            gender: "M"
+            medical_school: "University Of Vermont College Of Medicine"
+            graduation_year: 2002
+            specialties:
+              - name: "Internal Medicine"
                 primary: true
-            affiliations:
-              - name: "Healthwise Medical Association"
-                type: "group"
-                distance: 2.2
+            group_affiliations:
+              - id: "6002841947"
+                name: "Personal Care Associates Llc"
+                distance: null
                 address:
-                  street_1: "375 E Center St"
-                  city: "New Haven"
-                  zip_code: "06702"
+                  street_1: "501 Farmington Ave"
+                  city: "Wallingford"
+                  zip_code: "060321901"
                   state: "CT"
-                phone: "8606460166"
-                web: "http://www.healthwisema.com/"
+                phone: "8606744334"
+                web: null
                 languages:
                   - "English"
                   - "Spanish"
                 office_hours:
                   - "Extended Hours"
                 wheelchair_access: true
-              - name: "Saint Francis Hospital and Medical Center"
-                type: "hospital"
-                distance: 23.7
-                address:
-                  street_1: "114 Woodland St"
-                  city: "Hartford"
-                  zip_code: "06105"
-                  state: "CT"
-                phone: "8777837262"
-                web: "https://www.stfranciscare.org/hartford"
-                languages:
-                  - "English" 
-                  - "Spanish"
-                  - "Arabic"
+            hospital_affiliations: []  
               
 
             
