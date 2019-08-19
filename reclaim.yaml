@@ -397,34 +397,43 @@ paths:
             <td> claim_type </td><td> Type of medical/pharmacy claims under the plan </td><td> string </td><td> MED|RX </td>
           </tr>
           <tr>
-            <td> in_network_ee_deductible </td><td> In network deductible for subscriber only plan; if applicable</td><td> integer </td><td> 1500</td>
+            <td> in_network_ee_deductible </td><td> In network deductible for subscriber only plan</td><td> integer </td><td> 1500</td>
           </tr>
           <tr>
-            <td> in_network_ef_deductible </td><td> In network deductible for subscriber and dependents; if applicable</td><td> integer </td><td> 3000</td>
+            <td> in_network_ef_deductible </td><td> In network deductible for subscriber and dependents</td><td> integer </td><td> 3000</td>
           </tr>
           <tr>
-            <td> out_network_ee_deductible </td><td> Out-of network deductible for subscriber only plan; if applicable</td><td> integer </td><td> 3000</td>
+            <td> out_network_ee_deductible </td><td> Out-of network deductible for subscriber only plan</td><td> integer </td><td> 3000</td>
           </tr>
           <tr>
-            <td> out_network_ef_deductible </td><td> Out-of network deductible for subscriber and dependents; if applicable</td><td> integer </td><td> 6000</td>
+            <td> out_network_ef_deductible </td><td> Out-of network deductible for subscriber and dependents</td><td> integer </td><td> 6000</td>
           </tr>
           <tr>
-            <td> in_network_ee_oop_max </td><td> In network out-of-pocket max for subscriber only plan; if applicable</td><td> integer </td><td> 3000</td>
+            <td> in_network_ee_oop_max </td><td> In network out-of-pocket max for subscriber only plan</td><td> integer </td><td> 3000</td>
           </tr>
           <tr>
-            <td> in_network_ef_oop_max </td><td> In network out-of-pocket max for subscriber and dependents; if applicable</td><td> integer </td><td> 6000</td>
+            <td> in_network_ef_oop_max </td><td> In network out-of-pocket max for subscriber and dependents</td><td> integer </td><td> 6000</td>
           </tr>
           <tr>
-            <td> out_network_ee_oop_max </td><td> Out-of network out-of-pocket max for subscriber only plan; if applicable</td><td> integer </td><td> 6000</td>
+            <td> out_network_ee_oop_max </td><td> Out-of network out-of-pocket max for subscriber only plan</td><td> integer </td><td> 6000</td>
           </tr>
           <tr>
-            <td> out_network_ef_oop_max </td><td> Out-of network out-of-pocket max for subscriber and dependents; if applicable</td><td> integer </td><td> 10000</td>
+            <td> out_network_ef_oop_max </td><td> Out-of network out-of-pocket max for subscriber and dependents</td><td> integer </td><td> 10000</td>
           </tr>
           <tr>
-            <td> in_network_coinsurance </td><td> In network coinsurance; if applicable</td><td> integer </td><td> 20</td>
+            <td> in_network_coinsurance </td><td> In network coinsurance</td><td> integer </td><td> 20</td>
           </tr>
           <tr>
-            <td> out_network_coinsurance </td><td> Out-of network coinsurance; if applicable</td><td> integer </td><td> 30</td>
+            <td> out_network_coinsurance </td><td> Out-of network coinsurance</td><td> integer </td><td> 30</td>
+          </tr>
+          <tr>
+            <td> rx_oop_max </td><td> Out of pocket for pharmacy claims; if separate from medical</td><td> integer </td><td> 30</td>
+          </tr>
+          <tr>
+            <td> vision_included </td><td> True if vision is included in the plan; False otherwise</td><td> integer </td><td> 30</td>
+          </tr>
+          <tr>
+            <td> dental_included </td><td> True if dental is included in the plan; False otherwise</td><td> integer </td><td> 30</td>
           </tr>
         </table>
         
@@ -715,34 +724,34 @@ paths:
             <td> tobacco </td> <td> Boolean for tobacco</td><td> boolean </td><td> FALSE </td>
           </tr>
           <tr>
-            <td> premium_18_24 </td> <td> Monthly premium for covered person for age group 18 to 24 </td><td> boolean </td><td> 3.6 </td>
+            <td> premium_18_24 </td> <td> Monthly premium for covered person for age group 18 to 24 </td><td> float </td><td> 3.6 </td>
           </tr>
           <tr>
-            <td> premium_25_29 </td> <td> Monthly premium for covered person for age group 25 to 29 </td><td> boolean </td><td> 3.6 </td>
+            <td> premium_25_29 </td> <td> Monthly premium for covered person for age group 25 to 29 </td><td> float </td><td> 3.6 </td>
           </tr>
           <tr>
-            <td> premium_30_34 </td> <td> Monthly premium for covered person for age group 30 to 34 </td><td> boolean </td><td> 5.15 </td>
+            <td> premium_30_34 </td> <td> Monthly premium for covered person for age group 30 to 34 </td><td> float </td><td> 5.15 </td>
           </tr>
           <tr>
-            <td> premium_35_39 </td> <td> Monthly premium for covered person for age group 35 to 39 </td><td> boolean </td><td> 5.15 </td>
+            <td> premium_35_39 </td> <td> Monthly premium for covered person for age group 35 to 39 </td><td> float </td><td> 5.15 </td>
           </tr>
            <tr>
-            <td> premium_40_44 </td> <td> Monthly premium for covered person for age group 40 to 44 </td><td> boolean </td><td> 8.65 </td>
+            <td> premium_40_44 </td> <td> Monthly premium for covered person for age group 40 to 44 </td><td> float </td><td> 8.65 </td>
           </tr>
           <tr>
-            <td> premium_45_49 </td> <td> Monthly premium for covered person for age group 45 to 49 </td><td> boolean </td><td> 8.65 </td>
+            <td> premium_45_49 </td> <td> Monthly premium for covered person for age group 45 to 49 </td><td> float </td><td> 8.65 </td>
           </tr>
           <tr>
-            <td> premium_50_54 </td> <td> Monthly premium for covered person for age group 50 to 54 </td><td> boolean </td><td> 14.22 </td>
+            <td> premium_50_54 </td> <td> Monthly premium for covered person for age group 50 to 54 </td><td> float </td><td> 14.22 </td>
           </tr>
           <tr>
-            <td> premium_55_59 </td> <td> Monthly premium for covered person for age group 55 to 59 </td><td> boolean </td><td> 14.22 </td>
+            <td> premium_55_59 </td> <td> Monthly premium for covered person for age group 55 to 59 </td><td> float </td><td> 14.22 </td>
           </tr>
           <tr>
-            <td> premium_60_64 </td> <td> Monthly premium for covered person for age group 60 to 64 </td><td> boolean </td><td> 21.75 </td>
+            <td> premium_60_64 </td> <td> Monthly premium for covered person for age group 60 to 64 </td><td> float </td><td> 21.75 </td>
           </tr>
           <tr>
-            <td> premium_65_69 </td> <td> Monthly premium for covered person for age group 65 to 69 </td><td> boolean </td><td> 21.75 </td>
+            <td> premium_65_69 </td> <td> Monthly premium for covered person for age group 65 to 69 </td><td> float </td><td> 21.75 </td>
           </tr>
           <tr>
             <td> carrier </td><td> Carrier name </td><td> string </td><td> Aflac </td>
@@ -1722,7 +1731,7 @@ paths:
             headers = {'Authorization': '[token]'}
             
             response = requests.get('https://sandbox.reclaim.health:443/api/subscriber/1774/recommendations', headers=headers).json()  
-  /api/pcp:
+  /pcp:
     post:
       tags:
       - "PCP Search Endpoint"
@@ -1750,7 +1759,7 @@ paths:
             curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"network" : "NEXUS","zip_code" : "06032"}' https://sandbox.reclaim.health/api/pcp
             
             # more inputs can also be accommodated
-            curl -i -X POST -H "Authorization: Bearer QBQKJobHrhAHpkf3p6FVfjAvDKujDlnxhprt0VE9yQ" -H "Content-Type: application/json" -d '{"network":"NEXUS","city":"Farmington","state":"CT","primary_specialty":"Family Medicine","zip_code":"06032"}' https://sandbox.reclaim.health/api/pcp
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"network":"NEXUS","city":"Farmington","state":"CT","primary_specialty":"Family Medicine","zip_code":"06032"}' https://sandbox.reclaim.health/api/pcp
  
       - lang: "Python"
         source: |
@@ -4810,12 +4819,18 @@ definitions:
   PCPDetailInput:
     type: "object"
     properties:
+      carrier:
+        type: "string"
+        description: "Carrier identifier (e.g. 'uhc')"
       network: 
         type: "string"
         description: "Short identifier for the carrier network (e.g., 'NEXUS')."
       zip_code: 
         type: "string"
         description: "Zip code as implied to Client from either subscriber selection in the PCP search."
+      range: 
+        type: "integer"
+        description: "Distance range (miles) requested around which the API searches for available PCPs"
       city:
         type: "string"
         description: "City as implied to Client from either subscriber selection in the PCP search."
@@ -4826,8 +4841,10 @@ definitions:
         type: "string"
         description: "Primary specialty if chosen by the subscriber at the time of the PCP search (e.g. 'Family Medicine')."    
     example:
+      carrier: "uhc"
       network: "NEXUS"
-      zip_code: "06032"   
+      zip_code: "06032" 
+      range: 20
 # Output for PCP Enrollment
   PCPDetailOutput:
     type: "object"
