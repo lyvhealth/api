@@ -1759,7 +1759,7 @@ paths:
             curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"network" : "NEXUS","zip_code" : "06032"}' https://sandbox.reclaim.health/api/pcp
             
             # more inputs can also be accommodated
-            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"network":"NEXUS","city":"Farmington","state":"CT","primary_specialty":"Family Medicine","zip_code":"06032"}' https://sandbox.reclaim.health/api/pcp
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"carrier": "uhc", "network": "nexus", "zip_code": "06032", "range": 20}' https://sandbox.reclaim.health/api/pcp
  
       - lang: "Python"
         source: |
@@ -1771,7 +1771,7 @@ paths:
             response = requests.put('https://sandbox.reclaim.health/api/pcp', data=payload, headers=headers).json() 
             
             # more inputs can also be accommodated
-            payload ={"network":"NEXUS","city":"Farmington","state":"CT","primary_specialty":"Family Medicine","zip_code":"06032"}
+            payload ={"carrier": "uhc", "network": "nexus", "zip_code": "06032", "range": 20}
             
             headers = {'Authorization': '[token]'}
             
@@ -4824,27 +4824,19 @@ definitions:
         description: "Carrier identifier (e.g. 'uhc')"
       network: 
         type: "string"
-        description: "Short identifier for the carrier network (e.g., 'NEXUS')."
+        description: "Short identifier for the carrier network (e.g., 'nexus')."
       zip_code: 
         type: "string"
         description: "Zip code as implied to Client from either subscriber selection in the PCP search."
       range: 
         type: "integer"
-        description: "Distance range (miles) requested around which the API searches for available PCPs"
-      city:
-        type: "string"
-        description: "City as implied to Client from either subscriber selection in the PCP search."
-      state:     
-        type: "string"
-        description: "State as implied to Client from either subscriber selection in the PCP search."
-      primary_specialty: 
-        type: "string"
-        description: "Primary specialty if chosen by the subscriber at the time of the PCP search (e.g. 'Family Medicine')."    
+        description: "Distance range (miles) requested around which the API searches for available PCPs" 
     example:
       carrier: "uhc"
-      network: "NEXUS"
+      network: "nexus"
       zip_code: "06032" 
       range: 20
+      
 # Output for PCP Enrollment
   PCPDetailOutput:
     type: "object"
@@ -4877,10 +4869,10 @@ definitions:
               properties:
                 id:
                   type: "string"
-                  description: "National provider identification (NPI)"
+                  description: "Provider uuid as identifiable by the carrier/network"
                 tier:
                   type: "string"
-                  description: "Provider's tier designation"
+                  description: "Provider's tier designation. If null, this means that the provider is not in the preferred tier."
                 name:
                   type: "object"
                   properties: 
@@ -4896,151 +4888,182 @@ definitions:
                     suffix: 
                       type: "string"
                       description: "Provider's name suffix"  
+                    credentials: 
+                      type: "string"
+                      description: "Provider's credentials, e.g., 'MD'"
                 gender: 
                   type: "string"
-                  description: "Provider's gender, if known"
-                school: 
-                      type: "string"
-                      description: "Provider's medical school"
-                graduation_year:
-                      type: "integer"
-                      description: "Graduation year, if known"
+                  description: "Provider's gender, if known (M/F)"
+                education: 
+                    type: "array"
+                    description: "List of medical schools that this provider has graduated from"
+                    items:
+                        type: "object"
+                        properties:
+                            medical_school: 
+                                type: "string"
+                                description: "Medical School, if available"
+                            graduation_year:
+                                type: "integer"
+                                description: "Year of graduation"
                 specialties: 
+                  type: "array of strings"
+                  description: "Provider's list of specialties"
+                languages: 
+                  type: "array of strings"
+                  description: "List of languages spoken by the provider themselves"
+                locations:
                   type: "array"
-                  description: "Provider's list of specialties and board certifications"
-                  items: 
-                    type: "object"
-                    properties:
-                      name: 
-                        type: "string"
-                        description: "Provider's specialty name"
-                      primary: 
-                        type: "boolean"
-                        description: "True if associated with provider's primary specialty"
-                      board_certification: 
-                        type: "string"
-                        description: "Provider's board certification, if available"
-                group_affiliations:
-                  type: "array"
-                  description: "List of medical group affiliations"
+                  description: "List of locations where the provider performs their healthcare services"
                   items:
                     type: "object"
                     properties: 
                         id: 
                           type: "string"
-                          description: "Medical group affiliation ID"
-                        name: 
-                          type: "string"
-                          description: "Medical group affiliation name"
+                          description: "Location address uuid, as know to carrier/network"
+                        pcp_id: 
+                          type: "array of strings"
+                          description: "Array of the PCP IDs as known to carrier/network for this specific provider at the specific location"
+                        groups:
+                          type: "array"
+                          description: "List of locations where the provider performs their healthcare services"
+                          items:
+                            type: "object"
+                            properties: 
+                              id: 
+                                type: "string"
+                                description: "Medical group uuid as known to the carrier/network"
+                              name:     
+                                type: "string"
+                                description: "Medical group name"
                         distance: 
                           type: "float"
-                          description: "Estimated distance in miles from member's address / zip code (Note for now, not yet computed)"
+                          description: "Estimated distance in miles from member's address / zip code"
                         address:
                             type: "object"
                             description: "Provider affiliation's address"
                             properties:
                               street_1:
                                 type: "string"
-                                description: "First line of street address, if available"
-                              street_2:
-                                type: "string"
-                                description: "Second line of street address, if available"    
+                                description: "First line of street address, if available"    
                               city:
                                 type: "string"
-                                description: "Provider affiliation's city name" 
+                                description: "Location city name" 
                               zip_code:
                                 type: "string"
-                                description: "Provider affiliation's zip code (required)"
+                                description: "Location zip code"
                               state:
                                 type: "string"
-                                description: "Provider affiliation's state name" 
-                        phone: 
-                          type: "string"
-                          description: "Provider affiliation's telephone number"
+                                description: "Location state name" 
+                              county:
+                                type: "string"
+                                description: "Location county name"     
+                              longitude:
+                                type: "float"
+                                description: "Location longitude"
+                              latitude:
+                                type: "float"
+                                description: "Location latitude"    
+                        contact: 
+                          type: "array"
+                          description: "Array of contact numbers for the associated location"
+                          items:
+                            type: "object"
+                            properties:
+                              phone_type: 
+                                type: "string"
+                                description: "Phone type, e.g., 'Office Phone', 'Appointments', etc."
+                              phone_number: 
+                                type: "string"
+                                description: "Phone number, e.g., '+1 860-524-4506'"          
                         web:
                           type: "string"
-                          description: "Provider affiliation's web address, if available"
-                        languages:
-                          type: "array of strings"
+                          description: "Location's web address, if available"
+                        office_languages:
+                          type: "array"
                           description: "Array of spoken languages at the provider's office"
-                        office_hours:
-                          type: "array of strings"
+                          items:
+                            type: "object"
+                            properties:
+                              language:
+                                type: "string"
+                                description: "Language description"
+                              spoken_by: 
+                                type: "string"
+                                description: "Idientifer denoting whether the language is spoken by staff members or by an interpreter"              
+                        extended_hours:
+                          type: "string"
                           description: "Listing for weekend hours or extended hours, if applicable"
                         wheelchair_access:
                           type: "boolean"
                           description: "True if the provider's office has wheelchair access, if available"
-                "hospital_affiliations":
-                   type: "array of strings"
-                   description: "List of hospital affiliations"
-                     
+                        gender_limitation: 
+                          type: "string"
+                          description: "Gender (M/F) limitation if applicable"
+                        age_limitation:
+                          type: "object"
+                          properties:
+                            min_age: 
+                              type: "integer"
+                              description: "Minimum age limitation"
+                            max_age: 
+                              type: "integer"
+                              description: "Maximum age limitation. Note that 150 means no upper age limitation"
     example:
       status: "success"
       detail: []
       entity:
         count: 2
         providers:
-          - id: "1003860891"
-            tier: "Tier 1"
+          - id: "f64ed408-ae51-4c0c-a088-409203ca7486"
+            tier: "null"
             name:
-              first: "Timothy"
-              middle: "E"
-              last: "Cooper"
+              first: "John"
+              middle: "C"
+              last: "Huang"
+              suffix: null,
+              credentials: "MD"
             gender: "M"
+            education:
+              - medical_school: "ALBERT EINSTEIN SCHOOL OF MEDICINE; NEW YORK, NY"
+                graduation_year: 1999
             medical_school: "Wayne State University School Of Medicine"
             graduation_year: 1984
-            specialties:
-              - name: "Family Medicine"
-                primary: true
-            group_affiliations:
-              - id: "1355246950"
-                name: "Prohealth Physicians Pc"
-                distance: null
+            specialties: 
+              - "Internal Medicine"
+            languages: 
+              -  "English"
+            locations:
+              - id: "06656962ad9a6beb6ad0339432a63255cd735ae1"
+                pcp_ids: 
+                  - "00002180246 016"
+                groups:
+                  - id: "d3e48fdc-17ac-4876-b644-4b2dfea7f763"
+                    name: "HARTFORD HEALTHCARE MEDICAL GROUP INC"
+                distance: 0.2    
                 address:
-                  street_1: "3 Farm Glen Blvd"
-                  city: "Wallingford"
-                  zip_code: "060321981"
+                  street_1: "17 Talcott Notch Rd"
+                  city: "Farmington"
                   state: "CT"
-                phone: "8602845200"
-                web: "http://www.prohealthmd.com/"
-                languages:
-                  - "English"
-                  - "Spanish"
-                office_hours:
-                  - "Extended Hours"
-                wheelchair_access: true
-            hospital_affiliations:
-              - "Day Kimball Hospital"
-          - id: "1174531172"
-            tier: "Tier 1"
-            name:
-              first: "Paul"
-              middle: "A"
-              last: "Guardino"
-            gender: "M"
-            medical_school: "University Of Vermont College Of Medicine"
-            graduation_year: 2002
-            specialties:
-              - name: "Internal Medicine"
-                primary: true
-            group_affiliations:
-              - id: "6002841947"
-                name: "Personal Care Associates Llc"
-                distance: null
-                address:
-                  street_1: "501 Farmington Ave"
-                  city: "Wallingford"
-                  zip_code: "060321901"
-                  state: "CT"
-                phone: "8606744334"
+                  zip: "06032"
+                  county: "Hartford"
+                  longitude: -72.79508
+                  latitude: 41.739498
+                contact:
+                  - phone_type: "Office Phone"
+                    phone_number: "+1 860-524-4506"
                 web: null
-                languages:
-                  - "English"
-                  - "Spanish"
-                office_hours:
-                  - "Extended Hours"
-                wheelchair_access: true
-            hospital_affiliations: []  
-              
+                office_languages: 
+                  - language: "English"
+                    spoken_by: "staff"
+                extended_hours: null
+                wheelchair_access: true 
+                gener_limitation: null
+                age_limitation:
+                  min_age: 0
+                  max_age: 150
+                   
+            
 
             
           
