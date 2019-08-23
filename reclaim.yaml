@@ -5062,13 +5062,8 @@ definitions:
                 accessibility:
                   - "Exterior Building"
                   - "Parking"
-                  - "Restroom
+                  - "Restroom"
                 gender_limitation: null
                 age_limitation:
                   min_age: 0
                   max_age: 150
-                   
-            
-
-            
-          
