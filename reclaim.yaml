@@ -4997,6 +4997,9 @@ definitions:
                         wheelchair_access:
                           type: "boolean"
                           description: "True if the provider's office has wheelchair access, if available"
+                        accessability:
+                          type: "array of strings"
+                          description: "Array of location accessability pointers, e.g., 'Parking', 'Restroom', etc."
                         gender_limitation: 
                           type: "string"
                           description: "Gender (M/F) limitation if applicable"
@@ -5027,8 +5030,6 @@ definitions:
             education:
               - medical_school: "ALBERT EINSTEIN SCHOOL OF MEDICINE; NEW YORK, NY"
                 graduation_year: 1999
-            medical_school: "Wayne State University School Of Medicine"
-            graduation_year: 1984
             specialties: 
               - "Internal Medicine"
             languages: 
@@ -5045,7 +5046,7 @@ definitions:
                   street_1: "17 Talcott Notch Rd"
                   city: "Farmington"
                   state: "CT"
-                  zip: "06032"
+                  zip_code: "06032"
                   county: "Hartford"
                   longitude: -72.79508
                   latitude: 41.739498
@@ -5058,7 +5059,11 @@ definitions:
                     spoken_by: "staff"
                 extended_hours: null
                 wheelchair_access: true 
-                gener_limitation: null
+                accessibility:
+                  - "Exterior Building"
+                  - "Parking"
+                  - "Restroom
+                gender_limitation: null
                 age_limitation:
                   min_age: 0
                   max_age: 150
