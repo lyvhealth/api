@@ -1308,116 +1308,117 @@ paths:
       - lang: "cURL"
         source: |                              
             # updating a subscriber
-            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" --data '{"name": {"first": "Zulu"}}' https://sandbox.reclaim.health:443/api/subscriber/1774
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" --data '{"name": {"address": "205 Talbot street"}}' https://sandbox.reclaim.health:443/api/subscriber/1b404554-537d-483e-ab8f-18155583239d
       - lang: "Python"
         source: |
             # updating a subscriber
-            payload = {"name": {"first": "Zulu"}}
+            payload = {"name": {"address": "205 Talbot street"}}
             
             headers = {'Authorization': '[token]'}
             
-            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1774', data=payload, headers=headers).json()   
+            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1b404554-537d-483e-ab8f-18155583239d', data=payload, headers=headers).json()   
         
                
-  /api/subscriber/[subscriber_id]/members:
-    get:
-      tags:
-      - "Subscriber-Specific Endpoints"
-      summary: "List Members Details"
-      description: "This endpoints is designed to obtain information about all the dependent members, including the subscriber, that are eligible for the subscriber's benefits. Note that the members can be added or removed from consideration for the benefit recommendations, if instructed by the subscriber through the Client."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/MembersDetailOutput" 
-      x-code-samples:
-      - lang: "cURL"
-        source: |                              
-            # obtaining information about a specific subscriber
-            curl -i -X GET -H "Authorization: Bearer [token]" -H "Content-Type: application/json" https://sandbox.reclaim.health:443/api/subscriber/1774/members
-      - lang: "Python"
-        source: |
-            # obtaining information about a specific subscriber
-            headers = {'Authorization': '[token]'}  
-            response = requests.get('https://sandbox.reclaim.health:443/api/subscriber/1774/members', headers=headers).json()   
+#  /api/subscriber/[subscriber_id]/members:
+#    get:
+#      tags:
+#      - "Subscriber-Specific Endpoints"
+#      summary: "List Members Details"
+#      description: "This endpoints is designed to obtain information about all the dependent members, including the subscriber, that are eligible for the subscriber's benefits. Note that the members can be added or removed from consideration for the benefit recommendations, if instructed by the subscriber through the Client."
+#      consumes:
+#      - "application/json"
+#      produces:
+#      - "application/json"
+#      responses:
+#        200:
+#          description: "Success"
+#          schema:
+#            $ref: "#/definitions/MembersDetailOutput" 
+#      x-code-samples:
+#      - lang: "cURL"
+#        source: |                              
+#            # obtaining information about a specific subscriber
+#            curl -i -X GET -H "Authorization: Bearer [token]" -H "Content-Type: application/json" https://sandbox.reclaim.health:443/api/subscriber/1774/members
+#      - lang: "Python"
+#        source: |
+#            # obtaining information about a specific subscriber
+#            headers = {'Authorization': '[token]'}  
+#            response = requests.get('https://sandbox.reclaim.health:443/api/subscriber/1774/members', headers=headers).json()   
                                     
                                     
-    post:
-      tags:
-      - "Subscriber-Specific Endpoints"
-      summary: "Add Members"
-      description: "This endpoint allows the client to add the info of the members associated with the subscriber to the Reclaim system. To update a member's specific info, the POST may include only the items needed to be updated."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "MemberDetailInput"
-        required: true
-        schema:
-          $ref: "#/definitions/AddMembersDetailInput"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/AddMembersDetailOutput"   
-      x-code-samples:
-      - lang: "cURL"
-        source: |                              
-            # adding members
-            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json -d '{"members": [{"id": "1800", "status": "active", "benefits": [], "name": { "first": "George", "middle": null, "last": "Gomez" }, "dob": "2004-12-03", "ssn": "000001334", "gender": "m", "relation": "child", "address": { "street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}}, {"id": "1801", "status": "active", "benefits": [], "name":{"first": "Lucy", "middle": null, "last": "Gomez"}, "dob": "2017-04-02", "ssn": "000005152", "gender": "f", "relation": "child"}]}' https://sandbox.reclaim.health:443/api/subscriber/1774/members
-            
-      - lang: "Python"
-        source: |
-            # adding members
-            payload = {"members": [{"id": "1800", "status": "active", "benefits": [], "name": { "first": "George", "middle": null, "last": "Gomez" }, "dob": "2004-12-03", "ssn": "000001334", "gender": "m", "relation": "child", "address": { "street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}}, {"id": "1801", "status": "active", "benefits": [], "name":{"first": "Lucy", "middle": null, "last": "Gomez"}, "dob": "2017-04-02", "ssn": "000005152", "gender": "f", "relation": "child"}]}
-            
-            headers = {'Authorization': '[token]'}
-            
-            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1774/members', data=payload, headers=headers).json()     
+#    post:
+#      tags:
+#      - "Subscriber-Specific Endpoints"
+#      summary: "Add Members"
+#      description: "This endpoint allows the client to add the info of the members associated with the subscriber to the Reclaim system. To update a member's specific info, the POST may include only the items needed to be updated."
+#      consumes:
+#      - "application/json"
+#      produces:
+#      - "application/json"
+#      parameters:
+#      - in: "body"
+#        name: "MemberDetailInput"
+#        required: true
+#        schema:
+#          $ref: "#/definitions/AddMembersDetailInput"
+#      responses:
+#        200:
+#          description: "Success"
+#          schema:
+#            $ref: "#/definitions/AddMembersDetailOutput"   
+#      x-code-samples:
+#      - lang: "cURL"
+#        source: |                              
+#            # adding members
+#            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json -d '{"members": [{"id": "1800", "status": "active", "benefits": [], "name": { "first": "George", "middle": null, "last": "Gomez" }, "dob": "2004-12-03", "ssn": "000001334", "gender": "m", "relation": "child", "address": { "street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}}, {"id": "1801", "status": "active", "benefits": [], "name":{"first": "Lucy", "middle": null, "last": "Gomez"}, "dob": "2017-04-02", "ssn": "000005152", "gender": "f", "relation": "child"}]}' https://sandbox.reclaim.health:443/api/subscriber/1774/members
+#            
+#      - lang: "Python"
+#        source: |
+#            # adding members
+#            payload = {"members": [{"id": "1800", "status": "active", "benefits": [], "name": { "first": "George", "middle": null, "last": "Gomez" }, "dob": "2004-12-03", "ssn": "000001334", "gender": "m", "relation": "child", "address": { "street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}}, {"id": "1801", "status": "active", "benefits": [], "name":{"first": "Lucy", "middle": null, "last": "Gomez"}, "dob": "2017-04-02", "ssn": "000005152", "gender": "f", "relation": "child"}]}
+#            
+#            headers = {'Authorization': '[token]'}
+#            
+#            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1774/members', data=payload, headers=headers).json()     
     
     
             
-  /api/subscriber/[subscriber_id]/member/[member_id]:  
-    post:
-      tags:
-      - "Subscriber-Specific Endpoints"
-      summary: "Update A Member's Info"
-      description: "This endpoint allows the client to update a specific member's info. The POST may include only the items needed to be updated."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "UpdateMemberDetailInput"
-        required: true
-        schema:
-          $ref: "#/definitions/UpdateMemberDetailInput"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/UpdateMemberDetailOutput"   
-      x-code-samples:
-      - lang: "cURL"
-        source: |                              
-            # updating a member
-            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json -d '{"name":{"first":"Jorge"}}' https://sandbox.reclaim.health:443/api/subscriber/1774/member/1800
-      - lang: "Python"
-        source: |
-           # updating a member
-            payload = {"name":{"first":"Jorge"}}
-            
-            headers = {'Authorization': '[token]'}
-            
-            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1774/member/1800', data=payload, headers=headers).json()  
-            
+#/api/subscriber/[subscriber_id]/member/[member_id]:  
+#    post:
+#      tags:
+#      - "Subscriber-Specific Endpoints"
+#      summary: "Update A Member's Info"
+#      description: "This endpoint allows the client to update a specific member's info. The POST may include only the items needed to be updated."
+#      consumes:
+#      - "application/json"
+#      produces:
+#      - "application/json"
+#      parameters:
+#      - in: "body"
+#        name: "UpdateMemberDetailInput"
+#        required: true
+#        schema:
+#          $ref: "#/definitions/UpdateMemberDetailInput"
+#      responses:
+#        200:
+#          description: "Success"
+#          schema:
+#            $ref: "#/definitions/UpdateMemberDetailOutput"   
+#      x-code-samples:
+#      - lang: "cURL"
+#        source: |                              
+#            # updating a member
+#            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json -d '{"name":{"first":"Jorge"}}' https://sandbox.reclaim.health:443/api/subscriber/1774/member/1800
+#      - lang: "Python"
+#        source: |
+#           # updating a member
+#            payload = {"name":{"first":"Jorge"}}
+#            
+#            headers = {'Authorization': '[token]'}
+#            
+#            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1774/member/1800', data=payload, headers=headers).json()  
+ 
+ 
   /api/subscriber/[subscriber_id]/opt_in:
     post:
       tags:
@@ -1443,7 +1444,7 @@ paths:
       - lang: "cURL"
         source: |                              
             # updating a subscriber's claim authorization
-            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"opt_in": true}' https://sandbox.reclaim.health:443/api/subscriber/1774/opt_in
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"opt_in": true}' https://sandbox.reclaim.health:443/api/subscriber/1b404554-537d-483e-ab8f-18155583239d/opt_in
  
       - lang: "Python"
         source: |
@@ -1452,7 +1453,7 @@ paths:
             
             headers = {'Authorization': '[token]'}
             
-            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1774/opt_in', data=payload, headers=headers).json()              
+            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1b404554-537d-483e-ab8f-18155583239d/opt_in', data=payload, headers=headers).json()              
   /api/subscriber/[subscriber_id]/review:
     get:
       tags:
@@ -2299,18 +2300,12 @@ definitions:
       id:   
             type: "string"
             description: "Subscriber ID as known to Client"
-      status: 
-            type: "string"
-            description: "Status of the subscriber, i.e., 'active', 'terminated', etc."
       benefits: 
           type: "array"
-          description: "Array of current healthcare benefits that the subscriber is enrolled in"  
+          description: "TODO! Array of current healthcare benefits that the subscriber is enrolled in"  
       group:   
             type: "string"
-            description: "Employer group unique Reclaim short name identifier" 
-      division:   
-            type: "string"
-            description: "Employer group's division short name identifer"        
+            description: "Employer group unique Reclaim short name identifier"      
       name:
                     type: "object"
                     description: "Member's name object"
@@ -2352,129 +2347,33 @@ definitions:
                       state:
                         type: "string"
                         description: "Member's state name"   
-      members: 
-        type: "array"
-        description: "Array of members to add/update associated with the subscriber"
-        items:
-          type: "object"
-          properties:
-              id:   
-                    type: "string"
-                    description: "Member ID as known to Client"   
-              status: 
-                type: "string"
-                description: "Status of the member, i.e., 'active', 'terminated', etc."
-              benefits: 
-                type: "array"
-                description: "Array of current healthcare benefits that the member is enrolled in"         
-              name:
-                            type: "object"
-                            description: "Member's name object"
-                            properties:
-                              first:
-                                type: "string"
-                                description: "Member's first name"
-                              middle:
-                                type: "string"
-                                description: "Member's middle name"   
-                              last:
-                                type: "string"
-                                description: "Member's last name" 
-              dob: 
-                            type: "date"
-                            description: "Member's date of birth formatted as yyyy-month-date"
-              gender:
-                            type: "string"
-                            description: "Member's gender ('f' for female, 'm' for male, and 'u' for unknown)"
-              ssn:
-                            type: "string"
-                            description: "Member's social security number"
-              address:
-                            type: "object"
-                            description: "Member's address. If omitted, Reclaim assumes member resides at the same address as the subscriber"
-                            properties:
-                              street_1:
-                                type: "string"
-                                description: "First line of street address, if available"
-                              street_2:
-                                type: "string"
-                                description: "Second line of street address, if available"    
-                              city:
-                                type: "string"
-                                description: "Member's city name"  
-                              zip_code:
-                                type: "string"
-                                description: "Member's zip code"
-                              state:
-                                type: "string"
-                                description: "Member's state name" 
-              relation:
-                    type: "string"
-                    description: "Member's relationship to the subscriber ('spouse', 'child')"
                   
     example:
-      id: "1774"
-      status: "active"
+      id: "1b404554-537d-483e-ab8f-18155583239d"
       benefits: [ ]
       group: "acme"
-      division: "corporate"
       name:
-        first: "Jayson"
+        first: "Zulu"
         middle: null
         last: "Gomez"
       dob: "1955-02-23"
       gender: "m"
       ssn: "235848321"
       address:
-            street_1: null
-            street_2: "100 Talabow Street"
+            street_1: "100 Talabow Street"
+            street_2: null
             city: "Boston"
             zip_code: "02215"
             state: "MA"
-      members:
-        - id: "1776"
-          status: "active"
-          benefits: [ ]
-          name:
-            first: "Josie"
-            middle: null
-            last: "Gomez"
-          dob: "1957-12-03"  
-          gender: "f"
-          ssn: "000001234"
-          relationship: "spouse"
-          address:
-            street_1: null
-            street_2: "100 Talabow Street"
-            city: "Boston"
-            zip_code: "02215"
-            state: "MA"
-        - id: "1777"
-          name:
-            first: "Bobby"
-            middle: null
-            last: "Gomez"
-          dob: "2000-01-01"
-          gender: "m"
-          ssn: "000005552"
-          relationship: "child"
-          address:
-            street_1: null
-            street_2: "100 Talabow Street"
-            city: "Boston"
-            zip_code: "02215"
-            state: "MA"
-            
+
+
 # Update Subscriber Details            
   UpdateSubscriberDetailInput:  
     type: "object"
     properties:    
-          status: 
-            type: "string"
-            description: "Status of the member, i.e., 'active', 'terminated', etc."
           benefits: 
             type: "array"
-            description: "Array of current healthcare benefits that the subscriber is enrolled in"          
+            description: "TODO! Array of current healthcare benefits that the subscriber is enrolled in"          
           name:
                         type: "object"
                         description: "Subscriber's name object"
@@ -2517,8 +2416,8 @@ definitions:
                             type: "string"
                             description: "Subscriber's state name" 
     example:
-      name: 
-        first: "Zulu" 
+      address: 
+        street_1: "205 Talbot street" 
         
 #Subscriber Detail Output
   SubscriberDetailOutput:
@@ -2550,9 +2449,6 @@ definitions:
               group:
                 type: "string"
                 description: "Reclaim's group unique name identifier to which the subscriber belongs"
-              division:
-                type: "string"
-                description: "Employer group division to which the subscriber belongs"
               name:
                 type: "object"
                 description: "Subscriber's name object"
@@ -2582,9 +2478,22 @@ definitions:
                       flag: 
                         type: "boolean"
                         description: "true if the subscriber has already authorized Reclaim for the use of their claims, false otherwise"
+                      dependent_flag:
+                        type: "boolean"
+                        description: "true if a subscriber's dependent has already authorized Reclaim for the use of their claims, false otherwise"
                       date: 
                         type: "timestamp"
                         description: "Timestamp (in UTC) of the latest update on the subscriber claims authorization"
+                  plan_review:
+                    type: "object"
+                    properties:
+                      flag: 
+                        type: "boolean"
+                        description: "true if the subscriber has already benefits information for the current plan year, and therefore a plan review available to them, false otherwise"
+                      date: 
+                        type: "timestamp"
+                        description: "Timestamp (in UTC) of the latest update on the subscriber plan review, if applicable"                        
+                          
               survey:
                 type: "object"
                 description: "Object specifying if the subscriber has taken the enrollment survey"
@@ -2602,83 +2511,34 @@ definitions:
               updated:
                 type: "timestamp"
                 description: "Timestamp (in UTC) indicating the time the subscriber was last updated" 
-          members: 
-            type: "array"
-            description: "Array of members associated with the subscriber"
-            items:
-              type: "object"
-              properties:
-                  id:   
-                    type: "string"
-                    description: "Member ID as known to Client"           
-                  name:
-                    type: "object"
-                    description: "Member's name object"
-                    properties:
-                      first:
-                        type: "string"
-                        description: "Member's first name"
-                  age: 
-                    type: "integer"
-                    description: "Member's age"
-                  gender:
-                    type: "string"
-                    description: "Member's gender ('f' for female, 'm' for male, and 'u' for unknown)"
-                  zip_code:
-                    type: "string"
-                    description: "Member's zip code"
-                  relation:
-                        type: "string"
-                        description: "Member's relationship to the subscriber ('spouse', 'child')"
-                  created:
-                    type: "timestamp"
-                    description: "Timestamp (in UTC) indicating the time the member was created"
-                  updated:
-                    type: "timestamp"
-                    description: "Timestamp (in UTC) indicating the time the member was last updated"         
+       
             
     example:
       status: "success"
       details: []
       entity:
           subscriber: 
-              id: "1774"
-              group_id: "acme"
-              division: "corporate"
+              id: "1b404554-537d-483e-ab8f-18155583239d"
+              group: "acme"
               name: 
-                first: "Jason"
+                first: "Zulu"
               age: 64
               gender: "m"
               zip_code: "02215"
               claims:
                 available: true
                 opt_in:
+                  flag: false
+                  date: null 
+                  dependent_flag: false
+                plan_review:
                   flag: true
-                  date: "2019-06-20 13:46:22.368355"       
+                  date: "2019-06-17 13:37:36.138650"
               survey:
                 flag: false
                 date: null
               created: "2019-06-20 13:46:22.368361"
-              updated: "2019-06-20 13:46:22.368364"
-          members:
-            - id: "1776"
-              name:
-                first: "Josie"
-              age: 61
-              gender: "f"
-              zip_code: "02215"
-              relation: "spouse"
-              created: "2019-06-20 13:46:22.368371"
-              updated: "2019-06-20 13:46:22.368373"
-            - id: "1777"
-              name:
-                first: "Bobby"
-              age: 19
-              gender: "m"
-              zip_code: "02215"
-              relation: "child"
-              created: "2019-06-20 13:46:22.368378"
-              updated: "2019-06-20 13:46:22.368378"  
+              updated: "2019-06-20 13:46:22.368364" 
               
           
 #Update Subscriber Detail Output
@@ -2701,16 +2561,16 @@ definitions:
       entity:
         type: "object"
         description: "API detailed output"
-        properties:      
+        properties:
+          subscriber:
+            type: "object"
+            properties:      
               id:
                 type: "string"
                 description: "Subscriber's ID, as known to the client"
               group:
                 type: "string"
                 description: "Reclaim's group unique name identifier to which the subscriber belongs"
-              division:
-                type: "string"
-                description: "Employer group division to which the subscriber belongs"
               name:
                 type: "object"
                 description: "Subscriber's name object"
@@ -2740,9 +2600,21 @@ definitions:
                       flag: 
                         type: "boolean"
                         description: "true if the subscriber has already authorized Reclaim for the use of their claims, false otherwise"
+                      dependent_flag:
+                        type: "boolean"
+                        description: "true if a subscriber's dependent has already authorized Reclaim for the use of their claims, false otherwise"
                       date: 
                         type: "timestamp"
                         description: "Timestamp (in UTC) of the latest update on the subscriber claims authorization"
+                  plan_review:
+                    type: "object"
+                    properties:
+                      flag: 
+                        type: "boolean"
+                        description: "true if the subscriber has already benefits information for the current plan year, and therefore a plan review available to them, false otherwise"
+                      date: 
+                        type: "timestamp"
+                        description: "Timestamp (in UTC) of the latest update on the subscriber plan review, if applicable"                        
               survey:
                 type: "object"
                 description: "Object specifying if the subscriber has taken the enrollment survey"
@@ -2764,27 +2636,32 @@ definitions:
     example:
       status: "success"
       details: 
-        - "Updated subscriber '1774' successfully"
+        - "Updated subscriber '1b404554-537d-483e-ab8f-18155583239d' successfully"
       entity:
-          id: "1774"
-          group: "acme"
-          division: "corporate"
-          name: 
-            first: "Zulu"
-          age: 64
-          gender: "m"
-          zip_code: "02215"
-          claims:
-            available: true
-            opt_in:
-              flag: true
-              date: "2019-06-20 13:46:22.368355"       
-          survey:
-            flag: false
-            date: null
-          created: "2019-06-20 13:46:22.368361"
-          updated: "2019-06-20 13:46:27.424498"  
+          subscriber: 
+              id: "1b404554-537d-483e-ab8f-18155583239d"
+              group: "acme"
+              name: 
+                first: "Zulu"
+              age: 64
+              gender: "m"
+              zip_code: "02215"
+              claims:
+                available: true
+                opt_in:
+                  flag: false
+                  date: null 
+                  dependent_flag: false
+                plan_review:
+                  flag: true
+                  date: "2019-06-17 13:37:36.138650"
+              survey:
+                flag: false
+                date: null
+              created: "2019-06-20 13:46:22.368361"
+              updated: "2019-06-20 13:46:22.368364"  
           
+
 #Members Detail Iutput
   AddMembersDetailInput:
     type: "object"
@@ -3274,7 +3151,11 @@ definitions:
       entity:
         type: "object"
         description: "API detailed output"
-        properties:      
+        properties:   
+          subscriber:
+            type: "object"
+            description: "API detailed output"
+            properties:  
               id:
                 type: "string"
                 description: "Subscriber's ID, as known to the client"
@@ -3312,10 +3193,22 @@ definitions:
                     properties:
                       flag: 
                         type: "boolean"
-                        description: "true if the subscriber has opted in for Reclaim to use of their claims, false otherwise"
+                        description: "true if the subscriber has already authorized Reclaim for the use of their claims, false otherwise"
+                      dependent_flag:
+                        type: "boolean"
+                        description: "true if a subscriber's dependent has already authorized Reclaim for the use of their claims, false otherwise"
                       date: 
                         type: "timestamp"
                         description: "Timestamp (in UTC) of the latest update on the subscriber claims authorization"
+                  plan_review:
+                    type: "object"
+                    properties:
+                      flag: 
+                        type: "boolean"
+                        description: "true if the subscriber has already benefits information for the current plan year, and therefore a plan review available to them, false otherwise"
+                      date: 
+                        type: "timestamp"
+                        description: "Timestamp (in UTC) of the latest update on the subscriber plan review, if applicable"                        
               survey:
                 type: "object"
                 description: "Object specifying if the subscriber has taken the enrollment survey"
@@ -3336,26 +3229,31 @@ definitions:
                 
     example:
       status: "success"
-      details: [ ]
+      details: []
       entity:
-          id: "1774"
-          group: "acme"
-          division: "corporate"
-          name: 
-            first: "Zulu"
-          age: 64
-          gender: "m"
-          zip_code: "02215"
-          claims:
-            available: true
-            opt_in:
-              flag: true
-              date: "2019-06-20 13:46:29.333603"       
-          survey:
-            flag: false
-            date: null
-          created: "2019-06-20 13:46:22.368361"
-          updated: "2019-06-20 13:46:27.424498"    
+          subscriber: 
+              id: "1b404554-537d-483e-ab8f-18155583239d"
+              group: "acme"
+              name: 
+                first: "Zulu"
+              age: 64
+              gender: "m"
+              zip_code: "02215"
+              claims:
+                available: true
+                opt_in:
+                  flag: true
+                  date: "2019-11-14 17:20:03.626346" 
+                  dependent_flag: false
+                plan_review:
+                  flag: true
+                  date: "2019-06-17 13:37:36.138650"
+              survey:
+                flag: false
+                date: null
+              created: "2019-06-20 13:46:22.368361"
+              updated: "2019-11-14 17:20:03.626346" 
+              
               
 #Current Plan Performance Review Detail Output
   ReviewDetailOutput:
