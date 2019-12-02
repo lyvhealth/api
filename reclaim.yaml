@@ -64,9 +64,9 @@ info:
     To reach our team for any questions or to highlight issues with any of the processes related to the Reclaim API, please feel free to issue a request using our <a href="https://re-claim.atlassian.net/servicedesk/customer/portal/1" target="_blank"> **SERVICE HELP CENTER**</a>. Note that our help center is powered by Jira, and your Jira user needs to be created internally by Reclaim to be able to log in to our help desk center.
     
   
-  version: "v0.2"
+  version: "v2.0"
   title: "RECLAIM Backend APIs"
-host: "sandbox.reclaim.health/api"
+host: "sandbox2.reclaim.health/api"
 x-logo:
    url: 'https://rebilly.github.io/ReDoc/petstore-logo.png'
 
@@ -99,9 +99,10 @@ tags:
     ## Security
     All calls to Reclaim’s APIs are encrypted over HTTPS. Our APIs support connections using TLS version 1.2 or higher. All modern languages and frameworks support TLS 1.2 (although specific older ones do not).
     
-#    While these examples illustrate the typical process of obtaining an access token and then properly utilizing that token in an Authorization header for subsequent API requests, be aware that it is extremely inefficient to request a new token if you already obtained one that is still valid (note the number of seconds specified in the expires_in parameter in the cURL example’s response). For this reason we recommend using a PokitDok client library, giving you the ability to instantiate and use a long-lived PokitDok client connection that provides automatic handling of token retrieval, expiration, and rotation.
+
 - name: "Group-Specific Endpoints"
-  description: "This section documents the available endpoints associated with open enrollment. These endpoints come from the perspective of obtaining or updating information specific to a subscriber. Following the Reclaim terminology, an employee who enrolls their family in an employer-sponsored plan is the subscriber of the plan."
+  description: "This section documents the available endpoints associated with open enrollment. These endpoints come from the perspective of obtaining or updating information specific to a subscriber. Following the Reclaim terminology, an employee who enrolls their family in an employer-sponsored plan is the subscriber of the plan. **Please note that this section is currently under development (to be approved by client).**"
+  
 - name: "Subscriber-Specific Endpoints"
   description: "This section documents the available endpoints associated with open enrollment. These endpoints come from the perspective of obtaining or updating information specific to a subscriber. Following the Reclaim terminology, an employee who enrolls their family in an employer-sponsored plan is the subscriber of the plan."
 schemes:
@@ -137,9 +138,9 @@ paths:
             CLIENT_SECRET=<YOUR_CLIENT_SECRET>
 
             # request an access token
-            curl -X POST -u $CLIENT_ID:$CLIENT_SECRET -d "grant_type=client_credentials" https://sandbox.reclaim.health/oauth2/token
+            curl -X POST -u $CLIENT_ID:$CLIENT_SECRET -d "grant_type=client_credentials" https://partner-auth.staging.reclaim.health/oauth2/token
 
-            # the response from https://sandbox.reclaim.health/oauth2/token
+            # the response from https://partner-auth.staging.reclaim.health/oauth2/token
             {
               "access_token": "[token]",
               "expires_in": 3600,
@@ -153,7 +154,7 @@ paths:
             client_secret = <YOUR_CLIENT_SECRET>
 
             # request an access token
-            r = requests.post (url    = "https://sandbox.reclaim.health/oauth2/token',
+            r = requests.post (url    = "https://partner-auth.staging.reclaim.health/oauth2/token',
                                params = {"grant_type": "client_credentials"},
                                auth   = (client_id, client_secret))
             access_token = r.json () ['access_token']                                              
@@ -192,6 +193,114 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/AddGroupDetailOutput" 
+  /api/group/[group_id]/medical:
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "List Medical Plans"
+      description: "This endpoints allows the client to list all the current and future medical plans, if available for the group, as known to the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GroupMedicalPlansListDetailOutput" 
+    post:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Add Group Medical Plans"
+      description: "This endpoints allows the client to add current and/or future group medical plans."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "AddGroupMedicalPlansDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/AddGroupMedicalPlansDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GroupMedicalPlansListDetailOutput"    
+
+  /api/group/[group_id]/savings:
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "List Savings Plans"
+      description: "This endpoints allows the client to list all the current and future savings plans, if available for the group, as known to the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GroupSavingsListDetailOutput" 
+    post:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Add Group Savings Plans"
+      description: "This endpoints allows the client to add current and/or future group savings plans."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "AddGroupSavingsDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/AddGroupSavingsDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GroupSavingsListDetailOutput" 
+
+  /api/group/[group_id]/voluntary:
+    get:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "List Voluntary Benefits"
+      description: "This endpoints allows the client to list all the current and future voluntary health benefits, if available for the group, as known to the Reclaim system."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GroupVoluntaryListDetailOutput" 
+    post:
+      tags:
+      - "Group-Specific Endpoints"
+      summary: "Add Voluntary Benefits"
+      description: "This endpoints allows the client to add current and/or future group voluntary health benefits."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "AddGroupVoluntaryDetailInput"
+        required: true
+        schema:
+          $ref: "#/definitions/AddGroupVoluntaryDetailInput"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GroupVoluntaryListDetailOutput"
+            
   /api/groups/file:
     post:
       tags:
@@ -1247,16 +1356,16 @@ paths:
       - lang: "cURL"
         source: |                              
             # adding a subscriber
-            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"id": "1774", "status": "active", "benefits": [], "name": {"first": "Jason", "middle": null, "last": "Gomez"}, "group": "acme", "division": "corporate", "dob": "1955-02-23", "ssn": "235848321", "gender": "m", "address": {"street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}, "members": [{"id": "1776", "status": "active", "benefits": [], "name": {"first": "Josie", "middle": null, "last": "Gomez"}, "dob": "1957-12-03", "ssn": "000001234", "gender": "f", "relation": "spouse", "address": {"street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}},{"id": "1777", "status": "active", "benefits": [], "name": {"first": "Bobby", "middle": null, "last": "Gomez"}, "dob": "2000-01-01", "ssn": "000005552", "gender": "m", "relation": "child", "address": {"street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}}]}' https://sandbox.reclaim.health:443/api/subscriber
+            curl -i -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d '{"id": "AAE9ED6E-6CC6-4043-81A8-AAB800F0E67A", "group": "acme","name": {"first": "Stan","middle": null,"last": "Kim"},"dob": "1984-02-24","gender": "M","ssn": "138389538","address": {"street_1": null,"street_2": "100 Talabow Street","city": "Nashville","zip_code": "37086","state": "TN"}}' https://sandbox2.reclaim.health/api/subscriber
             
       - lang: "Python"
         source: |
             # adding a subscriber
-            payload = {"id": "1774", "status": "active", "benefits": [], "name": {"first": "Jason", "middle": null, "last": "Gomez"}, "group": "acme", "division": "corporate", "dob": "1955-02-23", "ssn": "235848321", "gender": "m", "address": {"street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}, "members": [{"id": "1776", "status": "active", "benefits": [], "name": {"first": "Josie", "middle": null, "last": "Gomez"}, "dob": "1957-12-03", "ssn": "000001234", "gender": "f", "relation": "spouse", "address": {"street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}},{"id": "1777", "status": "active", "benefits": [], "name": {"first": "Bobby", "middle": null, "last": "Gomez"}, "dob": "2000-01-01", "ssn": "000005552", "gender": "m", "relation": "child", "address": {"street_1": null, "street_2": null, "zip_code": "02215", "city": "Boston", "state": "MA"}}]}
+            payload = {"id": "AAE9ED6E-6CC6-4043-81A8-AAB800F0E67A", "group": "acme","name": {"first": "Stan","middle": null,"last": "Kim"},"dob": "1984-02-24","gender": "M","ssn": "138389538","address": {"street_1": null,"street_2": "100 Talabow Street","city": "Nashville","zip_code": "37086","state": "TN"}}
             
             headers = {'Authorization': '[token]'}
             
-            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber', data=payload, headers=headers).json()   
+            response = requests.put('https://sandbox2.reclaim.health/api/subscriber', data=payload, headers=headers).json()   
 
   
   /api/subscriber/[subscriber_id]:
@@ -1278,12 +1387,12 @@ paths:
       - lang: "cURL"
         source: |                              
             # obtaining information about a specific subscriber
-            curl -i -X GET -H "Authorization: Bearer [token]" https://sandbox.reclaim.health:443/api/subscriber/1774
+            curl -i -X GET -H "Authorization: Bearer [token]" https://sandbox2.reclaim.health/api/subscriber/aae9ed6e-6cc6-4043-81a8-aab800f0e67a
       - lang: "Python"
         source: |
             # obtaining information about a specific subscriber
             headers = {'Authorization': '[token]'}  
-            response = requests.get('https://sandbox.reclaim.health:443/api/subscriber/1774', headers=headers).json()  
+            response = requests.get('https://sandbox2.reclaim.health/api/subscriber/aae9ed6e-6cc6-4043-81a8-aab800f0e67a', headers=headers).json()  
     post:
       tags:
       - "Subscriber-Specific Endpoints"
@@ -1308,7 +1417,7 @@ paths:
       - lang: "cURL"
         source: |                              
             # updating a subscriber
-            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" --data '{"name": {"address": "205 Talbot street"}}' https://sandbox.reclaim.health:443/api/subscriber/1b404554-537d-483e-ab8f-18155583239d
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" --data '{"name": {"address": "205 Talbot street"}}' https://sandbox2.reclaim.health/api/subscriber/aae9ed6e-6cc6-4043-81a8-aab800f0e67a
       - lang: "Python"
         source: |
             # updating a subscriber
@@ -1316,7 +1425,7 @@ paths:
             
             headers = {'Authorization': '[token]'}
             
-            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1b404554-537d-483e-ab8f-18155583239d', data=payload, headers=headers).json()   
+            response = requests.put('https://sandbox2.reclaim.health/api/subscriber/aae9ed6e-6cc6-4043-81a8-aab800f0e67a', data=payload, headers=headers).json()   
         
                
 #  /api/subscriber/[subscriber_id]/members:
@@ -1444,7 +1553,7 @@ paths:
       - lang: "cURL"
         source: |                              
             # updating a subscriber's claim authorization
-            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"opt_in": true}' https://sandbox.reclaim.health:443/api/subscriber/1b404554-537d-483e-ab8f-18155583239d/opt_in
+            curl -i -X POST -H "Authorization: Bearer [token]" -H "Content-Type: application/json" -d '{"opt_in": true}' https://sandbox2.reclaim.health/api/subscriber/aae9ed6e-6cc6-4043-81a8-aab800f0e67a/opt_in
  
       - lang: "Python"
         source: |
@@ -1453,7 +1562,7 @@ paths:
             
             headers = {'Authorization': '[token]'}
             
-            response = requests.put('https://sandbox.reclaim.health:443/api/subscriber/1b404554-537d-483e-ab8f-18155583239d/opt_in', data=payload, headers=headers).json()              
+            response = requests.put('https://sandbox2.reclaim.health/api/subscriber/aae9ed6e-6cc6-4043-81a8-aab800f0e67a/opt_in', data=payload, headers=headers).json()              
   /api/subscriber/[subscriber_id]/review:
     get:
       tags:
@@ -2054,6 +2163,958 @@ definitions:
               status: "not linked"
               created: "2019-04-09 01:29:21"
               updated: "2019-04-09 01:30:03"
+              
+# List Group Medical Plans
+  GroupMedicalPlansListDetailOutput:
+    type: "object"
+    properties: 
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array of strings"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count:   
+                type: "integer"
+                description: "Number of medical plans available for the group in the Reclaim system"
+          medical:   
+                type: "array"
+                description: "Array containing all the medical plans for the group (both current and future, if available)" 
+                items:
+                  type: "object"
+                  properties:
+                    id:   
+                      type: "string"
+                      description: "Medical plan ID (does not need to be a uuid)"  
+                    name:
+                      type: "string"
+                      description: "Medical plan user-friendly name"
+                    type:
+                      type: "string"
+                      description: "Returns `medical` for medical or basic health plans"  
+                    group:
+                      type: "string"
+                      description: "Short descriptor of group"
+                    plan_year:
+                      type: "integer"
+                      description: "Plan year start date's year"
+                    start_date:
+                      type: "date"
+                      description: "Plan start date formatted as 'yyyy-mm-dd', i.e., 2020-07-01"
+                    end_date: 
+                      type: "date"
+                      description: "Plan end date formatted as 'yyyy-mm-dd', i.e., 2021-06-30"
+                    carrier:
+                      type: "string"
+                      description: "Carrier short description" 
+                    network:
+                      type: "string"
+                      description: "Plan network short description, e.g., nexus, if applicable"
+                    coverage:
+                      type: "object"
+                      properties:
+                        in_network: 
+                          type: "object"
+                          properties:
+                            individual_deductible: 
+                              type: "float"
+                              description: "In network deductible for individual coverage"
+                            family_deductible:
+                              type: "float"
+                              description: "In network deductible for family coverage"
+                            is_deductible_embedded:  
+                              type: "boolean"
+                              description: "True if a single family member does not have to meet the full family deductible; false otherwise"
+                            individual_oop: 
+                              type: "float"
+                              description: "In network out-of-pocket maximum for individual coverage"
+                            family_oop:
+                              type: "float"
+                              description: "In network out-of-pocket maximum for family coverage"
+                            rx_oop:
+                              type: "integer"
+                              description: "Out of pocket for pharmacy claims; if separate from medical"
+                            is_oop_embedded:  
+                              type: "boolean"
+                              description: "True if a single family member does not have to meet the full family out-of-pocket maximum; false otherwise"  
+                            coinsurance: 
+                              type: "integer"
+                              description: "Percentage that the subscriber would have to pay after reaching the deductible"
+                        out_network: 
+                          type: "object"
+                          properties:
+                            individual_deductible: 
+                              type: "float"
+                              description: "Out-of-network network deductible for individual coverage"
+                            family_deductible:
+                              type: "float"
+                              description: "Out-of-network deductible for family coverage"
+                            is_deductible_embedded:  
+                              type: "boolean"
+                              description: "True if a single family member does not have to meet the full family deductible; false otherwise"
+                            individual_oop: 
+                              type: "float"
+                              description: "Out-of-network out-of-pocket maximum for individual coverage"
+                            family_oop:
+                              type: "float"
+                              description: "Out-of-network out-of-pocket maximum for family coverage"
+                            is_oop_embedded:  
+                              type: "boolean"
+                              description: "True if a single family member does not have to meet the full family out-of-pocket maximum; false otherwise"  
+                            coinsurance: 
+                              type: "integer"
+                              description: "Percentage that the subscriber would have to pay after reaching the deductible"
+                        included:
+                          type: "object"
+                          properties:
+                            vision: 
+                              type: "boolean"
+                              description: "True if vision is included in the plan; False otherwise"
+                            dental: 
+                              type: "boolean"
+                              description: "True if dental is included in the plan; False otherwise"  
+                    created:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the time that the medical plan entry was created in the Reclaim system" 
+                    updated:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the latest update to the medical plan entry in the Reclaim system"  
+    example: 
+      status: "success"
+      detail: []
+      entity:
+          count: 2
+          medical:
+            - id: "BCBSOWNW"
+              name: "Health - Weekly No HRA"
+              type: "medical"
+              group: "BGBENEFITS"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "bcbsal"
+              network: "P"
+              coverage:
+                in_network:
+                  individual_deductible: 750
+                  family_deductible: 1500
+                  is_deductible_embedded: true
+                  individual_oop: 2750
+                  family_oop: 5500
+                  rx_oop: 100
+                  is_oop_embedded: true
+                  coinsurance: 20
+                out_network:
+                  individual_deductible: 750
+                  family_deductible: 1500
+                  is_deductible_embedded: false
+                  individual_oop: 3750
+                  family_oop: 7500
+                  rx_oop: null
+                  is_oop_embedded: false
+                  coinsurance: 30  
+                included:
+                  vision: false
+                  dental: false
+              created: "2019-04-09 01:29:21"
+              updated: "2019-04-09 01:30:03"
+            - id: "BCBSHSAW"
+              name: "Health - Weekly with HSA"
+              type: "medical"
+              group: "BGBENEFITS"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "bcbsal"
+              network: "P"
+              coverage:
+                in_network:
+                  individual_deductible: 1750
+                  family_deductible: 3500
+                  is_deductible_embedded: true
+                  individual_oop: 3500
+                  family_oop: 7000
+                  rx_oop: null
+                  is_oop_embedded: true
+                  coinsurance: 20
+                out_network:
+                  individual_deductible: 1750
+                  family_deductible: 3500
+                  is_deductible_embedded: false
+                  individual_oop: 4500
+                  family_oop: 9000
+                  rx_oop: null
+                  is_oop_embedded: false
+                  coinsurance: 30  
+                included:
+                  vision: false
+                  dental: false
+              created: "2019-04-09 01:29:21"
+              updated: "2019-04-09 01:30:03"  
+              
+# Add Group Medical Plans
+  AddGroupMedicalPlansDetailInput:
+    type: "object"
+    properties: 
+      medical:   
+                type: "array"
+                description: "Array containing all the medical plans for the group (both current and future, if available)" 
+                items:
+                  type: "object"
+                  properties:
+                    id:   
+                      type: "string"
+                      description: "Medical plan ID (does not need to be a uuid)"  
+                    name:
+                      type: "string"
+                      description: "Medical plan user-friendly name"
+                    type:
+                      type: "string"
+                      description: "Returns `medical` for medical or basic health plans"  
+                    plan_year:
+                      type: "integer"
+                      description: "Plan year start date's year"
+                    start_date:
+                      type: "date"
+                      description: "Plan start date formatted as 'yyyy-mm-dd', i.e., 2020-07-01"
+                    end_date: 
+                      type: "date"
+                      description: "Plan end date formatted as 'yyyy-mm-dd', i.e., 2021-06-30"
+                    carrier:
+                      type: "string"
+                      description: "Carrier short description" 
+                    network:
+                      type: "string"
+                      description: "Plan network short description, e.g., nexus, if applicable"
+                    coverage:
+                      type: "object"
+                      properties:
+                        in_network: 
+                          type: "object"
+                          properties:
+                            individual_deductible: 
+                              type: "float"
+                              description: "In network deductible for individual coverage"
+                            family_deductible:
+                              type: "float"
+                              description: "In network deductible for family coverage"
+                            is_deductible_embedded:  
+                              type: "boolean"
+                              description: "True if a single family member does not have to meet the full family deductible; false otherwise"
+                            individual_oop: 
+                              type: "float"
+                              description: "In network out-of-pocket maximum for individual coverage"
+                            family_oop:
+                              type: "float"
+                              description: "In network out-of-pocket maximum for family coverage"
+                            rx_oop:
+                              type: "integer"
+                              description: "Out of pocket for pharmacy claims; if separate from medical"
+                            is_oop_embedded:  
+                              type: "boolean"
+                              description: "True if a single family member does not have to meet the full family out-of-pocket maximum; false otherwise"  
+                            coinsurance: 
+                              type: "integer"
+                              description: "Percentage that the subscriber would have to pay after reaching the deductible"
+                        out_network: 
+                          type: "object"
+                          properties:
+                            individual_deductible: 
+                              type: "float"
+                              description: "Out-of-network network deductible for individual coverage"
+                            family_deductible:
+                              type: "float"
+                              description: "Out-of-network deductible for family coverage"
+                            is_deductible_embedded:  
+                              type: "boolean"
+                              description: "True if a single family member does not have to meet the full family deductible; false otherwise"
+                            individual_oop: 
+                              type: "float"
+                              description: "Out-of-network out-of-pocket maximum for individual coverage"
+                            family_oop:
+                              type: "float"
+                              description: "Out-of-network out-of-pocket maximum for family coverage"
+                            is_oop_embedded:  
+                              type: "boolean"
+                              description: "True if a single family member does not have to meet the full family out-of-pocket maximum; false otherwise"  
+                            coinsurance: 
+                              type: "integer"
+                              description: "Percentage that the subscriber would have to pay after reaching the deductible"
+                        included:
+                          type: "object"
+                          properties:
+                            vision: 
+                              type: "boolean"
+                              description: "True if vision is included in the plan; False otherwise"
+                            dental: 
+                              type: "boolean"
+                              description: "True if dental is included in the plan; False otherwise"   
+    example: 
+      medical:
+            - id: "BCBSOWNW"
+              name: "Health - Weekly No HRA"
+              type: "medical"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "bcbsal"
+              network: "P"
+              coverage:
+                in_network:
+                  individual_deductible: 750
+                  family_deductible: 1500
+                  is_deductible_embedded: true
+                  individual_oop: 2750
+                  family_oop: 5500
+                  rx_oop: 100
+                  is_oop_embedded: true
+                  coinsurance: 20
+                out_network:
+                  individual_deductible: 750
+                  family_deductible: 1500
+                  is_deductible_embedded: false
+                  individual_oop: 3750
+                  family_oop: 7500
+                  rx_oop: null
+                  is_oop_embedded: false
+                  coinsurance: 30  
+                included:
+                  vision: false
+                  dental: false
+            - id: "BCBSHSAW"
+              name: "Health - Weekly with HSA"
+              type: "medical"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "bcbsal"
+              network: "P"
+              coverage:
+                in_network:
+                  individual_deductible: 1750
+                  family_deductible: 3500
+                  is_deductible_embedded: true
+                  individual_oop: 3500
+                  family_oop: 7000
+                  rx_oop: null
+                  is_oop_embedded: true
+                  coinsurance: 20
+                out_network:
+                  individual_deductible: 1750
+                  family_deductible: 3500
+                  is_deductible_embedded: false
+                  individual_oop: 4500
+                  family_oop: 9000
+                  rx_oop: null
+                  is_oop_embedded: false
+                  coinsurance: 30  
+                included:
+                  vision: false
+                  dental: false
+                  
+
+# List Group Savings Plans
+  GroupSavingsListDetailOutput:
+    type: "object"
+    properties: 
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array of strings"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count:   
+                type: "integer"
+                description: "Number of savings plans available for the group in the Reclaim system"
+          savings:   
+                type: "array"
+                description: "Array containing all the savings plans for the group (both current and future, if available)" 
+                items:
+                  type: "object"
+                  properties:
+                    id:   
+                      type: "string"
+                      description: "Savings plan ID (does not need to be a uuid)"  
+                    name:
+                      type: "string"
+                      description: "Savings plan user-friendly name"
+                    type:
+                      type: "string"
+                      description: "Returns `hsa` for health savings accounts and `fsa` for flexible spending accounts"  
+                    group:
+                      type: "string"
+                      description: "Short descriptor of group"
+                    plan_year:
+                      type: "integer"
+                      description: "Plan year start date's year"
+                    start_date:
+                      type: "date"
+                      description: "Plan start date formatted as 'yyyy-mm-dd' (e.g., 2020-07-01)"
+                    end_date: 
+                      type: "date"
+                      description: "Plan end date formatted as 'yyyy-mm-dd' (e.g., 2021-06-30)"
+                    bank:
+                      type: "string"
+                      description: "Bank administering savings plan" 
+                    contribution:
+                      type: "object"
+                      properties:
+                        group: 
+                          type: "object"
+                          properties:
+                            individual: 
+                              type: "float"
+                              description: "Group contribution towards savings account for individual coverage"
+                            family:
+                              type: "float"
+                              description: "Group contribution towards savings account for a family coverage"
+                        limit: 
+                          type: "object"
+                          properties:
+                            individual: 
+                              type: "float"
+                              description: "Maximum total contribution towards savings account for individual coverage"
+                            family:
+                              type: "float"
+                              description: "Maximum total contribution towards savings account for a family coverage"
+                    created:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the time that the medical plan entry was created in the Reclaim system" 
+                    updated:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the latest update to the medical plan entry in the Reclaim system"  
+    example: 
+      status: "success"
+      detail: []
+      entity:
+          count: 2
+          medical:
+            - id: "HSACOV2020"
+              name: "HSA Participating 2020"
+              type: "hsa"
+              group: "BGBENEFITS"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              bank: "health_equity"
+              contribution:
+                group: 
+                  individual: 0
+                  family: 0
+                limit: 
+                  individual: 3250
+                  family: 6600
+              created: "2019-04-09 01:29:21"
+              updated: "2019-04-09 01:30:03"
+            - id: "HCFSACOV2020"
+              name: "HCFSA Participating 2020"
+              type: "fsa"
+              group: "BGBENEFITS"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              bank: "health_equity"
+              contribution:
+                group: 
+                  individual: 0
+                  family: 0
+                limit: 
+                  individual: 2750
+                  family: 2750
+              created: "2019-04-09 01:29:21"
+              updated: "2019-04-09 01:30:03"
+              
+# Add Group Savings Plans
+  AddGroupSavingsDetailInput:
+    type: "object"
+    properties: 
+      savings:   
+                type: "array"
+                description: "Array containing all the savings plans for the group (both current and future, if available)" 
+                items:
+                  type: "object"
+                  properties:
+                    id:   
+                      type: "string"
+                      description: "Savings plan ID (does not need to be a uuid)"  
+                    name:
+                      type: "string"
+                      description: "Savings plan user-friendly name"
+                    type:
+                      type: "string"
+                      description: "Returns `hsa` for health savings accounts and `fsa` for flexible spending accounts"  
+                    plan_year:
+                      type: "integer"
+                      description: "Plan year start date's year"
+                    start_date:
+                      type: "date"
+                      description: "Plan start date formatted as 'yyyy-mm-dd' (e.g., 2020-07-01)"
+                    end_date: 
+                      type: "date"
+                      description: "Plan end date formatted as 'yyyy-mm-dd' (e.g., 2021-06-30)"
+                    bank:
+                      type: "string"
+                      description: "Bank administering savings plan" 
+                    contribution:
+                      type: "object"
+                      properties:
+                        group: 
+                          type: "object"
+                          properties:
+                            individual: 
+                              type: "float"
+                              description: "Group contribution towards savings account for individual coverage"
+                            family:
+                              type: "float"
+                              description: "Group contribution towards savings account for a family coverage"
+                        limit: 
+                          type: "object"
+                          properties:
+                            individual: 
+                              type: "float"
+                              description: "Maximum total contribution towards savings account for individual coverage"
+                            family:
+                              type: "float"
+                              description: "Maximum total contribution towards savings account for a family coverage"
+    example: 
+      medical:
+            - id: "HSACOV2020"
+              name: "HSA Participating 2020"
+              type: "hsa"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              bank: "health_equity"
+              contribution:
+                group: 
+                  individual: 0
+                  family: 0
+                limit: 
+                  individual: 3250
+                  family: 6600
+            - id: "HCFSACOV2020"
+              name: "HCFSA Participating 2020"
+              type: "fsa"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              bank: "health_equity"
+              contribution:
+                group: 
+                  individual: 0
+                  family: 0
+                limit: 
+                  individual: 2750
+                  family: 2750
+                  
+
+# List Group Voluntary Benefits
+  GroupVoluntaryListDetailOutput:
+    type: "object"
+    properties: 
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array of strings"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count:   
+                type: "integer"
+                description: "Number of savings plans available for the group in the Reclaim system"
+          voluntary:   
+                type: "array"
+                description: "Array containing all the savings plans for the group (both current and future, if available)" 
+                items:
+                  type: "object"
+                  properties:
+                    id:   
+                      type: "string"
+                      description: "Savings plan ID (does not need to be a uuid)"  
+                    name:
+                      type: "string"
+                      description: "Savings plan user-friendly name"
+                    type:
+                      type: "string"
+                      description: "Returns 'hospital' for hospital indemnity, `accident` for accident insurance, `critical_illness` for critical illness insurance"  
+                    group:
+                      type: "string"
+                      description: "Short descriptor of group"
+                    plan_year:
+                      type: "integer"
+                      description: "Plan year start date's year"
+                    start_date:
+                      type: "date"
+                      description: "Plan start date formatted as 'yyyy-mm-dd', i.e., 2020-07-01"
+                    end_date: 
+                      type: "date"
+                      description: "Plan end date formatted as 'yyyy-mm-dd', i.e., 2021-06-30"
+                    carrier:
+                      type: "string"
+                      description: "Short descriptor for voluntary carrier offering benefit" 
+                    waiting_period:
+                      type: "integer"
+                      description: "If applicable, number of days waiting period before insurance is applicable"
+                    coverage:
+                      type: "object"
+                      properties:
+                        max_reimbursement: 
+                          type: "integer"
+                          description: "Maximum reimbursement; applicable to critical illness coverages only"
+                        conditions:
+                          type: "array of strings"
+                          description: "Array of conditions that are applicable under this coverage. Could be non-null for critical illness coverages, unless deemed covering the 'usual' set of critical conditions."       
+                        benefits:
+                          type: "array"
+                          items:
+                            type: "object"
+                            properties:
+                              service: 
+                                    type: "string"
+                                    description: "Service for which the benefit applies (admission, stay, icu, surgery, anesthesia, ground_ambulance, air_ambulance, emergency)"
+                              reimbursement: 
+                                    type: "integer"
+                                    description: "Reimbursement eligible for associated service"
+                              limit:
+                                    type: "integer"
+                                    description: "Maximum limit (number of days, number of events, etc.) eligible for benefit"
+                              limit_unit:
+                                    type: "string"
+                                    description: "Unit corresponding to maximum limit (e.g., calendar_year, days, events)"
+                              overall_limit: 
+                                type: "integer"
+                                description: "Overall limit of reimbursement per service"
+                              overall_limit_unit:
+                                type: "string"
+                                description: "Unit of overall limit of reimbursement (e.g., calendar_year)"        
+                        preexisting_conditions:
+                             type: "object"
+                             properties:
+                               is_limited:
+                                 type: "boolean"
+                                 description: "True if preexiting conditions excluded in the coverage; false otherwise"
+                               months_pre_coverage:
+                                 type: "integer"
+                                 description: "If applicable, number of months pre-coverage for preexisting conditions"
+                               months_post_coverage:
+                                 type: "integer"
+                                 description: "If applicable, number of months post-coverage for preexisting conditions"      
+                    created:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the time that the medical plan entry was created in the Reclaim system" 
+                    updated:
+                      type: "timestamp"
+                      description: "Timestamp (in UTC) recording the latest update to the medical plan entry in the Reclaim system"  
+    example: 
+      status: "success"
+      detail: []
+      entity:
+          count: 3
+          voluntary:
+            - id: "COVERAGE"
+              name: "Hospital Indemnity"
+              type: "hospital"
+              group: "BGBENEFITS"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "unum"
+              waiting_period: 0
+              coverage:
+                  max_reimbursement: null
+                  conditions: []     
+                  benefits:
+                    - service: "hospital admission"
+                      reimbursement: 500
+                      limit: 1
+                      limit_unit: "event"
+                      overall_limit: null
+                      overall_limit_unit: null
+                    - service: "ground ambulance"
+                      reimbursement: 100
+                      limit: 1
+                      limit_unit: "event"
+                      overall_limit: 1
+                      overall_limit_unit: "calendar_year" 
+                    - service: "surgery"
+                      reimbursement: 750
+                      limit: 1
+                      limit_unit: "event"
+                      overall_limit: 1
+                      overall_limit_unit: "calendar_year"   
+                    - service: "stay"
+                      reimbursement: 150
+                      limit: 1
+                      limit_unit: "day"
+                      overall_limit: 15
+                      overall_limit_unit: "calendar_year"   
+                  preexisting_conditions:
+                      is_limited: false
+                      months_pre_coverage: null
+                      months_post_coverage: null
+              created: "2019-04-09 01:29:21"
+              updated: "2019-04-09 01:30:03"
+            - id: "basic"
+              name: "Accident Insurance"
+              type: "accident"
+              group: "BGBENEFITS"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "lincoln"
+              waiting_period: 0
+              coverage:
+                    max_reimbursement: null
+                    conditions: []    
+                    benefits:
+                        - service: "air ambulance"
+                          reimbursement: 1125
+                          limit: 1
+                          limit_unit: "event"
+                          overall_limit: 1
+                          overall_limit_unit: "calendar_year"
+                        - service: "ground ambulance"
+                          reimbursement: 225
+                          limit: 1
+                          limit_unit: "event"
+                          overall_limit: 1
+                          overall_limit_unit: "calendar_year" 
+                        - service: "emergency"
+                          reimbursement: 150
+                          limit: 1
+                          limit_unit: "event"
+                          overall_limit: 1
+                          overall_limit_unit: "calendar_year"   
+                    preexisting_conditions:
+                      is_limited: false
+                      months_pre_coverage: null
+                      months_post_coverage: null
+              created: "2019-04-09 01:29:21"
+              updated: "2019-04-09 01:30:03"        
+            - id: "EENONTOBACCO"
+              name: "Critical Illness - Employee"
+              type: "critical_illness"
+              group: "BGBENEFITS"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "lincoln"
+              waiting_period: 180
+              coverage:
+                  max_reimbursement: 10000
+                  conditions: []    
+                  benefits: []
+                  preexisting_conditions:
+                      is_limited: true
+                      months_pre_coverage: 12
+                      months_post_coverage: 12
+              created: "2019-04-09 01:29:21"
+              updated: "2019-04-09 01:30:03"              
+              
+# Add Group Voluntary Plans
+  AddGroupVoluntaryDetailInput:
+    type: "object"
+    properties: 
+          voluntary:   
+                type: "array"
+                description: "Array containing all the savings plans for the group (both current and future, if available)" 
+                items:
+                  type: "object"
+                  properties:
+                    id:   
+                      type: "string"
+                      description: "Savings plan ID (does not need to be a uuid)"  
+                    name:
+                      type: "string"
+                      description: "Savings plan user-friendly name"
+                    type:
+                      type: "string"
+                      description: "Returns 'hospital' for hospital indemnity, `accident` for accident insurance, `critical_illness` for critical illness insurance"  
+                    plan_year:
+                      type: "integer"
+                      description: "Plan year start date's year"
+                    start_date:
+                      type: "date"
+                      description: "Plan start date formatted as 'yyyy-mm-dd', i.e., 2020-07-01"
+                    end_date: 
+                      type: "date"
+                      description: "Plan end date formatted as 'yyyy-mm-dd', i.e., 2021-06-30"
+                    carrier:
+                      type: "string"
+                      description: "Short descriptor for voluntary carrier offering benefit" 
+                    waiting_period:
+                      type: "integer"
+                      description: "If applicable, number of days waiting period before insurance is applicable"
+                    coverage:
+                      type: "object"
+                      properties:
+                        max_reimbursement: 
+                          type: "integer"
+                          description: "Maximum reimbursement; applicable to critical illness coverages only"
+                        conditions:
+                          type: "array of strings"
+                          description: "Array of conditions that are applicable under this coverage. Could be non-null for critical illness coverages, unless deemed covering the 'usual' set of critical conditions."       
+                        benefits:
+                          type: "array"
+                          items:
+                            type: "object"
+                            properties:
+                              service: 
+                                    type: "string"
+                                    description: "Service for which the benefit applies (admission, stay, icu, surgery, anesthesia, ground_ambulance, air_ambulance, emergency)"
+                              reimbursement: 
+                                    type: "integer"
+                                    description: "Reimbursement eligible for associated service"
+                              limit:
+                                    type: "integer"
+                                    description: "Maximum limit (number of days, number of events, etc.) eligible for benefit"
+                              limit_unit:
+                                    type: "string"
+                                    description: "Unit corresponding to maximum limit (e.g., calendar_year, days, events)"
+                              overall_limit: 
+                                type: "integer"
+                                description: "Overall limit of reimbursement per service"
+                              overall_limit_unit:
+                                type: "string"
+                                description: "Unit of overall limit of reimbursement (e.g., calendar_year)"        
+                        preexisting_conditions:
+                             type: "object"
+                             properties:
+                               is_limited:
+                                 type: "boolean"
+                                 description: "True if preexiting conditions excluded in the coverage; false otherwise"
+                               months_pre_coverage:
+                                 type: "integer"
+                                 description: "If applicable, number of months pre-coverage for preexisting conditions"
+                               months_post_coverage:
+                                 type: "integer"
+                                 description: "If applicable, number of months post-coverage for preexisting conditions"   
+    example: 
+          voluntary:
+            - id: "COVERAGE"
+              name: "Hospital Indemnity"
+              type: "hospital"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "unum"
+              waiting_period: 0
+              coverage:
+                  max_reimbursement: null
+                  conditions: []       
+                  benefits:
+                    - service: "hospital admission"
+                      reimbursement: 500
+                      limit: 1
+                      limit_unit: "event"
+                      overall_limit: null
+                      overall_limit_unit: null
+                    - service: "ground ambulance"
+                      reimbursement: 100
+                      limit: 1
+                      limit_unit: "event"
+                      overall_limit: 1
+                      overall_limit_unit: "calendar_year" 
+                    - service: "surgery"
+                      reimbursement: 750
+                      limit: 1
+                      limit_unit: "event"
+                      overall_limit: 1
+                      overall_limit_unit: "calendar_year"   
+                    - service: "stay"
+                      reimbursement: 150
+                      limit: 1
+                      limit_unit: "day"
+                      overall_limit: 15
+                      overall_limit_unit: "calendar_year"   
+                  preexisting_conditions:
+                      is_limited: false
+                      months_pre_coverage: null
+                      months_post_coverage: null
+            - id: "basic"
+              name: "Accident Insurance"
+              type: "accident"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "lincoln"
+              waiting_period: 0
+              coverage:
+                    max_reimbursement: null
+                    conditions: []    
+                    benefits:
+                        - service: "air ambulance"
+                          reimbursement: 1125
+                          limit: 1
+                          limit_unit: "event"
+                          overall_limit: 1
+                          overall_limit_unit: "calendar_year"
+                        - service: "ground ambulance"
+                          reimbursement: 225
+                          limit: 1
+                          limit_unit: "event"
+                          overall_limit: 1
+                          overall_limit_unit: "calendar_year" 
+                        - service: "emergency"
+                          reimbursement: 150
+                          limit: 1
+                          limit_unit: "event"
+                          overall_limit: 1
+                          overall_limit_unit: "calendar_year"   
+                    preexisting_conditions:
+                      is_limited: false
+                      months_pre_coverage: null
+                      months_post_coverage: null      
+            - id: "EENONTOBACCO"
+              name: "Critical Illness - Employee"
+              type: "critical_illness"
+              plan_year: 2020
+              start_date: "2020-01-01"
+              end_date: "2020-12-31"
+              carrier: "lincoln"
+              waiting_period: 180
+              coverage:
+                  max_reimbursement: 10000
+                  conditions: []    
+                  benefits: []
+                  preexisting_conditions:
+                      is_limited: true
+                      months_pre_coverage: 12
+                      months_post_coverage: 12                  
+
+
 # Eligibility Upload Detail Output  
   UploadDetailOutput:
     type: "object"
@@ -2300,9 +3361,6 @@ definitions:
       id:   
             type: "string"
             description: "Subscriber ID as known to Client"
-      benefits: 
-          type: "array"
-          description: "TODO! Array of current healthcare benefits that the subscriber is enrolled in"  
       group:   
             type: "string"
             description: "Employer group unique Reclaim short name identifier"      
@@ -2349,31 +3407,27 @@ definitions:
                         description: "Member's state name"   
                   
     example:
-      id: "1b404554-537d-483e-ab8f-18155583239d"
-      benefits: [ ]
+      id: "AAE9ED6E-6CC6-4043-81A8-AAB800F0E67A"
       group: "acme"
       name:
-        first: "Zulu"
+        first: "Stan"
         middle: null
-        last: "Gomez"
-      dob: "1955-02-23"
-      gender: "m"
-      ssn: "235848321"
+        last: "Kim"
+      dob: "1984-02-24"
+      gender: "M"
+      ssn: "138389538"
       address:
             street_1: "100 Talabow Street"
             street_2: null
-            city: "Boston"
-            zip_code: "02215"
-            state: "MA"
+            city: "Nashville"
+            zip_code: "37086"
+            state: "TN"
 
 
 # Update Subscriber Details            
   UpdateSubscriberDetailInput:  
     type: "object"
-    properties:    
-          benefits: 
-            type: "array"
-            description: "TODO! Array of current healthcare benefits that the subscriber is enrolled in"          
+    properties:             
           name:
                         type: "object"
                         description: "Subscriber's name object"
@@ -2518,13 +3572,13 @@ definitions:
       details: []
       entity:
           subscriber: 
-              id: "1b404554-537d-483e-ab8f-18155583239d"
+              id: "aae9ed6e-6cc6-4043-81a8-aab800f0e67a"
               group: "acme"
               name: 
-                first: "Zulu"
-              age: 64
-              gender: "m"
-              zip_code: "02215"
+                first: "Stan"
+              age: 35
+              gender: "M"
+              zip_code: "37086"
               claims:
                 available: true
                 opt_in:
@@ -2532,8 +3586,8 @@ definitions:
                   date: null 
                   dependent_flag: false
                 plan_review:
-                  flag: true
-                  date: "2019-06-17 13:37:36.138650"
+                  flag: false
+                  date: null
               survey:
                 flag: false
                 date: null
@@ -2639,13 +3693,13 @@ definitions:
         - "Updated subscriber '1b404554-537d-483e-ab8f-18155583239d' successfully"
       entity:
           subscriber: 
-              id: "1b404554-537d-483e-ab8f-18155583239d"
+              id: "aae9ed6e-6cc6-4043-81a8-aab800f0e67a"
               group: "acme"
               name: 
-                first: "Zulu"
-              age: 64
-              gender: "m"
-              zip_code: "02215"
+                first: "Stan"
+              age: 35
+              gender: "M"
+              zip_code: "37086"
               claims:
                 available: true
                 opt_in:
@@ -2653,8 +3707,8 @@ definitions:
                   date: null 
                   dependent_flag: false
                 plan_review:
-                  flag: true
-                  date: "2019-06-17 13:37:36.138650"
+                  flag: false
+                  date: null
               survey:
                 flag: false
                 date: null
@@ -3162,9 +4216,6 @@ definitions:
               group:
                 type: "string"
                 description: "Reclaim's group unique name identifier to which the subscriber belongs"
-              division:
-                type: "string"
-                description: "Employer group division to which the subscriber belongs"
               name:
                 type: "object"
                 description: "Subscriber's name object"
@@ -3232,27 +4283,27 @@ definitions:
       details: []
       entity:
           subscriber: 
-              id: "1b404554-537d-483e-ab8f-18155583239d"
+              id: "aae9ed6e-6cc6-4043-81a8-aab800f0e67a"
               group: "acme"
               name: 
-                first: "Zulu"
-              age: 64
-              gender: "m"
-              zip_code: "02215"
+                first: "Stan"
+              age: 35
+              gender: "M"
+              zip_code: "37086"
               claims:
                 available: true
                 opt_in:
                   flag: true
-                  date: "2019-11-14 17:20:03.626346" 
+                  date: "2019-07-20 13:46:22.368361"
                   dependent_flag: false
                 plan_review:
-                  flag: true
-                  date: "2019-06-17 13:37:36.138650"
+                  flag: false
+                  date: null
               survey:
                 flag: false
                 date: null
               created: "2019-06-20 13:46:22.368361"
-              updated: "2019-11-14 17:20:03.626346" 
+              updated: "2019-06-20 13:46:22.368364" 
               
               
 #Current Plan Performance Review Detail Output
