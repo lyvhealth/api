@@ -1886,7 +1886,34 @@ paths:
             headers = {'Authorization': '[token]'}
             
             response = requests.put('https://sandbox.reclaim.health/api/pcp', data=payload, headers=headers).json() 
+
+  /eligible_events:
+    get:
+      tags:
+      - "Eligible Events Payouts Endpoint"
+      summary: "Get Eligible Events for Voluntary Benefit Payout/Reimbursement"
+      description: "This endpoint allows the client to retrieve details on medical events and their corresponding claims that may trigger a payout possibility. The goal is to help assist in the adjudication of the voluntary benefit by sharing what consists of a proof of record for the medical events in question"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ListEligibleEventsOutput"  
+      x-code-samples:
+      - lang: "cURL"
+        source: |                              
+            # retrieving all eligible events/claims for a given voluntary benefit claim notification ID
+            curl -i -X GET -H "Authorization: Bearer [token]" https://sandbox2.reclaim.health/api/eligible_events/<notification_id>
+ 
+      - lang: "Python"
+        source: |
+            # retrieving all eligible events/claims for a given voluntary benefit claim notification ID
+            headers = {'Authorization': '[token]'}
             
+            response = requests.get('https://sandbox2.reclaim.health/api/eligible_events/<notification_id>', headers=headers).json()  
+
+
 definitions:
 # Auth Ouput
   AuthOutput:
@@ -6016,3 +6043,209 @@ definitions:
                 age_limitation:
                   min_age: 0
                   max_age: 150
+
+
+
+# Output for PCP Enrollment
+  ListEligibleEventsOutput:
+    type: "object"
+    properties:
+      status: 
+        type: "string"
+        description: |
+          Indicates the status of the operation:
+          
+          `success` indicates that the operation was successful 
+
+          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
+          
+          `error` indicates that the operation failed
+      details:
+        type: "array"
+        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
+      entity:
+        type: "object"
+        description: "API detailed output"
+        properties:
+          count: 
+            type: "integer"
+            description: "Number of eligible events for a specific voluntary benefit claim payout notification ID"
+          eligible_events: 
+            type: "array"
+            description: "Array of eligible events"
+            items:
+              type: "object"
+              properties:
+                voluntary_benefit_stream_person_id: 
+                  type: "string"
+                  description: "Member/claimant unique identifier as known to the voluntary benefit carrier. This uuid is to be provided to Reclaim via the voluntary benefit enrollment data feed. Note that this ID refers to the patient that has received the healthcare services outlined in the medical event and the associated medical claims."
+                voluntary_benefit_stream_parent_id: 
+                  type: "string"
+                  description: "Subscriber/employee unique identifier as known to the voluntary benefit carrier. This uuid is to be provided to Reclaim via the voluntary benefit enrollment data feed"  
+                payout_id: 
+                  type: "string"
+                  description: "Payout unique identifier as given by the voluntary benefit carrier once the Reclaim user confirms their intention to file for a voluntary benefit payout. This is also the input to the GET endpoint"
+                payout_estimate:
+                  type: "integer"
+                  description: "Estimated payout as computed by Reclaim's triggers"
+                id:
+                  type: "string"
+                  description: "Medical event unique identifier"
+                condition:
+                  type: "string"
+                  description: "High level information on the underlying condition for this medical event"
+                service:
+                  type: "string"
+                  description: "High level information on the underlying service for this medical event"
+                start_date:
+                  type: "string"
+                  description: "Start date of the event formatted as 'yyyy-mm-dd'"
+                end_date:
+                  type: "string"
+                  description: "Start date of the event formatted as 'yyyy-mm-dd'"
+                claims: 
+                    type: "array"
+                    description: "Array of corresponding claims"
+                    items:
+                      type: "object"
+                      properties:
+                        id: 
+                          type: "string"
+                          description: "Reclaim's unique identifier for the medical claim line item "
+                        start_date: 
+                          type: "string"
+                          description: "Start date of the claim line item formatted as 'yyyy-mm-dd'"  
+                        end_date: 
+                          type: "string"
+                          description: "End date of the claim line item formatted as 'yyyy-mm-dd'"  
+                        hospital_admission_date: 
+                          type: "string"
+                          description: "Start date of the patient's hospital admission formatted as 'yyyy-mm-dd', if applicable"  
+                        hospital_discharge_date: 
+                          type: "string"
+                          description: "End date of the patient's hospital admission formatted as 'yyyy-mm-dd', if applicable"   
+                        location_type_description:
+                          type: "string"
+                          description: "Location where the service was rendered, e.g., Office, Inpatient Hospital, Outpatient Hospital, etc." 
+                        service_procedure_code:
+                          type: "string"
+                          description: "CPT/HCPCS/Revenue procedure code associated with the service rendered on the claim line item" 
+                        service_procedure_name:
+                          type: "string"
+                          description: "CPT/HCPCS/Revenue procedure name associated with the service rendered on the claim line item"   
+                        service_procedure_category:
+                          type: "string"
+                          description: "CPT/HCPCS/Revenue procedure category associated with the service rendered on the claim line item"   
+                        diagnosis_icd_1:     
+                          type: "string"
+                          description: "Diagnosis (ICD 10) code associated with the service rendered on the claim line item. (Could be thought of as the primary diagnosis for the claim)" 
+                        diagnosis_icd_1_name:     
+                          type: "string"
+                          description: "Diagnosis descriptive name associated with the service rendered on the claim line item. (Could be thought of as the primary diagnosis for the claim)"  
+                        diagnosis_icd_2:     
+                          type: "string"
+                          description: "Secondary diagnosis (ICD 10) code associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)" 
+                        diagnosis_icd_2_name:     
+                          type: "string"
+                          description: "Secondary diagnosis (ICD 10) name associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)" 
+                        diagnosis_icd_3:     
+                          type: "string"
+                          description: "Third diagnosis (ICD 10) code associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)" 
+                        diagnosis_icd_3_name:     
+                          type: "string"
+                          description: "Third diagnosis (ICD 10) code associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)"  
+                        diagnosis_drg:
+                          type: "string"
+                          description: "Diagnosis DRG code associated with the service rendered on the claim line item. (Could be encoded for hospital visits)"  
+                        diagnosis_drg_name:
+                          type: "string"
+                          description: "Diagnosis DRG name associated with the service rendered on the claim line item. (Could be encoded for hospital visits)"    
+                        diagnosis_category:     
+                          type: "string"
+                          description: "Diagnosis category description associated with the service rendered on the claim line item"   
+                        diagnosis_group:     
+                          type: "string"
+                          description: "Diagnosis group description associated with the service rendered on the claim line item"     
+                        billing_provider_name:
+                          type: "string"
+                          description: "Name of the provider that is billing the service to the patient"   
+                        billing_provider_street_1:
+                          type: "string"
+                          description: "First line of address to the billing provider, if known"  
+                        billing_provider_street_2:
+                          type: "string"
+                          description: "Second line of address to the billing provider, if known"  
+                        billing_provider_city:
+                          type: "string"
+                          description: "City associated with the address of the billing provider, if known" 
+                        billing_provider_state:
+                          type: "string"
+                          description: "State associated with the address of the billing provider, if known"   
+                        billing_provider_phone:
+                          type: "string"
+                          description: "Phone number associated with the billing provider, if known" 
+                        rendering_provider_name:
+                          type: "string"
+                          description: "Name of the provider that has rendered the service to the patient"   
+                        rendering_provider_street_1:
+                          type: "string"
+                          description: "First line of address to the rendering provider, if known"  
+                        rendering_provider_street_2:
+                          type: "string"
+                          description: "Second line of address to the rendering provider, if known"  
+                        rendering_provider_city:
+                          type: "string"
+                          description: "City associated with the address of the rendering provider, if known" 
+                        rendering_provider_state:
+                          type: "string"
+                          description: "State associated with the address of the rendering provider, if known"   
+                        rendering_provider_phone:
+                          type: "string"
+                          description: "Phone number associated with the rendering provider, if known" 
+                        rendering_provider_specialty:
+                          type: "string"
+                          description: "Primary specialty of the rendering provider, if known"   
+                payout_triggers: 
+                    type: "array"
+                    description: "Array of voluntary benefit payout triggers"
+                    items:
+                      type: "object"
+                      properties:
+                        carrier_policy_id: 
+                          type: "string"
+                          description: "Voluntary benefit policy identifier, connecting both the plan ID and the product information, as known to the voluntary benefit carrier. This is to be passed along to Reclaim in the enrollment data feed"
+                        carrier_group_id: 
+                          type: "string"
+                          description: "Voluntary benefit group unique identifier, as known to the voluntary benefit carrier. This is to be passed along to Reclaim in the enrollment data feed"  
+                        policy_type: 
+                          type: "string"
+                          description: "Voluntary benefit policy type, e.g. 'hospital', 'accident', 'critical illness'"
+                        details:  
+                            type: "array"
+                            description: "Array of voluntary benefit payout triggers"
+                            items:
+                              type: "object"
+                              properties:
+                                benefit: 
+                                  type: "string"
+                                  description: "Benefit short descriptor, e.g. 'hospital admission'"
+                                carrier_benefit: 
+                                  type: "string"
+                                  description: "Benefit short descriptor, as known to the carrier"  
+                                carrier_condition: 
+                                  type: "string"
+                                  description: "Condition short descriptor, as known to the carrier"   
+                                per_unit_payout: 
+                                  type: "integer"
+                                  description: "Payout associated with the benefit/condition" 
+                                limit_unit: 
+                                  type: "string"
+                                  description: "Short description, e.g. 'event' referring to a payout per visit, 'days', referring to a payout per day"  
+                                units: 
+                                  type: "integer"
+                                  description: "Number of units related to the payout limit unit"  
+                                payout: 
+                                  type: "integer"
+                                  description: "Total payout for the associated benefit/condition"    
+                        
+ 
