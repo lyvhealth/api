@@ -6067,28 +6067,41 @@ definitions:
         type: "object"
         description: "API detailed output"
         properties:
-          count: 
-            type: "integer"
-            description: "Number of eligible events for a specific voluntary benefit claim payout notification ID"
-          eligible_events: 
-            type: "array"
-            description: "Array of eligible events"
-            items:
-              type: "object"
-              properties:
-                voluntary_benefit_stream_person_id: 
+                notification_id: 
                   type: "string"
-                  description: "Member/claimant unique identifier as known to the voluntary benefit carrier. This uuid is to be provided to Reclaim via the voluntary benefit enrollment data feed. Note that this ID refers to the patient that has received the healthcare services outlined in the medical event and the associated medical claims."
-                voluntary_benefit_stream_parent_id: 
-                  type: "string"
-                  description: "Subscriber/employee unique identifier as known to the voluntary benefit carrier. This uuid is to be provided to Reclaim via the voluntary benefit enrollment data feed"  
+                  description: "Carrier-specific claim reimbursement notification ID after the user has filed for reimbursement successfully"
                 payout_id: 
                   type: "string"
-                  description: "Payout unique identifier as given by the voluntary benefit carrier once the Reclaim user confirms their intention to file for a voluntary benefit payout. This is also the input to the GET endpoint"
-                payout_estimate:
-                  type: "integer"
-                  description: "Estimated payout as computed by Reclaim's triggers"
-                id:
+                  description: "Payout unique identifier as given by the voluntary benefit carrier once the Reclaim user confirms their intention to file for a voluntary benefit payout"
+                subscriber:
+                  type: "string"
+                  description: "Subscriber's identification, as known to the carrier"
+                patient:
+                  type: "object"
+                  description: "Patient information"
+                  properties: 
+                    name: 
+                      type: "object"
+                      properties:
+                        first: 
+                          type: "string"
+                          description: "Patient's first name"
+                        middle: 
+                          type: "string"
+                          description: "Patient's middle name"
+                        last: 
+                          type: "string"
+                          description: "Patient's last name"  
+                      dob:
+                        type: "string"
+                        description: "Patient's date of birth formatted as 'yyyy-mm-dd'"
+                      gender:
+                        type: "string"
+                        description: "Patient's gender if known"
+                      relation:
+                        type: "string"
+                        description: "Patient's relationship to the subscriber, e.g. spouse or child"
+                event_id:
                   type: "string"
                   description: "Medical event unique identifier"
                 condition:
@@ -6103,19 +6116,78 @@ definitions:
                 end_date:
                   type: "string"
                   description: "Start date of the event formatted as 'yyyy-mm-dd'"
+                payout_estimate:
+                  type: "float"
+                  description: "Estimated payout as computed by Reclaim's triggers" 
+                created_at: 
+                  type: "timestamp"
+                  description: "Timestamp (in UTC) recording the time that the event was created. Note all the timestamps are UTC"
+                updated_at: 
+                  type: "timestamp"
+                  description: "Timestamp (in UTC) recording the time that the event was last updated. Note all the timestamps are UTC" 
+                policies:
+                  type: "array"
+                  description: "Listing of the policies and the payout triggers corresponding to the event"
+                  items:
+                    type: "object"
+                    properties: 
+                      policy_id: 
+                        type: "string"
+                        description: "Voluntary benefit policy ID as known to Reclaim. (On the roadmap to allow this policy_id be the ID known to the carrier)"
+                      policy_type:
+                        type: "string"
+                        description: "Policy type, e.g. 'hospital', 'accident', or 'critical_illness'"
+                      policy_year:
+                        type: "integer"
+                        description: "Year of the start date for the voluntary benefit policy in question"
+                      group:
+                        type: "string"
+                        description: "Group ID as known to the carrier"
+                      payout_details:
+                        type: "array"
+                        items:
+                          type: "object"
+                          properties: 
+                            benefit: 
+                              type: "string"
+                              description: "Short descriptor of the benefit item on the policy applicable for a payout"
+                            per_unit_payout:
+                              type: "float"
+                              description: "Payout per unit of service rendered"
+                            units:
+                              type: "integer"
+                              description: "Number of service units rendered"
+                            limit_unit: 
+                              type: "string"
+                              description: "Short descriptor for the type of units, e.g. event, days, calendar_year"
+                            total_payout: 
+                              type: "float"
+                              description: "Total payout for the benefit in question"               
                 claims: 
                     type: "array"
                     description: "Array of corresponding claims"
                     items:
                       type: "object"
                       properties:
-                        id: 
+                        created_at: 
+                          type: "timestamp"
+                          description: "Timestamp (in UTC) recording the time that the claim was created. Note all the timestamps are UTC"
+                        updated_at: 
+                          type: "timestamp"
+                          description: "Timestamp (in UTC) recording the time that the claim was last updated. Note all the timestamps are UTC" 
+                        claim_id: 
                           type: "string"
-                          description: "Reclaim's unique identifier for the medical claim line item "
-                        start_date: 
+                          description: "Medical carrier claim identifier"
+                        claim_line_number: 
                           type: "string"
-                          description: "Start date of the claim line item formatted as 'yyyy-mm-dd'"  
-                        end_date: 
+                          description: "Medical carrier claim line identifier"  
+                        claim_type:
+                          type: "string"
+                          description: "Claim type, e.g. 'medical', 'rx', 'dental', or 'vision'"
+                        claim_start: 
+                          type: "string"
+                          description: "Start date of the claim line item formatted as 'yyyy-mm-dd'" 
+                        claim_end: 
                           type: "string"
                           description: "End date of the claim line item formatted as 'yyyy-mm-dd'"  
                         hospital_admission_date: 
@@ -6124,7 +6196,7 @@ definitions:
                         hospital_discharge_date: 
                           type: "string"
                           description: "End date of the patient's hospital admission formatted as 'yyyy-mm-dd', if applicable"   
-                        location_type_description:
+                        location_type_desc:
                           type: "string"
                           description: "Location where the service was rendered, e.g., Office, Inpatient Hospital, Outpatient Hospital, etc." 
                         service_procedure_code:
@@ -6135,25 +6207,40 @@ definitions:
                           description: "CPT/HCPCS/Revenue procedure name associated with the service rendered on the claim line item"   
                         service_procedure_category:
                           type: "string"
-                          description: "CPT/HCPCS/Revenue procedure category associated with the service rendered on the claim line item"   
+                          description: "CPT/HCPCS/Revenue procedure category associated with the service rendered on the claim line item"
+                        service_procedure_type:
+                          type: "string"
+                          description: "Service procedure type (revenue, cpt)"  
+                        service_type_description:
+                          type: "string"
+                          description: "Higher level description of service rendered, if available"    
                         diagnosis_icd_1:     
                           type: "string"
                           description: "Diagnosis (ICD 10) code associated with the service rendered on the claim line item. (Could be thought of as the primary diagnosis for the claim)" 
                         diagnosis_icd_1_name:     
                           type: "string"
                           description: "Diagnosis descriptive name associated with the service rendered on the claim line item. (Could be thought of as the primary diagnosis for the claim)"  
+                        diagnosis_icd_1_category:     
+                          type: "string"
+                          description: "Diagnosis descriptive category associated with the service rendered on the claim line item. (Could be thought of as the primary diagnosis for the claim)"   
                         diagnosis_icd_2:     
                           type: "string"
                           description: "Secondary diagnosis (ICD 10) code associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)" 
                         diagnosis_icd_2_name:     
                           type: "string"
                           description: "Secondary diagnosis (ICD 10) name associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)" 
+                        diagnosis_icd_2_category:     
+                          type: "string"
+                          description: "Secondary diagnosis (ICD 10) category associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)"   
                         diagnosis_icd_3:     
                           type: "string"
                           description: "Third diagnosis (ICD 10) code associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)" 
                         diagnosis_icd_3_name:     
                           type: "string"
                           description: "Third diagnosis (ICD 10) code associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)"  
+                        diagnosis_icd_3_category:     
+                          type: "string"
+                          description: "Third diagnosis (ICD 10) category associated with the service rendered on the claim line item (Could be thought of as additional diagnoses or comorbidities. Ordering may not be representative of diagnosis importance to the event itself)"   
                         diagnosis_drg:
                           type: "string"
                           description: "Diagnosis DRG code associated with the service rendered on the claim line item. (Could be encoded for hospital visits)"  
@@ -6162,10 +6249,7 @@ definitions:
                           description: "Diagnosis DRG name associated with the service rendered on the claim line item. (Could be encoded for hospital visits)"    
                         diagnosis_category:     
                           type: "string"
-                          description: "Diagnosis category description associated with the service rendered on the claim line item"   
-                        diagnosis_group:     
-                          type: "string"
-                          description: "Diagnosis group description associated with the service rendered on the claim line item"     
+                          description: "Diagnosis category description associated with the service rendered on the claim line item"      
                         billing_provider_name:
                           type: "string"
                           description: "Name of the provider that is billing the service to the patient"   
@@ -6180,10 +6264,16 @@ definitions:
                           description: "City associated with the address of the billing provider, if known" 
                         billing_provider_state:
                           type: "string"
-                          description: "State associated with the address of the billing provider, if known"   
+                          description: "State associated with the address of the billing provider, if known"  
+                        billing_provider_zipcode:
+                          type: "string"
+                          description: "Zipcode associated with the address of the billing provider, if known"    
                         billing_provider_phone:
                           type: "string"
                           description: "Phone number associated with the billing provider, if known" 
+                        billing_provider_specialty:
+                          type: "string"
+                          description: "Billing provider specialty, if known"
                         rendering_provider_name:
                           type: "string"
                           description: "Name of the provider that has rendered the service to the patient"   
@@ -6199,53 +6289,552 @@ definitions:
                         rendering_provider_state:
                           type: "string"
                           description: "State associated with the address of the rendering provider, if known"   
-                        rendering_provider_phone:
+                        rendering_provider_zipcode:
                           type: "string"
-                          description: "Phone number associated with the rendering provider, if known" 
+                          description: "Zipcode associated with the address of the rendering provider, if known"     
                         rendering_provider_specialty:
                           type: "string"
-                          description: "Primary specialty of the rendering provider, if known"   
-                payout_triggers: 
-                    type: "array"
-                    description: "Array of voluntary benefit payout triggers"
-                    items:
-                      type: "object"
-                      properties:
-                        carrier_policy_id: 
+                          description: "Primary specialty of the rendering provider, if known"  
+                        patient_first_name:
                           type: "string"
-                          description: "Voluntary benefit policy identifier, connecting both the plan ID and the product information, as known to the voluntary benefit carrier. This is to be passed along to Reclaim in the enrollment data feed"
-                        carrier_group_id: 
+                          description: "Patient's first name as received by the medical carrier"
+                        patient_last_name:
                           type: "string"
-                          description: "Voluntary benefit group unique identifier, as known to the voluntary benefit carrier. This is to be passed along to Reclaim in the enrollment data feed"  
-                        policy_type: 
-                          type: "string"
-                          description: "Voluntary benefit policy type, e.g. 'hospital', 'accident', 'critical illness'"
-                        details:  
-                            type: "array"
-                            description: "Array of voluntary benefit payout triggers"
-                            items:
-                              type: "object"
-                              properties:
-                                benefit: 
-                                  type: "string"
-                                  description: "Benefit short descriptor, e.g. 'hospital admission'"
-                                carrier_benefit: 
-                                  type: "string"
-                                  description: "Benefit short descriptor, as known to the carrier"  
-                                carrier_condition: 
-                                  type: "string"
-                                  description: "Condition short descriptor, as known to the carrier"   
-                                per_unit_payout: 
-                                  type: "integer"
-                                  description: "Payout associated with the benefit/condition" 
-                                limit_unit: 
-                                  type: "string"
-                                  description: "Short description, e.g. 'event' referring to a payout per visit, 'days', referring to a payout per day"  
-                                units: 
-                                  type: "integer"
-                                  description: "Number of units related to the payout limit unit"  
-                                payout: 
-                                  type: "integer"
-                                  description: "Total payout for the associated benefit/condition"    
-                        
- 
+                          description: "Patient's last name as received by the medical carrier" 
+
+    example:
+      status: "success"
+      detail: []
+      entity:
+        notification_id: "468547"
+        payout_id: null
+        subscriber: "119845487"
+        patient: 
+          name: 
+            first: "Jane"
+            middle: "B"
+            last: "Smith"
+          dob: "1975-11-09"
+          gender: "f"
+          relation: "spouse"
+        event_id: "f0f85006-d359-45cd-aff8-877862898d4d"
+        condition: "Fracture of skull and facial bones"
+        service: "Hospitalization"
+        start_date: "2020-07-09"
+        end_date: "2020-07-10"
+        payout_estimate: 1200
+        created_at: "2020-08-31 23:05:11"
+        updated_at: "2020-08-31 23:05:11"
+        policies: 
+            - policy_id: "0076050"
+              policy_type: "hospital"
+              policy_year: 2020
+              group: "011068"
+              payout_details: 
+                - benefit: "hospital_admission"
+                  per_unit_payout: 1000
+                  units: 1
+                  limit_unit: "event"
+                  total_payout: 1000
+                - benefit: "hospital_stay"
+                  per_unit_payout: 200
+                  units: 1
+                  limit_unit: "day"
+                  total_payout: 200
+        claims:
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131201988231078"
+            claim_line_number: "73659357892"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-10"
+            hospital_admission_date: "2020-07-09"
+            hospital_discharge_date: "2020-07-10"
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "WakeMed Raleigh Campus"
+            billing_provider_street_1: "3000 New Bern Avenue"
+            billing_provider_street_2: null
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: "+19193508000"
+            billing_provider_specialty: "HO"
+            rendering_provider_name: "WakeMed Raleigh Campus"
+            rendering_provider_street_1: "3000 New Bern Avenue"
+            rendering_provider_street_2: null
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "HO"
+            location_type_desc: "Inpatient Hospital"
+            service_procedure_code: "250"
+            service_procedure_type: "revenue"
+            service_procedure_name: "Pharmacy general"
+            service_procedure_category: "Pharmacy"
+            service_type_description: "Hospital ancillary"
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.11GA"
+            diagnosis_icd_1_name: "Type II occipital condyle fracture subsequent encounter for fracture with delayed healing"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: "S02.19XA"
+            diagnosis_icd_2_name: "Other fracture of base of skull initial encounter for closed fracture"
+            diagnosis_icd_2_category: "Head injury"
+            diagnosis_icd_3: "G93.89"
+            diagnosis_icd_3_category: "Other specified disorders of brain"
+            diagnosis_icd_3_name: "Brain disorder"
+            diagnosis_drg: "87"
+            diagnosis_drg_name: "Traumatic stupor and coma"
+            diagnosis_drg_category: "Nervous system"
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131201988231078"
+            claim_line_number: "73659367394"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-09"
+            hospital_admission_date: "2020-07-09"
+            hospital_discharge_date: "2020-07-10"
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "WakeMed Raleigh Campus"
+            billing_provider_street_1: "3000 New Bern Avenue"
+            billing_provider_street_2: null
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: "+19193508000"
+            billing_provider_specialty: "HO"
+            rendering_provider_name: "WakeMed Raleigh Campus"
+            rendering_provider_street_1: "3000 New Bern Avenue"
+            rendering_provider_street_2: null
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "HO"
+            location_type_desc: "Inpatient Hospital"
+            service_procedure_code: "203"
+            service_procedure_type: "revenue"
+            service_procedure_name: "Intensive care"
+            service_procedure_category: "Intensive care"
+            service_type_description: "Room & board"
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.11GA"
+            diagnosis_icd_1_name: "Type II occipital condyle fracture subsequent encounter for fracture with delayed healing"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: "S02.19XA"
+            diagnosis_icd_2_name: "Other fracture of base of skull initial encounter for closed fracture"
+            diagnosis_icd_2_category: "Head injury"
+            diagnosis_icd_3: "G93.89"
+            diagnosis_icd_3_category: "Other specified disorders of brain"
+            diagnosis_icd_3_name: "Brain disorder"
+            diagnosis_drg: "87"
+            diagnosis_drg_name: "Traumatic stupor and coma"
+            diagnosis_drg_category: "Nervous system"
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131201988231078"
+            claim_line_number: "73659375579"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-10"
+            hospital_admission_date: "2020-07-09"
+            hospital_discharge_date: "2020-07-10"
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "WakeMed Raleigh Campus"
+            billing_provider_street_1: "3000 New Bern Avenue"
+            billing_provider_street_2: null
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: "+19193508000"
+            billing_provider_specialty: "HO"
+            rendering_provider_name: "WakeMed Raleigh Campus"
+            rendering_provider_street_1: "3000 New Bern Avenue"
+            rendering_provider_street_2: null
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "HO"
+            location_type_desc: "Inpatient Hospital"
+            service_procedure_code: "351"
+            service_procedure_type: "revenue"
+            service_procedure_name: "Head scan"
+            service_procedure_category: "Radiology"
+            service_type_description: "Hospital ancillary"
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.11GA"
+            diagnosis_icd_1_name: "Type II occipital condyle fracture subsequent encounter for fracture with delayed healing"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: "S02.19XA"
+            diagnosis_icd_2_name: "Other fracture of base of skull initial encounter for closed fracture"
+            diagnosis_icd_2_category: "Head injury"
+            diagnosis_icd_3: "G93.89"
+            diagnosis_icd_3_category: "Other specified disorders of brain"
+            diagnosis_icd_3_name: "Brain disorder"
+            diagnosis_drg: "87"
+            diagnosis_drg_name: "Traumatic stupor and coma"
+            diagnosis_drg_category: "Nervous system"
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131201988231078"
+            claim_line_number: "73659376712"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-10"
+            hospital_admission_date: "2020-07-09"
+            hospital_discharge_date: "2020-07-10"
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "WakeMed Raleigh Campus"
+            billing_provider_street_1: "3000 New Bern Avenue"
+            billing_provider_street_2: null
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: "+19193508000"
+            billing_provider_specialty: "HO"
+            rendering_provider_name: "WakeMed Raleigh Campus"
+            rendering_provider_street_1: "3000 New Bern Avenue"
+            rendering_provider_street_2: null
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "HO"
+            location_type_desc: "Inpatient Hospital"
+            service_procedure_code: "450"
+            service_procedure_type: "revenue"
+            service_procedure_name: "Emergency room general"
+            service_procedure_category: "Emergency care"
+            service_type_description: "Hospital ancillary"
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.11GA"
+            diagnosis_icd_1_name: "Type II occipital condyle fracture subsequent encounter for fracture with delayed healing"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: "S02.19XA"
+            diagnosis_icd_2_name: "Other fracture of base of skull initial encounter for closed fracture"
+            diagnosis_icd_2_category: "Head injury"
+            diagnosis_icd_3: "G93.89"
+            diagnosis_icd_3_category: "Other specified disorders of brain"
+            diagnosis_icd_3_name: "Brain disorder"
+            diagnosis_drg: "87"
+            diagnosis_drg_name: "Traumatic stupor and coma"
+            diagnosis_drg_category: "Nervous system"
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131201988231078"
+            claim_line_number: "73659376779"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-10"
+            hospital_admission_date: "2020-07-09"
+            hospital_discharge_date: "2020-07-10"
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "WakeMed Raleigh Campus"
+            billing_provider_street_1: "3000 New Bern Avenue"
+            billing_provider_street_2: null
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: "+19193508000"
+            billing_provider_specialty: "HO"
+            rendering_provider_name: "WakeMed Raleigh Campus"
+            rendering_provider_street_1: "3000 New Bern Avenue"
+            rendering_provider_street_2: null
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "HO"
+            location_type_desc: "Inpatient Hospital"
+            service_procedure_code: "270"
+            service_procedure_type: "revenue"
+            service_procedure_name: "Medical/surgical supplies"
+            service_procedure_category: "IV therapy"
+            service_type_description: "Hospital ancillary"
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.11GA"
+            diagnosis_icd_1_name: "Type II occipital condyle fracture subsequent encounter for fracture with delayed healing"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: "S02.19XA"
+            diagnosis_icd_2_name: "Other fracture of base of skull initial encounter for closed fracture"
+            diagnosis_icd_2_category: "Head injury"
+            diagnosis_icd_3: "G93.89"
+            diagnosis_icd_3_category: "Other specified disorders of brain"
+            diagnosis_icd_3_name: "Brain disorder"
+            diagnosis_drg: "87"
+            diagnosis_drg_name: "Traumatic stupor and coma"
+            diagnosis_drg_category: "Nervous system"
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131201988231078"
+            claim_line_number: "73659383260"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-10"
+            hospital_admission_date: "2020-07-09"
+            hospital_discharge_date: "2020-07-10"
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "WakeMed Raleigh Campus"
+            billing_provider_street_1: "3000 New Bern Avenue"
+            billing_provider_street_2: null
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: "+19193508000"
+            billing_provider_specialty: "HO"
+            rendering_provider_name: "WakeMed Raleigh Campus"
+            rendering_provider_street_1: "3000 New Bern Avenue"
+            rendering_provider_street_2: null
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "HO"
+            location_type_desc: "Inpatient Hospital"
+            service_procedure_code: "350"
+            service_procedure_type: "revenue"
+            service_procedure_name: "Ct scan general"
+            service_procedure_category: "Radiology"
+            service_type_description: "Hospital ancillary"
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.11GA"
+            diagnosis_icd_1_name: "Type II occipital condyle fracture subsequent encounter for fracture with delayed healing"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: "S02.19XA"
+            diagnosis_icd_2_name: "Other fracture of base of skull initial encounter for closed fracture"
+            diagnosis_icd_2_category: "Head injury"
+            diagnosis_icd_3: "G93.89"
+            diagnosis_icd_3_category: "Other specified disorders of brain"
+            diagnosis_icd_3_name: "Brain disorder"
+            diagnosis_drg: "87"
+            diagnosis_drg_name: "Traumatic stupor and coma"
+            diagnosis_drg_category: "Nervous system"
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131201998154939"
+            claim_line_number: "73667444948"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-09"
+            hospital_admission_date: null
+            hospital_discharge_date: null
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "John Granville Alley"
+            billing_provider_street_1: "8851 Ellstree Lane"
+            billing_provider_street_2: "Suite 100"
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: null
+            billing_provider_specialty: "Radiology"
+            rendering_provider_name: "John Granville Alley"
+            rendering_provider_street_1: "8851 Ellstree Lane"
+            rendering_provider_street_2: "Suite 100"
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "Radiology"
+            location_type_desc: "Emergency Room - Hospital"
+            service_procedure_code: "70480"
+            service_procedure_type: "cpt"
+            service_procedure_name: "Computed tomography orbit sella or posterior fossa or outer middle or inner ear; without contrast material"
+            service_procedure_category: "Radiology"
+            service_type_description: "Xray & lab"
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.119A"
+            diagnosis_icd_1_name: "Unspecified fracture of occiput initial encounter for closed fracture"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: null
+            diagnosis_icd_2_name: null
+            diagnosis_icd_2_category: null
+            diagnosis_icd_3: null
+            diagnosis_icd_3_category: null
+            diagnosis_icd_3_name: null
+            diagnosis_drg: null
+            diagnosis_drg_name: null
+            diagnosis_drg_category: null
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131201988223259"
+            claim_line_number: "73681163630"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-09"
+            hospital_admission_date: null
+            hospital_discharge_date: null
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "Wake Emergency Physicians P.A."
+            billing_provider_street_1: "10000 Falls of Neuse Road"
+            billing_provider_street_2: null
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27614"
+            billing_provider_phone: "+19193508000"
+            billing_provider_specialty: "PH"
+            rendering_provider_name: "Wake Emergency Physicians P.A."
+            rendering_provider_street_1: "10000 Falls of Neuse Road"
+            rendering_provider_street_2: null
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27614"
+            rendering_provider_specialty: "PH"
+            location_type_desc: "Emergency Room - Hospital"
+            service_procedure_code: "99285"
+            service_procedure_type: "cpt"
+            service_procedure_name: "Emergency department visit for the evaluation and management of a patient which requires these 3 key components within the constraints imposed by the urgency of the patients clinical condition and/or mental status: A comprehensive history; A comprehensive examination; and Medical decision making of high complexity. Counseling and/or coordination of care with other physicians other qualified health care professionals or agencies are provided consistent with the nature of the problem(s) and the patients and/or familys needs. Usually the presenting problem(s) are of high severity and pose an immediate significant threat to life or physiologic function."
+            service_procedure_category: "Emergency Care"
+            service_type_description: null
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.119A"
+            diagnosis_icd_1_name: "Unspecified fracture of occiput initial encounter for closed fracture"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: "H92.01"
+            diagnosis_icd_2_name: "Otalgia right ear"
+            diagnosis_icd_2_category: "Otalgia and effusion of ear"
+            diagnosis_icd_3: null
+            diagnosis_icd_3_category: null
+            diagnosis_icd_3_name: null
+            diagnosis_drg: null
+            diagnosis_drg_name: null
+            diagnosis_drg_category: null
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131201968573121"
+            claim_line_number: "73696057608"
+            claim_type: "medical"
+            claim_start: "2020-07-10"
+            claim_end: "2020-07-10"
+            hospital_admission_date: null
+            hospital_discharge_date: null
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "Sarah L Mouw"
+            billing_provider_street_1: "5838 Six Forks Road"
+            billing_provider_street_2: "Suite 100"
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: null
+            billing_provider_specialty: "Physician assistant"
+            rendering_provider_name: "Sarah L Mouw"
+            rendering_provider_street_1: "5838 Six Forks Road"
+            rendering_provider_street_2: "Suite 100"
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "Physician assistant"
+            location_type_desc: "Inpatient Hospital"
+            service_procedure_code: "99222"
+            service_procedure_type: "cpt"
+            service_procedure_name: "Initial hospital care per day for the evaluation and management of a patient which requires these 3 key components: A comprehensive history; A comprehensive examination; and Medical decision making of moderate complexity. Counseling and/or coordination of care with other physicians other qualified health care professionals or agencies are provided consistent with the nature of the problem(s) and the patients and/or familys needs. Usually the problem(s) requiring admission are of moderate severity. Typically 50 minutes are spent at the bedside and on the patients hospital floor or unit."
+            service_procedure_category: "Hospital care"
+            service_type_description: null
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.119A"
+            diagnosis_icd_1_name: "Unspecified fracture of occiput initial encounter for closed fracture"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: null
+            diagnosis_icd_2_name: null
+            diagnosis_icd_2_category: null
+            diagnosis_icd_3: null
+            diagnosis_icd_3_category: null
+            diagnosis_icd_3_name: null
+            diagnosis_drg: null
+            diagnosis_drg_name: null
+            diagnosis_drg_category: null
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131202118204643"
+            claim_line_number: "73678522889"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-09"
+            hospital_admission_date: null
+            hospital_discharge_date: null
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "Raleigh Radiology Associates Inc."
+            billing_provider_street_1: "4420 Lake Boone Trail"
+            billing_provider_street_2: null
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: null
+            billing_provider_specialty: "RC"
+            rendering_provider_name: "Raleigh Radiology Associates Inc."
+            rendering_provider_street_1: "4420 Lake Boone Trail"
+            rendering_provider_street_2: null
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "RC"
+            location_type_desc: "Emergency Room - Hospital"
+            service_procedure_code: "76377"
+            service_procedure_type: "cpt"
+            service_procedure_name: "3D rendering with interpretation and reporting of computed tomography magnetic resonance imaging ultrasound or other tomographic modality with image postprocessing under concurrent supervision; requiring image postprocessing on an independent workstation"
+            service_procedure_category: "Radiology"
+            service_type_description: "Xray & lab"
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.19XA"
+            diagnosis_icd_1_name: "Other fracture of base of skull initial encounter for closed fracture"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: "S02.91XA"
+            diagnosis_icd_2_name: "Unspecified fracture of skull initial encounter for closed fracture"
+            diagnosis_icd_2_category: "Head injury"
+            diagnosis_icd_3: null
+            diagnosis_icd_3_category: null
+            diagnosis_icd_3_name: null
+            diagnosis_drg: null
+            diagnosis_drg_name: null
+            diagnosis_drg_category: null
+          - created: "2020-08-28 21:05:11"
+            updated: "2020-08-28 21:05:11"
+            claim_id: "131202118204643"
+            claim_line_number: "73698543055"
+            claim_type: "medical"
+            claim_start: "2020-07-09"
+            claim_end: "2020-07-09"
+            hospital_admission_date: null
+            hospital_discharge_date: null
+            patient_last_name: "Smith"
+            patient_first_name: "Jane"
+            billing_provider_name: "Raleigh Radiology Associates Inc."
+            billing_provider_street_1: "4420 Lake Boone Trail"
+            billing_provider_street_2: null
+            billing_provider_city: "Raleigh"
+            billing_provider_state: "NC"
+            billing_provider_zipcode: "27610"
+            billing_provider_phone: null
+            billing_provider_specialty: "RC"
+            rendering_provider_name: "Raleigh Radiology Associates Inc."
+            rendering_provider_street_1: "4420 Lake Boone Trail"
+            rendering_provider_street_2: null
+            rendering_provider_city: "Raleigh"
+            rendering_provider_state: "NC"
+            rendering_provider_zipcode: "27610"
+            rendering_provider_specialty: "RC"
+            location_type_desc: "Emergency Room - Hospital"
+            service_procedure_code: "70450"
+            service_procedure_type: "cpt"
+            service_procedure_name: "Computed tomography head or brain; without contrast material"
+            service_procedure_category: "Radiology"
+            service_type_description: "Xray & lab"
+            diagnosis_category: "Fracture of skull and facial bones"
+            diagnosis_icd_1: "S02.19XA"
+            diagnosis_icd_1_name: "Other fracture of base of skull initial encounter for closed fracture"
+            diagnosis_icd_1_category: "Head injury"
+            diagnosis_icd_2: "S02.91XA"
+            diagnosis_icd_2_name: "Unspecified fracture of skull initial encounter for closed fracture"
+            diagnosis_icd_2_category: "Head injury"
+            diagnosis_icd_3: null
+            diagnosis_icd_3_category: null
+            diagnosis_icd_3_name: null
+            diagnosis_drg: null
+            diagnosis_drg_name: null
+            diagnosis_drg_category: null
+          
