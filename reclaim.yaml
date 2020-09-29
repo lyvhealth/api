@@ -6058,29 +6058,19 @@ definitions:
   ListEligibleEventsOutput:
     type: "object"
     properties:
-      status: 
+      notification_id: 
         type: "string"
-        description: |
-          Indicates the status of the operation:
-          
-          `success` indicates that the operation was successful 
-
-          `warning` indicates that the operation was successful, however, there was some issues during the processing of the request
-          
-          `error` indicates that the operation failed
-      details:
-        type: "array"
-        descrption: "Array of strings providing information to the caller when the operation status was warning or error"
-      entity:
+        description: "Carrier-specific claim reimbursement notification ID after the user has filed for reimbursement successfully"
+      payout_id: 
+        type: "string"
+        description: "Payout unique identifier as given by the voluntary benefit carrier once the Reclaim user confirms their intention to file for a voluntary benefit payout"
+      carrier_code:
+        type: "string"
+        description: "Short descriptor for the voluntary carrier for which the user is notified for a claim payout"
+      eligible_event:
         type: "object"
         description: "API detailed output"
         properties:
-                notification_id: 
-                  type: "string"
-                  description: "Carrier-specific claim reimbursement notification ID after the user has filed for reimbursement successfully"
-                payout_id: 
-                  type: "string"
-                  description: "Payout unique identifier as given by the voluntary benefit carrier once the Reclaim user confirms their intention to file for a voluntary benefit payout"
                 subscriber:
                   type: "string"
                   description: "Subscriber's identification, as known to the carrier"
@@ -6311,11 +6301,10 @@ definitions:
                           description: "Patient's last name as received by the medical carrier" 
 
     example:
-      status: "success"
-      detail: []
-      entity:
-        notification_id: "468547"
-        payout_id: null
+      notification_id: "468547"
+      payout_id: null
+      carrier_code: "securian"
+      eligible_event:   
         subscriber: "119845487"
         patient: 
           name: 
