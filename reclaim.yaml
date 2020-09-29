@@ -1904,22 +1904,22 @@ paths:
       - lang: "cURL"
         source: |                              
             # retrieving all eligible events/claims for a given voluntary benefit claim notification ID
-            curl -i -X GET -H "Authorization: Bearer [token]" https://sandbox2.reclaim.health/api/eligible_events/notification/<notification_id>
+            curl -i -X GET -H "Authorization: Bearer [token]" https://partner-api.staging.reclaim.health/partner_api/v1.0/eligible_events/notification/<notification_id>
             
             # retrieving all eligible events/claims for a given voluntary carrier payout ID
-            curl -i -X GET -H "Authorization: Bearer [token]" https://sandbox2.reclaim.health/api/eligible_events/payout/<payout_id>
+            curl -i -X GET -H "Authorization: Bearer [token]" https://partner-api.staging.reclaim.health/partner_api/v1.0/eligible_events/payout/<payout_id>
  
       - lang: "Python"
         source: |
             # retrieving all eligible events/claims for a given voluntary benefit claim notification ID
             headers = {'Authorization': '[token]'}
             
-            response = requests.get('https://sandbox2.reclaim.health/api/eligible_events/notification/<notification_id>', headers=headers).json()  
+            response = requests.get('https://partner-api.staging.reclaim.health/partner_api/v1.0/eligible_events/notification/<notification_id>', headers=headers).json()  
             
             # retrieving all eligible events/claims for a given voluntary carrier payout ID
             headers = {'Authorization': '[token]'}
             
-            response = requests.get('https://sandbox2.reclaim.health/api/eligible_events/payout/<payout_id>', headers=headers).json()  
+            response = requests.get('https://partner-api.staging.reclaim.health/partner_api/v1.0/eligible_events/payout/<payout_id>', headers=headers).json()  
 
 
 definitions:
